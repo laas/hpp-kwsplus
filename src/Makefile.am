@@ -16,4 +16,7 @@ libkwsPlus_la_SOURCES = \
 	kwsPlusRoadmap.cpp
 
 libkwsPlus_la_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
-libkwsPlus_la_LDFLAGS = $(KWSIO_LIBS) 
+libkwsPlus_la_LDFLAGS =\
+	$(KWSIO_LIBS) 	\
+	-release ${PACKAGE_VERSION}
+
