@@ -1,0 +1,19 @@
+2007/05/02
+	Added methods and attributes to keep track of extration and reversion of KineoWorks direct paths.
+	
+2007/04/27
+	1. Class CkwsPlusRoadmap now inherits from CkppKCDAssembly instead of CkppKCDPolyhedron, in order to allow roadmap building on
+	run-time.
+	2. Added a method "lastEdge" to this class. To use with a roadmap builder delegate and a progress delegate for a "real-time" display
+
+2007/04/26
+	Added class CkwsPlusRoadmap: derives from CkwsRoadmap and from CkppKCDPolyhedron and implements a display() method that
+	puts the roadmap in the geometry node of the model tree if any.
+	
+2007/04/20
+	1. Documentation is now generated at installation
+	2. kwsPlus.doxytag is produced by doxygen and installed.
+	
+2007/04/03
+	1. Flatness based computations for carlike robot are now externalized in another library in order to be reused for other purposes.
+	2. Removed reference to package angle. angle is provided by flatCarDirectPath.

@@ -1,0 +1,17 @@
+Installation instructions
+
+Configuration
+-------------
+untar the package
+cd kwsPlus
+mkdir build
+cd build
+../configure --with-kineo=$PATH_TO_KWS
+
+Compilation
+-----------
+make
+
+Installation
+------------
+make install

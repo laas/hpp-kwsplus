@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: @PACKAGE@
+Description: Extension to KineoWorks software
+Version: @VERSION@
+Requires: kwsIO
+Libs: -L${libdir} -lkwsPlus @KWSIO_LIBS@ 
+Cflags: -I${includedir}/kwsPlus @KWSIO_CFLAGS@ 
