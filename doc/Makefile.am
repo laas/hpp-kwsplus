@@ -21,7 +21,8 @@ EXTRA_DIST = \
 	figures/equation-combinaison-convexe.png \
 	figures/flatCar.fig \
 	figures/flatCar.pdf \
-	figures/flatCar.png 
+	figures/flatCar.png	\
+	papers/rapport-mathieu.pdf
 
 install: html-doc
 	mkdir -p $(kwsPlusdir)
