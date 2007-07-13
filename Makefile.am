@@ -6,7 +6,8 @@
 #
 
 SUBDIRS = \
-	src \
+	src 	\
+	doc	\
 	include \
 	unitTesting
 
