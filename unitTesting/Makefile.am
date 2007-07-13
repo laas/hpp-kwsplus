@@ -24,6 +24,7 @@ clean-license:
 #
 
 testFlicMaxDeriv_SOURCES = \
+	testFlicDirectPath.h \
 	testFlicDirectPath.cpp \
 	testFlicDirectPathMaxAbsDeriv.cpp
 
