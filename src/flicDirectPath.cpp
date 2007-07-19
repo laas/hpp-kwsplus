@@ -1225,9 +1225,9 @@ CflicDirectPathShPtr CflicDirectPath::create(const CkwsConfig &inStartCfg,
   else
   {
     // debug
-    cout << "================= CflicDirectPath::create succeeded ===============================" << endl;
-    cout << "init : " << inStartCfg << endl;
-    cout << "end : "  << inEndCfg << endl ;
+    // cout << "================= CflicDirectPath::create succeeded ===============================" << endl;
+    // cout << "init : " << inStartCfg << endl;
+    // cout << "end : "  << inEndCfg << endl ;
     // -----------
   }
 
