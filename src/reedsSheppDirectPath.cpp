@@ -121,6 +121,17 @@ CreedsSheppDirectPathShPtr CreedsSheppDirectPath::createCopy (const CreedsSheppD
 
 }
 
+
+
+
+// ==============================================================================
+
+std::vector< TrsCurve >CreedsSheppDirectPath::getInfoRsCurveVector() const {
+
+  return attRsCurveVector ;
+}
+
+
 // ==============================================================================
 
 CreedsSheppDirectPath::CreedsSheppDirectPath(const CkwsConfig &inStartCfg, const CkwsConfig &inEndCfg,
@@ -192,221 +203,25 @@ void CreedsSheppDirectPath::maxAbsoluteDerivative(double inFrom, double inTo,
   cout << " DANGER !!!!!! TODO  CreedsSheppDirectPath :    maxAbsoluteDerivative -- inFrom " << inFrom << " inTo " << inTo << endl ;
 
   outVectorDeriv.clear() ;
+  // X
   outVectorDeriv.push_back(1) ;
+  // Y
   outVectorDeriv.push_back(1) ;
-  outVectorDeriv.push_back(1) ;
-  outVectorDeriv.push_back(1) ;
-  outVectorDeriv.push_back(1) ;
-  outVectorDeriv.push_back(1) ;
-
   
-  /*
-   *  Input:  the robot,
-   *          the local path,
-   *          the parameter along the curve,
-   *          the direction of motion,
-   *          the array of maximal distances moved by all the points of 
-   *          each body of the robot .
-   *
-   *  Output: distance the robot can move forward along the path without 
-   *          moving by more than the input distance
-   *
-   *  Description:
-   *          From a configuration on a local path, this function
-   *          computes an interval of parameter on the local path on
-   *          which all the points of the robot move by less than the
-   *          distance given as input.  The interval starts at the
-   *          configuration given as input. The function returns the
-   *          length of the interval.
-   *          Sketch of algorithm: the function computes sucessively
-   *          for the plateform and then for each body an upper
-   *          bound of the linear and angular velocities at the reference 
-   *          point. For each body, the maximal range of parameter along 
-   *          the curve is given by the minimal distance of the body to 
-   *          the obstacles (stored in array distances) divided by the upper
-   *          bound of the velocity of all its points. The minimal value of
-   *          these parameter ranges is returned.
-   *          
-   */
-
-
-  /*double p3d_rs_stay_within_dist(struct rob* robotPt,
-    struct localpath* localpathPt,
-    double parameter, whichway dir, 
-    double* distances)*/
-
-  //         TrsCurve curCurve ;
-  //         double irs = 0 ;
-  //
-  //
-  //
-  //
-  //
-  //         int base_joint = 0;
-  //         int trailer_joint = 1;
-  //
-  //         double max_param, min_param, range_param, tot_max_range;
-  //         p3d_rs_data *curCurve=NULL;
-  //         /* array of maximal linear and angular velocities of each body wrt
-  //            the body it is attached to */
-  //         int i, j, k;
-  //         //p3d_jnt *cur_jntPt, *prev_jntPt;
-  //         configPt q_max_param, q_param;
-  //         p3d_stay_within_dist_data * stay_within_dist_data;
-  //         //lm_reeds_shepp_str *rs_paramPt    = lm_get_reeds_shepp_lm_param(robotPt);
-  //         //pflat_trailer_str trailer_paramPt = lm_get_trailer_lm_param(robotPt);
-  //         int njnt = robotPt->njoints;
-  //         int *other_jnt, nb_other_jnt;
-  //         int x_coord, y_coord, z_coord;
-  //
-  //
-  //
-  //         curCurve = attRsCurveVector[irs];
-  //
-  //         /* store the data to compute the maximal velocities at the
-  //            joint for each body of the robot */
-  //         stay_within_dist_data = MY_ALLOC(p3d_stay_within_dist_data, njnt+2);
-  //         p3d_init_stay_within_dist_data(stay_within_dist_data);
-  //
-  //         if (trailer_paramPt != NULL) {
-  //                 other_jnt = trailer_paramPt->other_jnt;
-  //                 nb_other_jnt = trailer_paramPt->nb_other_jnt;
-  //                 base_joint = trailer_paramPt->numjnt[JNT_BASE];
-  //                 trailer_joint = trailer_paramPt->numjnt[JNT_TRAILER];
-  //                 x_coord = trailer_paramPt->numdof[DOF_X];
-  //                 y_coord = trailer_paramPt->numdof[DOF_Y];
-  //         } else {
-  //                 other_jnt = rs_paramPt->other_jnt;
-  //                 nb_other_jnt = rs_paramPt->nb_other_jnt;
-  //                 base_joint = rs_paramPt->numjnt;
-  //                 x_coord = rs_paramPt->numdof[DOF_RS_X];
-  //                 y_coord = rs_paramPt->numdof[DOF_RS_Y];
-  //         }
-  //         z_coord = rs_paramPt->numdof[DOF_RS_Z];
-  //
-  //         /* Get the current config to have the modifications of the constraints */
-  //         q_param = p3d_get_robot_config(robotPt);
-  //
-  //         /* get the RS segment on which the input configuration is */
-  //         curCurve = rs_segment_at_parameter(robotPt, curCurve,
-  //                          &parameter);
-  //         range_param = curCurve->val_rs;
-  //         tot_max_range = 0.;
-  //         /* range_max is the maximal range possible whitout reaching bounds
-  //            of local path. Notive that ranges are always positive */
-  //         if (dir == FORWARD) {
-  //                 min_param = max_param = range_param - parameter;
-  //                 q_max_param = curCurve->q_end;
-  //         } else {
-  //                 min_param = max_param = parameter;
-  //                 q_max_param = curCurve->q_init;
-  //         }
-  //
-  //         /* loop on the Reeds and Shepp segments */
-  //         while ((min_param>=0) && (curCurve != NULL)) {
-  //                 k = 0;
-  //                 for (i=0; i <= njnt; i++) {
-  //                         cur_jntPt = robotPt->joints[i];
-  //                         prev_jntPt = cur_jntPt->prev_jnt;
-  //
-  //                         if (i == base_joint) {
-  //                                 /* We could compute the stay_within_dist for the Reed & Shepp method */
-  //
-  //                                 /* j = index of the joint to which the current joint is attached */
-  //                                 prev_jntPt = cur_jntPt;
-  //                                 j = -2;
-  //                                 do {
-  //                                         if (prev_jntPt == NULL) {
-  //                                                 j = -1;
-  //                                         } else {
-  //                                                 if ((prev_jntPt->index_dof <= x_coord) &&
-  //                                                                 (prev_jntPt->index_dof <= y_coord) &&
-  //                                                                 ((prev_jntPt->index_dof <= z_coord) || (z_coord<0))) {
-  //                                                         if (prev_jntPt->prev_jnt == NULL) {
-  //                                                                 j = -1;
-  //                                                         } else {
-  //                                                                 j = prev_jntPt->prev_jnt->num;
-  //                                                         }
-  //                                                 } else {
-  //                                                         prev_jntPt = prev_jntPt->prev_jnt;
-  //                                                 }
-  //                                         }
-  //                                 } while(j==-2);
-  //                                 if (trailer_paramPt!=NULL) {
-  //                                         p3d_jnt_rs_trailer_stay_within_dist(&(stay_within_dist_data[j+1]),
-  //                                                                             robotPt, curCurve,
-  //                                                                             &(stay_within_dist_data[base_joint+1]),
-  //                                                                             &(distances[base_joint]),
-  //                                                                             &(stay_within_dist_data[trailer_joint+1]),
-  //                                                                             &(distances[trailer_joint]),
-  //                                                                             q_param, q_max_param, max_param, &min_param);
-  //                                 } else {
-  //                                         p3d_jnt_rs_stay_within_dist(&(stay_within_dist_data[j+1]),
-  //                                                                     robotPt, curCurve,
-  //                                                                     &(stay_within_dist_data[base_joint+1]),
-  //                                                                     &(distances[base_joint]),
-  //                                                                     q_param, q_max_param, max_param, &min_param);
-  //                                 }
-  //                                 /* All the joints which compose the trailer_joint have the same
-  //                                    stay_within_dist (this majoration is too strong, but normaly,
-  //                                    we couldn't have other link than base_joint, so we don't care) */
-  //                                 while((cur_jntPt!=prev_jntPt) && (cur_jntPt->prev_jnt!=NULL)) {
-  //                                         cur_jntPt = cur_jntPt->prev_jnt;
-  //                                         stay_within_dist_data[cur_jntPt->num+1] =
-  //                                                 stay_within_dist_data[base_joint+1];
-  //                                 }
-  //                         } else  if ((k < nb_other_jnt) && (i == other_jnt[k])) {
-  //                                 k ++;
-  //
-  //                                 /* j = index of the joint to which the current joint is attached */
-  //                                 if (prev_jntPt==NULL) {
-  //                                         j = -1;
-  //                                 } /* environment */
-  //                                 else {
-  //                                         j = prev_jntPt->num;
-  //                                 }
-  //
-  //                                 p3d_jnt_stay_within_dist(&(stay_within_dist_data[j+1]), cur_jntPt,
-  //                                                          &(stay_within_dist_data[i+1]),&(distances[i]),
-  //                                                          q_param, q_max_param, max_param, &min_param);
-  //                                 /* Rem: stay_within_dist_data[0] is bound to the environment */
-  //                         }
-  //                 }
-  //
-  //                 tot_max_range += min_param;
-  //                 if ((dir == FORWARD) && (parameter+min_param>range_param-EPS6)) {
-  //                         /* Test du chemin local suivant */
-  //                         curCurve = curCurve->next_rs;
-  //                         if (curCurve != NULL) {
-  //                                 range_param = curCurve->val_rs;
-  //                                 min_param = max_param = range_param;
-  //                                 parameter = 0.;
-  //                                 p3d_copy_config_into(robotPt, curCurve->q_init, &q_param);
-  //                                 q_max_param = curCurve->q_end;
-  //                         } else {
-  //                                 max_param = -1.;
-  //                         }
-  //                 } else if ((dir == BACKWARD) && (parameter-min_param<EPS6)) {
-  //                         /* Test du chemin local suivant */
-  //                         curCurve = curCurve->prev_rs;
-  //                         if (curCurve != NULL) {
-  //                                 range_param = curCurve->val_rs;
-  //                                 min_param = max_param = range_param;
-  //                                 parameter = range_param;
-  //                                 p3d_copy_config_into(robotPt, curCurve->q_end, &q_param);
-  //                                 q_max_param = curCurve->q_init;
-  //                         } else {
-  //                                 min_param = -1.;
-  //                         }
-  //                 } else {
-  //                         min_param = -1.;
-  //                 }
-  //         }
-  //         MY_FREE(stay_within_dist_data, p3d_stay_within_dist_data, njnt+2);
-  //         p3d_destroy_config(robotPt, q_param);
-  //
-  //         return tot_max_range;
-
+  if ( attTypeConfig == PLAN ) {
+    // RZ
+    outVectorDeriv.push_back(1/2) ;
+  }
+  else {
+    // Z
+    outVectorDeriv.push_back(0) ;
+    // RX
+    outVectorDeriv.push_back(0) ;
+    // RY
+    outVectorDeriv.push_back(0) ;
+    // RZ
+    outVectorDeriv.push_back(1/2) ;
+  }
 
 }
 
