@@ -23,9 +23,10 @@
 
 // =========================================================================================
 
-CreedsSheppSteeringMethod::CreedsSheppSteeringMethod(bool i_oriented, double inRadius) : m_oriented(i_oriented)
+CreedsSheppSteeringMethod::CreedsSheppSteeringMethod(bool i_oriented, double inRadius, ERsCurveType inType ) : m_oriented(i_oriented)
 {
         attRadius = inRadius ;
+	attType   = inType ;
 }
 
 // =========================================================================================
@@ -50,9 +51,9 @@ ktStatus CreedsSheppSteeringMethod::init(const CkwsSteeringMethodWkPtr& i_smWkPt
 
 // ==========================================================================================
 
-CreedsSheppSteeringMethodShPtr CreedsSheppSteeringMethod::create( double inRadius, bool i_oriented)
+CreedsSheppSteeringMethodShPtr CreedsSheppSteeringMethod::create( double inRadius, ERsCurveType inType, bool i_oriented)
 {
-        CreedsSheppSteeringMethod*  RSPtr = new CreedsSheppSteeringMethod(i_oriented, inRadius);
+  CreedsSheppSteeringMethod*  RSPtr = new CreedsSheppSteeringMethod(i_oriented, inRadius, inType);
         CreedsSheppSteeringMethodShPtr RSShPtr(RSPtr);
         CreedsSheppSteeringMethodWkPtr RSWkPtr(RSShPtr);
 
@@ -72,7 +73,7 @@ CkwsDirectPathShPtr CreedsSheppSteeringMethod::makeDirectPath (const CkwsConfig 
 {
 
         //    bool oriented = isOriented();
-        return CreedsSheppDirectPath::create(i_startCfg, i_endCfg, m_weakPtr.lock(), attRadius) ;
+  return CreedsSheppDirectPath::create(i_startCfg, i_endCfg, m_weakPtr.lock(), attRadius, attType) ;
 
 }
 

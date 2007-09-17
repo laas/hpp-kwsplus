@@ -36,9 +36,9 @@ CONSTANTE
 /// type For the R&S curve
 enum ERsCurveType {
   RS_ALL = 0 ,
-  RS_NO_CUSP = -1,
-  RS_WITH_CUSP = -2,
-  RS_DUBINS = -3
+  //RS_NO_CUSP = -1,
+  //RS_WITH_CUSP = -2,
+  //RS_DUBINS = -3
 } ;
 
 ///Type for the direction
@@ -308,7 +308,7 @@ private :
      \param v_r : distance value of the ieme partition of the curve
      \return length between c1 and c2
   */
-  double dubins(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r) ;
+  //double dubins(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r) ;
 
   /**
      \brief compute the minimun distance between 2 configurations. : WITHOUT rebroussement point
@@ -321,7 +321,7 @@ private :
      \param v_r : distance value of the ieme partition of the curve
      \return length between c1 and c2
   */
-  double reed_shepp_no_cusp(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r) ;
+  //double reed_shepp_no_cusp(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r) ;
 
   /**
      \brief compute the minimun distance between 2 configurations. : WITHOUT rebroussement point
@@ -334,7 +334,7 @@ private :
      \param v_r : distance value of the ieme partition of the curve
      \return length between c1 and c2
   */
-  double reed_shepp_with_cusp(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r) ;
+  //\double reed_shepp_with_cusp(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r) ;
 
   double c_c_c(double x , double y , double phi , double radius , double &t , double &u ,double &v);
   double c_cc(double x , double y , double phi , double radius , double &t , double &u , double &v);

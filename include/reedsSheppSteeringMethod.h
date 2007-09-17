@@ -1,7 +1,7 @@
 /*
-            Research carried out within the scope of the Associated International Laboratory: Joint Japanese-French Robotics Laboratory (JRL)
+  Research carried out within the scope of the Associated International Laboratory: Joint Japanese-French Robotics Laboratory (JRL)
  
-            Implemented by Mathieu Poirier (LAAS-CNRS)   
+  Implemented by Mathieu Poirier (LAAS-CNRS)   
 */
 
 
@@ -36,7 +36,7 @@ CLASS
 **************************************/
 /**
    \brief Steering Method for Reeds & Shepp derived from CkwsSteeringMethod.
- */
+*/
 class CreedsSheppSteeringMethod : public CkwsSteeringMethod
 {
 
@@ -53,7 +53,7 @@ public :
                   \param inRadius : the radius for R&S method
                   \return a shared pointer on the Steering Method
          */
-        static CreedsSheppSteeringMethodShPtr create(double inRadius, bool is_oriented = true) ;
+  static CreedsSheppSteeringMethodShPtr create(double inRadius,  ERsCurveType inType = RS_ALL, bool is_oriented = true) ;
 
         /**
                   \brief  Factory method that creates a new direct path between two configurations.
@@ -77,13 +77,15 @@ protected:
         bool m_oriented ;
         /// the radius for the Reeds&Shepp Method
         double attRadius ;
+        /// the type of calculation for the Reeds&Shepp Method
+        ERsCurveType attType ;
 
         /**
                   \brief Constructor.
                   \param i_oriented : if true, the steering method will produce oriented paths
                   \param inRadius : the radius for R&S method
          */
-        CreedsSheppSteeringMethod(bool i_oriented, double inRadius);
+        CreedsSheppSteeringMethod(bool i_oriented, double inRadius,  ERsCurveType inType);
 
         /**
                   \brief Initialization of the CkwsSMLinear object.
