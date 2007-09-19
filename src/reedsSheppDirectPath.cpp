@@ -88,11 +88,7 @@ CreedsSheppDirectPathShPtr CreedsSheppDirectPath::create(const CkwsConfig &inSta
     return pathShPtr ;
   }
 
-  // TODO
-  cout << endl << " implementer la possibilite de changer le type de courbe ALL/DUBINS/NOCUPS/WITHCUPS " << endl ;
-
-  //debug
-  //pathPtr->printDebug() ;
+ 
 
   return pathShPtr ;
 
@@ -198,8 +194,6 @@ void CreedsSheppDirectPath::interpolate(double u , CkwsConfig & outCfg) const
 void CreedsSheppDirectPath::maxAbsoluteDerivative(double inFrom, double inTo,
 						  std::vector< double > & outVectorDeriv) const
 {
-  //TODO
-  cout << " DANGER !!!!!! TODO  CreedsSheppDirectPath :    maxAbsoluteDerivative -- inFrom " << inFrom << " inTo " << inTo << endl ;
 
   unsigned int istart = findRsCurveNumInVector(inFrom) ;
   unsigned int iend   = findRsCurveNumInVector(inTo) ;
@@ -207,14 +201,10 @@ void CreedsSheppDirectPath::maxAbsoluteDerivative(double inFrom, double inTo,
   double maxDerivative = 1 ;
 
   for ( unsigned int i=istart ; i < iend  ; i++ ){
-    cout << "i : " << i << " r : " <<  attRsCurveVector[i].r << endl ;
     if (attRsCurveVector[i].type != STRAIGHT) {
       maxDerivative = 1 / attRsCurveVector[i].r ;
     }
   }
-
-  cout << " istart : " << istart << " iend : " << iend  << " maxDerivative : " << maxDerivative << endl ;
-  
 
   outVectorDeriv.clear() ;
   // X
