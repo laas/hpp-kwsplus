@@ -14,6 +14,8 @@
 #include "KineoModel/kppModelTree.h"
 #include "KineoModel/kppGeometryNode.h"
 #include "KineoModel/kppDeviceComponent.h"
+#include "KineoModel/kppJointComponent.h"
+#include "KineoWorks2/kwsJoint.h"
 
 #include "kwsPlusRoadmap.h"
 
@@ -48,35 +50,68 @@ CkwsPlusRoadmapShPtr CkwsPlusRoadmap::create(const CkwsDeviceShPtr & i_device,co
 void CkwsPlusRoadmap::compute(){
 
   unsigned int point_rank[6] ;
-  unsigned int scale = 1;
+  double scale = 0.05;
 
   CkppKCDPolyhedronShPtr rdmEdges = CkppKCDPolyhedron::create("edges");
+  
+  //
+  // Retrieve vector of joints that should be displayed.
+  //
+  CkwsDeviceShPtr rdmDevice = device();
+  CkwsDevice::TJointVector jointVector;
+  rdmDevice->getJointVector(jointVector);
+  std::vector<CkwsJointShPtr> displayJointVector;
+  for (unsigned int iJoint=0; iJoint<jointVector.size(); iJoint++) {
+    CkppJointComponentShPtr kppJoint = KIT_DYNAMIC_PTR_CAST(CkppJointComponent, jointVector[iJoint]);
+    if (kppJoint) {
+      if (kppJoint->doesDisplayPath()) {
+	displayJointVector.push_back(jointVector[iJoint]);
+      }
+    }
+  }
+  if (displayJointVector.size() == 0) {
+    std::cout << "CkwsPlusRoadmap::compute: no joint to display." << std::endl;
+    return;
+  }
 
   if(!countNodes()) cout<<"No nodes in the roadmap"<<endl;
   else{
     cout<<"displaying roadmap..."<<endl;
-    for(int i=0; i<countNodes(); i++){//pour chaque noeud de la roadmap
-      for(int j=0; j<node(i)->countOutEdges();j++){//Pour chaque arc sortant du noeud
+    for (unsigned int iJoint=0; iJoint < displayJointVector.size(); iJoint++) {
+      for(int i=0; i<countNodes(); i++){//pour chaque noeud de la roadmap
+	for(int j=0; j<node(i)->countOutEdges();j++){//Pour chaque arc sortant du noeud
+	  CkwsJointShPtr kwsJoint = displayJointVector[iJoint];
+	  CkwsConfig current(node(i)->config());//current configuration : edge start
+	  CkwsConfig next(node(i)->outEdge(j)->endNode()->config());//next configuration : edge end
 	
- 	CkwsConfig current(node(i)->config());//current configuration : edge start
- 	CkwsConfig next(node(i)->outEdge(j)->endNode()->config());//next configuration : edge end
-	
- 	//creating triangles to design an edge (toblerone-like)
- 	rdmEdges->CkcdPolyhedron::addPoint(current.dofValue(0)-scale , current.dofValue(1)  , current.dofValue(2) , point_rank[0]);
- 	rdmEdges->CkcdPolyhedron::addPoint(current.dofValue(0) , current.dofValue(1)-scale , current.dofValue(2) , point_rank[1]);
- 	rdmEdges->CkcdPolyhedron::addPoint(current.dofValue(0) , current.dofValue(1) , current.dofValue(2)-scale , point_rank[2]);
-	
- 	rdmEdges->CkcdPolyhedron::addPoint(next.dofValue(0)-scale , next.dofValue(1) , next.dofValue(2) , point_rank[3]);
- 	rdmEdges->CkcdPolyhedron::addPoint(next.dofValue(0) , next.dofValue(1)-scale , next.dofValue(2) , point_rank[4]);
- 	rdmEdges->CkcdPolyhedron::addPoint(next.dofValue(0) , next.dofValue(1) , next.dofValue(2)-scale , point_rank[5]);
+	  rdmDevice->setCurrentConfig(current);
+	  CkitMat4 jointPosition = kwsJoint->currentPosition();
+	  double x1 = jointPosition(0,3);
+	  double y1 = jointPosition(1,3);
+	  double z1 = jointPosition(2,3);
 
- 	rdmEdges->addTriangle(point_rank[0] , point_rank[3] , point_rank[1]);
- 	rdmEdges->addTriangle(point_rank[1] , point_rank[3] , point_rank[4]);
- 	rdmEdges->addTriangle(point_rank[1] , point_rank[4] , point_rank[5]);
- 	rdmEdges->addTriangle(point_rank[1] , point_rank[5] , point_rank[2]);
- 	rdmEdges->addTriangle(point_rank[2] , point_rank[5] , point_rank[3]);
- 	rdmEdges->addTriangle(point_rank[2] , point_rank[3] , point_rank[0]);
-	
+	  rdmDevice->setCurrentConfig(next);
+	  jointPosition = kwsJoint->currentPosition();
+	  double x2 = jointPosition(0,3);
+	  double y2 = jointPosition(1,3);
+	  double z2 = jointPosition(2,3);
+
+	  //creating triangles to design an edge (toblerone-like)
+	  rdmEdges->CkcdPolyhedron::addPoint(x1-scale , y1  , z1 , point_rank[0]);
+	  rdmEdges->CkcdPolyhedron::addPoint(x1 , y1-scale , z1 , point_rank[1]);
+	  rdmEdges->CkcdPolyhedron::addPoint(x1 , y1 , z1-scale , point_rank[2]);
+	  
+	  rdmEdges->CkcdPolyhedron::addPoint(x2-scale , y2 , z2 , point_rank[3]);
+	  rdmEdges->CkcdPolyhedron::addPoint(x2 , y2-scale , z2 , point_rank[4]);
+	  rdmEdges->CkcdPolyhedron::addPoint(x2 , y2 , z2-scale , point_rank[5]);
+	  
+	  rdmEdges->addTriangle(point_rank[0] , point_rank[3] , point_rank[1]);
+	  rdmEdges->addTriangle(point_rank[1] , point_rank[3] , point_rank[4]);
+	  rdmEdges->addTriangle(point_rank[1] , point_rank[4] , point_rank[5]);
+	  rdmEdges->addTriangle(point_rank[1] , point_rank[5] , point_rank[2]);
+	  rdmEdges->addTriangle(point_rank[2] , point_rank[5] , point_rank[3]);
+	  rdmEdges->addTriangle(point_rank[2] , point_rank[3] , point_rank[0]);
+	}
        }
     }
     insertChildComponent(rdmEdges,0);
@@ -107,40 +142,70 @@ void CkwsPlusRoadmap::display(){
 void CkwsPlusRoadmap::lastEdge(){
 
   unsigned int point_rank[6] ;
-  unsigned int scale = 1;
+  double scale = 0.05;
 
   CkppKCDPolyhedronShPtr newEdge = CkppKCDPolyhedron::create("edge");
+
+  //
+  // Retrieve vector of joints that should be displayed.
+  //
+  CkwsDeviceShPtr rdmDevice = device();
+  CkwsDevice::TJointVector jointVector;
+  rdmDevice->getJointVector(jointVector);
+  std::vector<CkwsJointShPtr> displayJointVector;
+  for (unsigned int iJoint=0; iJoint<jointVector.size(); iJoint++) {
+    CkppJointComponentShPtr kppJoint = KIT_DYNAMIC_PTR_CAST(CkppJointComponent, jointVector[iJoint]);
+    if (kppJoint) {
+      if (kppJoint->doesDisplayPath()) {
+	displayJointVector.push_back(jointVector[iJoint]);
+      }
+    }
+  }
+  if (displayJointVector.size() == 0) {
+    std::cout << "CkwsPlusRoadmap::compute: no joint to display." << std::endl;
+    return;
+  }
 
   if(countNodes()){
     
     if(node(countNodes()-1)->countOutEdges()){//adding only the edge corresponding to the last node
       for(int j=0; j<node(countNodes()-1)->countOutEdges();j++){//Pour chaque arc sortant du noeud
+	for (unsigned int iJoint=0; iJoint < displayJointVector.size(); iJoint++) {
+  
+	  CkwsConfig current(node(countNodes()-1)->config());//current configuration : edge start
+	  CkwsConfig next(node(countNodes()-1)->outEdge(j)->endNode()->config());//next configuration : edge end
+	  
+	  rdmDevice->setCurrentConfig(current);
+	  CkwsJointShPtr kwsJoint = displayJointVector[iJoint];
+	  CkitMat4 jointPosition = kwsJoint->currentPosition();
+	  double x1 = jointPosition(0,3);
+	  double y1 = jointPosition(1,3);
+	  double z1 = jointPosition(2,3);
 
-	CkwsConfig next(node(countNodes()-1)->outEdge(j)->endNode()->config());
-	CkwsConfig current(node(countNodes()-1)->outEdge(j)->startNode()->config());
-	
-	newEdge->CkcdPolyhedron::addPoint(current.dofValue(0)-scale , current.dofValue(1)  , current.dofValue(2) , point_rank[0]);
-	newEdge->CkcdPolyhedron::addPoint(current.dofValue(0) , current.dofValue(1)-scale , current.dofValue(2) , point_rank[1]);
-	newEdge->CkcdPolyhedron::addPoint(current.dofValue(0) , current.dofValue(1) , current.dofValue(2)-scale , point_rank[2]);
-	
-	newEdge->CkcdPolyhedron::addPoint(next.dofValue(0)-scale , next.dofValue(1) , next.dofValue(2) , point_rank[3]);
-	newEdge->CkcdPolyhedron::addPoint(next.dofValue(0) , next.dofValue(1)-scale , next.dofValue(2) , point_rank[4]);
-	newEdge->CkcdPolyhedron::addPoint(next.dofValue(0) , next.dofValue(1) , next.dofValue(2)-scale , point_rank[5]);
-	
-	newEdge->addTriangle(point_rank[0] , point_rank[3] , point_rank[1]);
-	newEdge->addTriangle(point_rank[1] , point_rank[3] , point_rank[4]);
-	newEdge->addTriangle(point_rank[1] , point_rank[4] , point_rank[5]);
-	newEdge->addTriangle(point_rank[1] , point_rank[5] , point_rank[2]);
-	newEdge->addTriangle(point_rank[2] , point_rank[5] , point_rank[3]);
-	newEdge->addTriangle(point_rank[2] , point_rank[3] , point_rank[0]);
+	  rdmDevice->setCurrentConfig(next);
+	  jointPosition = kwsJoint->currentPosition();
+	  double x2 = jointPosition(0,3);
+	  double y2 = jointPosition(1,3);
+	  double z2 = jointPosition(2,3);
+
+	  newEdge->CkcdPolyhedron::addPoint(x1-scale , y1  , z1 , point_rank[0]);
+	  newEdge->CkcdPolyhedron::addPoint(x1 , y1-scale , z1 , point_rank[1]);
+	  newEdge->CkcdPolyhedron::addPoint(x1 , y1 , z1-scale , point_rank[2]);
+	  
+	  newEdge->CkcdPolyhedron::addPoint(x2-scale , y2 , z2 , point_rank[3]);
+	  newEdge->CkcdPolyhedron::addPoint(x2 , y2-scale , z2 , point_rank[4]);
+	  newEdge->CkcdPolyhedron::addPoint(x2 , y2 , z2-scale , point_rank[5]);
+	  
+	  newEdge->addTriangle(point_rank[0] , point_rank[3] , point_rank[1]);
+	  newEdge->addTriangle(point_rank[1] , point_rank[3] , point_rank[4]);
+	  newEdge->addTriangle(point_rank[1] , point_rank[4] , point_rank[5]);
+	  newEdge->addTriangle(point_rank[1] , point_rank[5] , point_rank[2]);
+	  newEdge->addTriangle(point_rank[2] , point_rank[5] , point_rank[3]);
+	  newEdge->addTriangle(point_rank[2] , point_rank[3] , point_rank[0]);
+	}
       }
-      
       insertChildComponent(newEdge,0);
-      
-    }
-    else{
     }
   }
   else{ cout<<"ERROR : No Nodes in the roadmap"<<endl;}
-
 }

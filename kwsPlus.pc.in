@@ -7,5 +7,5 @@ Name: @PACKAGE@
 Description: Extension to KineoWorks software
 Version: @VERSION@
 Requires: kwsIO
-Libs: -L${libdir} -lkwsPlus @KWSIO_LIBS@ 
-Cflags: -I${includedir}/kwsPlus @KWSIO_CFLAGS@ 
+Libs: -L${libdir} -lkwsPlus 
+Cflags: -I${includedir}/kwsPlus 

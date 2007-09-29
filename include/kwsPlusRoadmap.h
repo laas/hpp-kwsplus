@@ -30,8 +30,8 @@ KIT_PREDEF_CLASS(CkwsPlusRoadmap);
 
    You can compute and display the roadmap on run-time using the method "lastEdge" and a 
    roadmap builder delegate. In order to refresh the screen on run-time, you should also 
-   use a progress delegate (A new class that inherits from both   CkppRdmBuilderDelegate 
-   and CkppProgressDelegate can be useful).
+   use a progress delegate (A new class that inherits from both   CkwsRdmBuilderDelegate 
+   and CkitProgressDelegate can be useful).
 
    Warning : if you have too many nodes in your roadmap, it will seriously slow KPP...
 
@@ -67,7 +67,7 @@ class CkwsPlusRoadmap : public CkwsRoadmap, public CkppKCDAssembly {
      to display the roadmap on run time. In this case, you should use it in a class that inherits from a roadmap 
      builder delegate class (CkwsRdmBuilderDelegate). 
      This is actually not enough to see the roadmap building in real time. For this, your delegate class should 
-     inherits from CkppProgressDelegate too, or a class that implements CkitProgressDelegate. You should also 
+     inherit from CkitProgressDelegate too, or a class that implements CkitProgressDelegate. You should also 
      call the display method before any calls to this method.
 
   */

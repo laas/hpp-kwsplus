@@ -1,3 +1,8 @@
+2007/09/29
+	1. Added visibility algorithm.
+	2. Added a roadmap builder delegate to display the roadmap.
+	3. Modified construction of CkwsPlusRoadmap.
+	
 2007/09/16
 	Completed the implementation of the Reeds&Shepp Curve
 		  - MaxAbsoluteDerivative 

@@ -13,7 +13,12 @@ libkwsPlus_la_SOURCES = \
 	reedsSheppDirectPath.cpp \
 	reedsSheppSteeringMethod.cpp \
 	kitMat3.cpp \
-	kwsPlusRoadmap.cpp
+	kwsPlusRoadmap.cpp \
+	kwsPlusDrawRdmBuilderDelegate.cpp \
+	hppConfigurationShooter.cpp \
+	hppShooterActiveDof.cpp \
+	hppVisRdmBuilder.cpp
+
 
 libkwsPlus_la_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
 libkwsPlus_la_LDFLAGS =\
