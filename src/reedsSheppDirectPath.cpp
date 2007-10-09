@@ -1661,6 +1661,7 @@ double CreedsSheppDirectPath::reed_shepp(CkwsConfig &c1 , CkwsConfig &c2, double
 ktStatus  CreedsSheppDirectPath::computeRsCurveVector(int num , double t, double u, double v , double r, CkwsConfig &conf )
 {
 
+
   int gauche , droite , ligne , av ,ar;
 
   droite = 1;
@@ -2123,9 +2124,13 @@ unsigned int CreedsSheppDirectPath::findRsCurveNumInVector(double &param) const
     param = 0;
   }
 
-  while ( (param > attRsCurveVector[irs].val) && (irs < attRsCurveVector.size() )) {
+  double EPS = 1e-6 ;
+
+  while ( ((param - attRsCurveVector[irs].val) > EPS) && (irs < attRsCurveVector.size() )) {
+
     param = param - attRsCurveVector[irs].val;
     irs ++ ;
+    
   }
 
   return irs ;
@@ -2136,6 +2141,7 @@ unsigned int CreedsSheppDirectPath::findRsCurveNumInVector(double &param) const
 void CreedsSheppDirectPath::kwsConfigAtLengthParam(double u, CkwsConfig &outCfg) const
 {
   double paramLength = u ;
+
   unsigned int irs = findRsCurveNumInVector(paramLength) ;
 
   CkwsConfig curConfig(outCfg);
@@ -2149,6 +2155,8 @@ void CreedsSheppDirectPath::kwsConfigAtLengthParam(double u, CkwsConfig &outCfg)
     dofRotz = 2 ;
   else
     dofRotz = 5 ;
+
+ 
 
   theta_init = attRsCurveVector[irs].cd->dofValue(dofRotz);
   theta_end = attRsCurveVector[irs].cf->dofValue(dofRotz);
