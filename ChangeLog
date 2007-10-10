@@ -1,3 +1,6 @@
+2007/10/10
+	kwsPlus release 1.1
+	
 2007/10/09
 	1. Correct a bug in  findRsCurveNumInVector() : 
 	   - put an Epsilon for the test else there is a bug when u ~= val 
@@ -12,6 +15,9 @@
 		  - MaxAbsoluteDerivative 
 		  - Reduce the option RS_ALL type of curve
 
+2007/07/13
+	kwsPlus release 1.0
+	
 2007/05/02
 	Added methods and attributes to keep track of extration and reversion of KineoWorks direct paths.
 	
