@@ -8,7 +8,7 @@ TESTS = \
 noinst_PROGRAMS = \
 	testFlicMaxDeriv \
 	testFlicBoundObj \
-	testFlicStraightLine
+	testFlicStraightLine 
 
 license: clean-license \
 	testFlicMaxDeriv.kab \
@@ -28,8 +28,8 @@ testFlicMaxDeriv_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicDirectPathMaxAbsDeriv.cpp
 
-testFlicMaxDeriv_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) $(FLATCARDIRECTPATH_CFLAGS)
-testFlicMaxDeriv_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) $(FLATCARDIRECTPATH_LIBS)
+testFlicMaxDeriv_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
+testFlicMaxDeriv_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
 
 
 #
@@ -40,8 +40,8 @@ testFlicBoundObj_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicDirectPathBoundingObjects.cpp
 
-testFlicBoundObj_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) $(FLATCARDIRECTPATH_CFLAGS)
-testFlicBoundObj_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) $(FLATCARDIRECTPATH_LIBS)
+testFlicBoundObj_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
+testFlicBoundObj_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
 
 
 #
@@ -51,8 +51,14 @@ testFlicStraightLine_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicStraightLine.cpp
 
-testFlicStraightLine_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) $(FLATCARDIRECTPATH_CFLAGS)
-testFlicStraightLine_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) $(FLATCARDIRECTPATH_LIBS)
+testFlicStraightLine_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
+testFlicStraightLine_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
+
+testProjectionConstraint_SOURCES = \
+	testProjectionConstraint.cpp
+
+testProjectionConstraint_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
+testProjectionConstraint_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
 
 %.kab: %
 	mkdir -p bin$<
