@@ -20,6 +20,11 @@
 KIT_PREDEF_CLASS(CkwsPlusRoadmap);
 
 /**
+   \addtogroup kwsPlus_graphic_rdm
+
+   @{
+*/
+/**
    \brief This class allows users to graphically display a roadmap.
    It shows only a 3D-space projection of the roadmap, if the robot have more than
    3 dof. Dofs should be in this order: X, Y, Z, ...  Linked devices must inherits 
@@ -96,5 +101,9 @@ class CkwsPlusRoadmap : public CkwsRoadmap, public CkppKCDAssembly {
   bool isInModelTree;
 
 };
+
+/**
+   @}
+*/
 
 #endif /*HPP_ROADMAP_H*/

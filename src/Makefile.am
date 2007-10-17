@@ -9,6 +9,7 @@ lib_LTLIBRARIES = libkwsPlus.la
 libkwsPlus_la_SOURCES = \
 	flicDirectPath.cpp \
 	flicSteeringMethod.cpp \
+	kwsPlusDirectPath.cpp \
 	directPathVector.cpp \
 	reedsSheppDirectPath.cpp \
 	reedsSheppSteeringMethod.cpp \

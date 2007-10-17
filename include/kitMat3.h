@@ -12,7 +12,7 @@
 #include "KineoUtility/kitMat4.h"
 
 /**
-   \addtogroup SO3
+   \addtogroup kwsPlus_misc
    @{
 */
 

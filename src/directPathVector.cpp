@@ -55,11 +55,8 @@ CdirectPathVector::CdirectPathVector(const CkwsConfig& inStartConfig,
 				     const CkwsConfig& inEndConfig,
 				     const CkwsSteeringMethodShPtr& inSteeringMethod,
 				     std::vector<CkwsDirectPathConstShPtr> inDirectPathVector) :
-  CkwsDirectPath(inStartConfig, inEndConfig, inSteeringMethod), 
-  attDirectPathVector(inDirectPathVector),
-  attUstart(0.0),
-  attUend(1.0),
-  attReverse(false)
+  CkwsPlusDirectPath(inStartConfig, inEndConfig, inSteeringMethod), 
+  attDirectPathVector(inDirectPathVector)
 {
   attLength = 0;
   //Compute length
@@ -72,19 +69,15 @@ CdirectPathVector::CdirectPathVector(const CkwsConfig& inStartConfig,
 
 
 CdirectPathVector::CdirectPathVector(const CdirectPathVector& inDirectPathVector) :
-  CkwsDirectPath(inDirectPathVector), 
+  CkwsPlusDirectPath(inDirectPathVector), 
   attDirectPathVector(inDirectPathVector.attDirectPathVector),
-  attLength(inDirectPathVector.attLength),
-  attUstart(inDirectPathVector.attUstart),
-  attUend(inDirectPathVector.attUend),
-  attReverse(inDirectPathVector.attReverse)
-
+  attLength(inDirectPathVector.attLength)
 {
 }
 
 ktStatus CdirectPathVector::init(const CdirectPathVectorWkPtr& inWeakPtr)
 {
-  ktStatus success = CkwsDirectPath::init(inWeakPtr) ;
+  ktStatus success = CkwsPlusDirectPath::init(inWeakPtr) ;
 
   // Check that vector is not empty
   CdirectPathVectorShPtr directPath = inWeakPtr.lock();
@@ -207,52 +200,3 @@ void CdirectPathVector::maxAbsoluteDerivative(double inFrom, double inTo,
   
 }
 
-ktStatus CdirectPathVector::extractFrom(double inParam)
-{
-  if (CkwsDirectPath::extractFrom(inParam) != KD_OK) {
-    return KD_ERROR;
-  }
-
-  if (attReverse) {
-    if (attUend - inParam < attUstart) {
-      return KD_ERROR;
-    }
-    attUend -= inParam;
-  } else {
-    if (attUstart + inParam > attUend) {
-      return KD_ERROR;
-    }
-    
-    attUstart += inParam;
-  }
-  return KD_OK;
-}
-
-ktStatus CdirectPathVector::extractTo(double inParam)
-{
-  if (CkwsDirectPath::extractTo(inParam) != KD_OK) {
-    return KD_ERROR;
-  }
-
-  if (attReverse) {
-    if (inParam > attUend - attUstart) {
-      return KD_ERROR;
-    }
-    attUstart = attUend - inParam;
-  } else {
-    if (inParam < 0) {
-      return KD_ERROR;
-    }
-    attUend = attUstart + inParam;
-  }
-  return KD_OK;
-}
-
-ktStatus CdirectPathVector::reverse()
-{
-  if (CkwsDirectPath::reverse() != KD_OK) {
-    return KD_ERROR;
-  }
-  attReverse = !attReverse;
-  return KD_OK;
-}

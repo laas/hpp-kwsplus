@@ -8,9 +8,15 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "KineoWorks2/kwsDirectPath.h"
+#include "kwsPlusDirectPath.h"
 
 KIT_PREDEF_CLASS(CdirectPathVector);
+
+/**
+   \addtogroup kwsPlus_DP
+
+   @{
+*/
 
 /**
    \brief Implement a vector of direct paths as a direct path.
@@ -22,7 +28,7 @@ KIT_PREDEF_CLASS(CdirectPathVector);
 
 */
 
-class CdirectPathVector : public CkwsDirectPath {
+class CdirectPathVector : public CkwsPlusDirectPath {
 public:
   /*
 
@@ -64,34 +70,6 @@ public:
   */
   CkwsDirectPathConstShPtr directPathAtRank(unsigned int inRank) const {return attDirectPathVector[inRank];};
 
-  /**
-     @}
-  */
-
-  /**
-     \name Reversion and extraction management.
-     @{
-  */
-  /**
-     \brief Returns whether direct path has been reversed.
-  */
-  bool isReversed() const {return attReverse;};
-
-  /**
-     \brief Return beginning of extracted interval.
-
-     A new path can be created by restriction to an interval. If this path comes from such a restriction,
-     this attribute is the lower bound of the interval.
-  */
-  const double& uStart() const {return attUstart;};
-
-  /**
-     \brief Return end of extracted interval.
-
-     A new path can be created by restriction to an interval. If this path comes from such a restriction,
-     this attribute is the upper bound of the interval.
-  */
-  const double& uEnd() const {return attUend;};
   /**
      @}
   */
@@ -145,21 +123,6 @@ protected:
   */
   void maxAbsoluteDerivative(double inFrom, double inTo, std::vector<double>& outDerivatives) const;
 
-  /**
-     \brief Reimplementation from CkwsDirectPath in order to keep track of the extracted interval.
-  */
-  virtual ktStatus extractFrom(double inParam);
-
-  /**
-     \brief Reimplementation from CkwsDirectPath in order to keep track of the extracted interval.
-  */
-  virtual ktStatus extractTo(double inParam);
-
-  /**
-     \brief Reimplementation from CkwsDirectPath in order to keep track of the extracted interval.
-  */
-  virtual ktStatus reverse();
-
 private:
   /*
 
@@ -201,25 +164,10 @@ private:
   */
   double attLength;
 
-  /**
-     \brief Beginning of extracted interval.
-     A new path can be created by restriction to an interval. If this path comes from such a restriction,
-     this attribute is the lower bound of the interval.
-  */
-  double attUstart;
-
-  /**
-     \brief End of extracted interval.
-     A new path can be created by restriction to an interval. If this path comes from such a restriction,
-     this attribute is the upper bound of the interval.
-  */
-  double attUend;
-
-  /**
-     \brief Whether path is reversed.
-     Store information about the fact that CkwsDirectPath has been reversed.
-     This information is used when writing the direct path in a file.
-  */
-  bool attReverse;
 };
+
+/**
+   @}
+*/
+
 #endif

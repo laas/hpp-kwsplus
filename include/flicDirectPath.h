@@ -9,6 +9,25 @@
 #ifndef __FLATINTERCARTDP_H
 #define __FLATINTERCARTDP_H
 
+/*************************************
+INCLUDE
+**************************************/
+
+#include <iostream>
+#include <list>
+#include "KineoWorks2/kwsSteeringMethod.h"
+#include "KineoWorks2/kwsConfig.h"
+#include "KineoWorks2/kwsDefine.h"
+
+#include "kwsPlusDirectPath.h"
+
+using namespace std ;
+
+KIT_PREDEF_CLASS( CflicDirectPath );
+KIT_PREDEF_CLASS( CflicBoundManagerDefParam );
+KIT_PREDEF_CLASS( CflicArcLengthManager );
+KIT_PREDEF_CLASS( CflicBoundManagerArcLengthParam );
+
 /** 
 
 \addtogroup flic 
@@ -102,30 +121,16 @@ Function CflicDirectPath::maxAbsoluteDerivative needs to compute upper values of
  
 
 /*************************************
-INCLUDE
-**************************************/
-
-#include <iostream>
-#include <list>
-#include "KineoWorks2/kwsDirectPath.h"
-#include "KineoWorks2/kwsSteeringMethod.h"
-#include "KineoWorks2/kwsConfig.h"
-#include "KineoWorks2/kwsDefine.h"
-
-
-using namespace std ;
-
-/*************************************
 CONSTANTE
 **************************************/
 
-/// \brief : define to compute integral
+/// \brief define to compute integral
 #define NEAR_ZERO 0.00000001
 
-/// \brief : Maximal order of derivation in combination function
+/// \brief Maximal order of derivation in combination function
 #define MAX_DERIV_ORDER_IN_COMBINATION   2
 
-/// \brief : the Epsilon between 2 scales
+/// \brief the Epsilon between 2 scales
 #define EPSILONINTER 0.01
 
 /*************************************
@@ -149,11 +154,6 @@ typedef struct TflicBoundInterval {
   double valueMax ; 
   double valueMin ; 
 } TflicBoundInterval; 
-
-KIT_PREDEF_CLASS( CflicDirectPath );
-KIT_PREDEF_CLASS( CflicBoundManagerDefParam );
-KIT_PREDEF_CLASS( CflicArcLengthManager );
-KIT_PREDEF_CLASS( CflicBoundManagerArcLengthParam );
 
 
 // For test only
@@ -605,7 +605,7 @@ private:
 /**
    \brief Direct path for flat interpolation for Cart derivate from CkwsDirectPath.
 */
-class CflicDirectPath : public CkwsDirectPath {
+class CflicDirectPath : public CkwsPlusDirectPath {
   friend class CtestFlicDirectPath;
   friend class CflicBoundManagerDefParam;
   friend class CflicArcLengthManager;

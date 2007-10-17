@@ -9,6 +9,7 @@ kwsPlusdir = @includedir@/kwsPlus
 kwsPlus_HEADERS = \
 	flicDirectPath.h \
 	flicSteeringMethod.h \
+	kwsPlusDirectPath.h \
 	directPathVector.h \
 	reedsSheppDirectPath.h \
 	reedsSheppSteeringMethod.h \

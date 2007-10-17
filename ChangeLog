@@ -1,5 +1,10 @@
+2007/10/17
+	3. Reorganization of documentation.
+	2. Added class CkwsPlusDirectPath that manages extraction and reverse of direct paths.
+	
 2007/10/16
 	1. Added a class in unitTesting to test whether a configuration constraint is a projection.
+	
 2007/10/10
 	kwsPlus release 1.1
 	

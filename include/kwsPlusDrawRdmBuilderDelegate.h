@@ -7,6 +7,11 @@
 KIT_PREDEF_CLASS(CkwsPlusDrawRdmBuilderDelegate);
 
 /**
+   \addtogroup kwsPlus_graphic_rdm
+   @{
+
+*/
+/**
    \brief Roadmap builder delegate that draws the roadmap.
 */
 
@@ -51,5 +56,9 @@ class CkwsPlusDrawRdmBuilderDelegate : public CkwsRdmBuilderDelegate, public Cki
   virtual bool cancelled(){return false;};
 
 };
+
+/**
+   @}
+*/
 
 #endif

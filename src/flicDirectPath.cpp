@@ -1303,7 +1303,7 @@ CkwsAbstractPathShPtr CflicDirectPath::clone() const
 
 CflicDirectPath::CflicDirectPath(const CkwsConfig &inStartCfg, const CkwsConfig &inEndCfg,
                                  const CkwsSteeringMethodShPtr &inSteeringMethod) :
-    CkwsDirectPath(inStartCfg, inEndCfg, inSteeringMethod)
+    CkwsPlusDirectPath(inStartCfg, inEndCfg, inSteeringMethod)
 {
   //configuration convertion
   flatStartCfg.kappa = inStartCfg.dofValue(CURV_COORD) ; //Kappa (dof fictif)
@@ -1323,7 +1323,7 @@ CflicDirectPath::CflicDirectPath(const CkwsConfig &inStartCfg, const CkwsConfig 
   // ---------------------
 }
 
-CflicDirectPath::CflicDirectPath(const CflicDirectPath &inDirectPath):CkwsDirectPath(inDirectPath)
+CflicDirectPath::CflicDirectPath(const CflicDirectPath &inDirectPath):CkwsPlusDirectPath(inDirectPath)
 {
   //configuration convertion
   flatStartCfg.kappa = m_start.dofValue(CURV_COORD) ; //Kappa (dof fictif)

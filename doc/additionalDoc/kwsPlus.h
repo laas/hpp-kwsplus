@@ -4,11 +4,27 @@
 
 This package includes general extensions to KineoWorks software. These extensions are divided into modules.
 
-\defgroup SO3 Rotation matrices
+\defgroup kwsPlus_DP Direct Paths and Steering Methods
+  @{
+*/
 
-\defgroup RS Reeds and Shepp local steering method
+/**
+  \defgroup RS Reeds and Shepp local steering method
 
-\defgroup flic Flatness-based local steering method for cart-like robot
+  \defgroup flic Flatness-based local steering method for cart-like robot
+
+*/
+
+/**
+  @}
+*/
+
+/**
+   \defgroup kwsPlus_rdm Roadmaps and roadmap builders
+   @{
+*/
+
+/**
 
 \defgroup visi Visibility roadmap builder
 
@@ -40,6 +56,20 @@ The DifussionShooterActiveDofSetter inherits from CkwsDiffusionShooter
 and from ChppActiveDofShooter. So it could be use to do a diffussing
 roadmap with RLG.
 
+*/
+
+/**
+   \defgroup kwsPlus_graphic_rdm Displaying roadmaps
+
+   This module provides tools to display a roadmap in KPP-interface.
 
 */
 
+/**
+@}
+*/
+
+/**
+   \defgroup kwsPlus_misc Miscellanous tools
+
+*/
