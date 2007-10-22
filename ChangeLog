@@ -1,3 +1,5 @@
+2007/10/22
+	4. Added a class to test whether a configuration constraint is continuous and is a projection.	
 2007/10/17
 	3. Reorganization of documentation.
 	2. Added class CkwsPlusDirectPath that manages extraction and reverse of direct paths.

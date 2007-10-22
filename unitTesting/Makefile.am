@@ -8,7 +8,8 @@ TESTS = \
 noinst_PROGRAMS = \
 	testFlicMaxDeriv \
 	testFlicBoundObj \
-	testFlicStraightLine 
+	testFlicStraightLine \
+	testProjectionConstraint
 
 license: clean-license \
 	testFlicMaxDeriv.kab \
