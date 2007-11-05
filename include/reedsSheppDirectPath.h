@@ -13,8 +13,10 @@
 **************************************/
 
 
+#include "kwsPlusDirectPath.h"
+
 #include <iostream>
-#include <KineoWorks2/kwsDirectPath.h>
+//#include <KineoWorks2/kwsDirectPath.h>
 #include <KineoWorks2/kwsPath.h>
 #include <KineoWorks2/kwsSteeringMethod.h>
 #include <KineoWorks2/kwsConfig.h>
@@ -95,7 +97,7 @@ KIT_PREDEF_CLASS( CreedsSheppDirectPath );
 /**
    \brief Direct path for Reeds and Shepp steering method
 */
-class CreedsSheppDirectPath : public CkwsDirectPath
+class CreedsSheppDirectPath : public CkwsPlusDirectPath
 {
 
 public :

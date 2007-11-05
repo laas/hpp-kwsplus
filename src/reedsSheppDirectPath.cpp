@@ -131,7 +131,7 @@ std::vector< TrsCurve >CreedsSheppDirectPath::getInfoRsCurveVector() const {
 
 CreedsSheppDirectPath::CreedsSheppDirectPath(const CkwsConfig &inStartCfg, const CkwsConfig &inEndCfg,
 					     const CkwsSteeringMethodShPtr &inSteeringMethod, const ERsCurveType inType)
-  : CkwsDirectPath(inStartCfg, inEndCfg, inSteeringMethod)
+  : CkwsPlusDirectPath(inStartCfg, inEndCfg, inSteeringMethod)
 {
   attTypeCurve = inType ;
   attRsCurveVector.clear() ;
@@ -140,7 +140,7 @@ CreedsSheppDirectPath::CreedsSheppDirectPath(const CkwsConfig &inStartCfg, const
 // ==============================================================================
 
 CreedsSheppDirectPath::CreedsSheppDirectPath(const CreedsSheppDirectPath &inDirectPath)
-  : CkwsDirectPath(inDirectPath)
+  : CkwsPlusDirectPath(inDirectPath)
 {
   attTypeCurve = inDirectPath.attTypeCurve ;
   attRsCurveVector = inDirectPath.attRsCurveVector ;
