@@ -123,7 +123,32 @@ CreedsSheppDirectPathShPtr CreedsSheppDirectPath::createCopy (const CreedsSheppD
 // ==============================================================================
 
 std::vector< TrsCurve >CreedsSheppDirectPath::getInfoRsCurveVector() const {
-  return attRsCurveVector ;
+
+  std::vector<TrsCurve> vectorCopy  ;
+  
+  double ustart = uStart() ;
+  double uend = uEnd() ;
+
+  cout << " ustart : " << ustart << " uend : " << uend << endl ;
+
+  if (ustart != 0){
+
+    unsigned int iStart = findRsCurveNumInVector(ustart) ;
+    unsigned int iEnd = findRsCurveNumInVector(uend) ;
+
+    for ( unsigned int i = iStart ; i != iEnd ; i ++) {
+      vectorCopy.push_back(attRsCurveVector[i]) ;
+    }
+     
+    vectorCopy[0].cd = configAtStart() ;
+    vectorCopy[vectorCopy.size()-1].cf = configAtEnd() ;
+      
+  }
+  else {
+    vectorCopy = attRsCurveVector ;
+  }
+
+  return vectorCopy ;
 }
 
 
@@ -150,7 +175,7 @@ CreedsSheppDirectPath::CreedsSheppDirectPath(const CreedsSheppDirectPath &inDire
 ktStatus CreedsSheppDirectPath::init(const CreedsSheppDirectPathWkPtr &inWeakPtr)
 {
 
-  ktStatus success = CkwsDirectPath::init(inWeakPtr) ;
+  ktStatus success = CkwsPlusDirectPath::init(inWeakPtr) ;
 
   if (KD_OK == success)
     attWeakPtr = inWeakPtr;

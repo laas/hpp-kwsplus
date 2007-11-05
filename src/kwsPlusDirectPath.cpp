@@ -39,8 +39,6 @@ ktStatus CkwsPlusDirectPath::init(const CkwsPlusDirectPathWkPtr& inWeakPtr)
 
 ktStatus CkwsPlusDirectPath::extractFrom(double inParam)
 {
-  //init
-  attUend = privateLength();
 
   if (CkwsDirectPath::extractFrom(inParam) != KD_OK) {
     cerr  << "ERROR - CkwsPlusDirectPath::extractFrom : CkwsDirectPath::extractFrom DID NOT WORK "   << endl ;
@@ -66,9 +64,6 @@ ktStatus CkwsPlusDirectPath::extractFrom(double inParam)
 
 ktStatus CkwsPlusDirectPath::extractTo(double inParam)
 {
-
-  //init
-  attUend = privateLength();
 
   if (CkwsDirectPath::extractTo(inParam) != KD_OK) {
     cout  << "ERROR - CkwsPlusDirectPath::extractTo : CkwsDirectPath::extractTo DID NOT WORK  "   << endl ;
