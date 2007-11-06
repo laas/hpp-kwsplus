@@ -41,9 +41,11 @@ ktStatus CkwsPlusDirectPath::extractFrom(double inParam)
 {
 
   if (CkwsDirectPath::extractFrom(inParam) != KD_OK) {
-    cerr  << "ERROR - CkwsPlusDirectPath::extractFrom : CkwsDirectPath::extractFrom DID NOT WORK "   << endl ;
+    //cerr  << "ERROR - CkwsPlusDirectPath::extractFrom : CkwsDirectPath::extractFrom DID NOT WORK "   << endl ;
     return KD_ERROR;
   }
+
+ 
 
   if (attReverse) {
     if ((attUend - inParam) < attUstart) {
@@ -66,7 +68,7 @@ ktStatus CkwsPlusDirectPath::extractTo(double inParam)
 {
 
   if (CkwsDirectPath::extractTo(inParam) != KD_OK) {
-    cout  << "ERROR - CkwsPlusDirectPath::extractTo : CkwsDirectPath::extractTo DID NOT WORK  "   << endl ;
+    //cout  << "ERROR - CkwsPlusDirectPath::extractTo : CkwsDirectPath::extractTo DID NOT WORK  "   << endl ;
     return KD_ERROR;
   }
 
@@ -89,7 +91,7 @@ ktStatus CkwsPlusDirectPath::extractTo(double inParam)
 ktStatus CkwsPlusDirectPath::reverse()
 {
   if (CkwsDirectPath::reverse() != KD_OK) {
-    cerr  << "ERROR - CkwsPlusDirectPath::reverse : CkwsDirectPath::reverse DID NOT WORK"  << endl ;
+    //cerr  << "ERROR - CkwsPlusDirectPath::reverse : CkwsDirectPath::reverse DID NOT WORK"  << endl ;
     return KD_ERROR;
   }
   attReverse = !attReverse;
