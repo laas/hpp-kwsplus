@@ -1,9 +1,14 @@
-2007/11/03
-	5. Correct a bug in CkwsPlusDirectPath. the fonction init is never called so the initialisation of attUend is made in 
-	   extractFrom and extractTo
+
+2007/11/06
+	5. Correct the reeds&sheppDirectPath Class :
+	      - is now derivated from kwsPlusDirectPath
+	      - you can acess to uStart and uEnd parameters which are configurated with extractTo and extractFrom
+	      - when you get the RSvectorPartition is now taking count of the uStart and uEnd extracting parameters
+
 
 2007/10/22
 	4. Added a class to test whether a configuration constraint is continuous and is a projection.	
+	
 2007/10/17
 	3. Reorganization of documentation.
 	2. Added class CkwsPlusDirectPath that manages extraction and reverse of direct paths.

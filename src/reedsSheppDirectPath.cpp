@@ -118,35 +118,91 @@ CreedsSheppDirectPathShPtr CreedsSheppDirectPath::createCopy (const CreedsSheppD
 }
 
 
+// ==============================================================================
 
+double CreedsSheppDirectPath::angleBetween2Vector( CkitVect3 startVect , CkitVect3 endVect)
+{
+
+  double prodNorm ;
+
+  prodNorm = startVect.norm() * endVect.norm() ;
+  
+ 
+  double sinA, cosA ;
+
+  cosA = startVect.scalarProduct(endVect) / prodNorm ;
+
+  sinA = ((startVect[0] * endVect[1]) - (startVect[1] * endVect[0])) / prodNorm ;
+  
+  return atan2(sinA, cosA) ;
+}
 
 // ==============================================================================
 
-std::vector< TrsCurve >CreedsSheppDirectPath::getInfoRsCurveVector() const {
+void CreedsSheppDirectPath::computeNewVal(TrsCurve &curCurve)
+{
+  CkitPoint3 Start, End ;
+
+  Start[0] = curCurve.cd->dofValue(0) ;
+  Start[1] = curCurve.cd->dofValue(1) ;
+  End[0] = curCurve.cf->dofValue(0) ;
+  End[1] = curCurve.cf->dofValue(1) ;
+
+
+  if (curCurve.type == STRAIGHT) {
+    curCurve.val = Start.distanceFrom(End) ;
+  }
+  else {
+    CkitPoint3 center ;
+    
+    center[0] = curCurve.centre_x ;
+    center[1] = curCurve.centre_y ;
+    
+    CkitVect3 center_Start, center_End ;
+
+    center_Start = Start - center ;
+    center_End   = End - center ;
+
+    double angle = angleBetween2Vector(center_Start, center_End) ;
+
+    curCurve.val = fabs(angle * curCurve.r) ;
+    
+  }
+}
+
+// ==============================================================================
+
+std::vector< TrsCurve >CreedsSheppDirectPath::getInfoRsCurveVector()  {
 
   std::vector<TrsCurve> vectorCopy  ;
   
   double ustart = uStart() ;
   double uend = uEnd() ;
 
-  cout << " ustart : " << ustart << " uend : " << uend << endl ;
-
-  if (ustart != 0){
-
-    unsigned int iStart = findRsCurveNumInVector(ustart) ;
-    unsigned int iEnd = findRsCurveNumInVector(uend) ;
-
-    for ( unsigned int i = iStart ; i != iEnd ; i ++) {
-      vectorCopy.push_back(attRsCurveVector[i]) ;
-    }
-     
-    vectorCopy[0].cd = configAtStart() ;
-    vectorCopy[vectorCopy.size()-1].cf = configAtEnd() ;
-      
+  unsigned int iStart = findRsCurveNumInVector(ustart) ;
+  unsigned int iEnd = findRsCurveNumInVector(uend) ;
+  
+  for ( unsigned int i = iStart ; i <= iEnd ; i ++) {
+    vectorCopy.push_back(attRsCurveVector[i]) ;
   }
-  else {
-    vectorCopy = attRsCurveVector ;
-  }
+  
+  vectorCopy[0].cd = configAtStart() ;
+  vectorCopy[vectorCopy.size()-1].cf = configAtEnd() ;
+    
+  computeNewVal(vectorCopy[0]) ;
+  computeNewVal(vectorCopy[vectorCopy.size()-1]) ;
+  
+  //DEBUG
+  //cout << " ustart : " << ustart << " uend : " << uend << endl ;
+  //cout << " iStart : " << iStart << " iEnd : " << iEnd << endl ;
+  //cout << "vector size : " << attRsCurveVector.size() << endl  ;
+  //cout << "vector COPY size : "<< vectorCopy.size() << endl ;
+  //cout << endl ;
+  //cout << " =========== attRsCurveVector =========== " << endl ;
+  //printDebug(attRsCurveVector) ;
+  //cout << " =========== vectorCopy =========== " << endl ;
+  //printDebug(vectorCopy) ;
+  //cout << endl ;
 
   return vectorCopy ;
 }
@@ -879,807 +935,6 @@ double CreedsSheppDirectPath::reed_shepp(CkwsConfig &c1 , CkwsConfig &c2, double
   return(longueur);
 }
 
-// ==============================================================================
-
-// double CreedsSheppDirectPath::dubins(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r)
-// {
-//   double x , y , phi;
-//   double t , u , v , t1 , u1 , v1;
-//   int num;
-//   double var , var_d, theta , alpha , dx , dy , r, longueur;
-
-//   int dofRotz ;
-//   if ( attTypeConfig == PLAN )
-//     dofRotz = 2 ;
-//   else
-//     dofRotz = 5 ;
-
-//   /* Changement de repere,les courbes sont toujours calculees
-//      de (0 0 0)--> (x , y , phi) */
-//   dx       = (c2.dofValue(0) - c1.dofValue(0));
-//   dy       = (c2.dofValue(1) - c1.dofValue(1));
-//   var      = (c2.dofValue(dofRotz) - c1.dofValue(dofRotz));
-
-
-//   r        = radius;
-
-//   theta    = atan2(dy , dx);
-//   alpha    = theta - (c1.dofValue(dofRotz));
-//   var_d    = sqrt(dx*dx + dy*dy);
-//   x        = cos(alpha)*var_d;
-//   y        = sin(alpha)*var_d;
-
-
-//   t1 = u1 = v1 = 0.0;
-
-//   if (fabs(var) <= M_PI)
-//     phi = var;
-//   else {
-//     if (c2.dofValue(dofRotz) >= c1.dofValue(dofRotz))
-//       phi = var - M_2PI;
-//     else
-//       phi = mod2pi(var);
-//   }
-
-//   if(FEQ(r,0.0,EPS4)) {
-
-//     longueur = csca(x , y , phi , r , t1 , u1 , v1); /* l+ s+ l+ */
-//     var = t1+v1;
-//     num = 9;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-
-//     csca(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ r+ */
-//     if((t1+v1) < (t+v)) {
-//       num = 10;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     cscb(x , y , phi , r , t1 , u1 , v1); /* l+ s+ r+ */
-//     if((t1+v1) < (t+v)) {
-//       num = 13;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     cscb(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ l+ */
-//     if((t1+v1) < (t+v)) {
-//       num = 14;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-
-//     t_r = t;
-//     u_r = u;
-//     v_r = v;
-//     numero = num;
-//     if(longueur == infini)
-//       cerr << "ERROR - CreedsSheppDirectPath::reed_shepp : infini" << endl;
-//     return(longueur);
-//   }
-
-//   /****  C S C ****/
-
-//   longueur = csca(x , y , phi , r , t1 , u1 , v1); /* l+ s+ l+ */
-//   num = 9;
-//   t = t1;
-//   u = u1;
-//   v = v1;
-
-//   var = csca(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 10;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = cscb(x , y , phi , r , t1 , u1 , v1); /* l+ s+ r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 13;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = cscb(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ l+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 14;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-
-//   t_r = t;
-//   u_r = u;
-//   v_r = v;
-//   numero = num;
-
-//   return(longueur);
-// }
-
-// ==============================================================================
-
-// double CreedsSheppDirectPath::reed_shepp_no_cusp(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r)
-// {
-//   double x , y , phi;
-//   double t , u , v , t1 , u1 , v1;
-//   int num;
-//   double var , var_d, theta , alpha , dx , dy , r, longueur;
-
-//   int dofRotz ;
-//   if ( attTypeConfig == PLAN )
-//     dofRotz = 2 ;
-//   else
-//     dofRotz = 5 ;
-
-//   /* Changement de repere,les courbes sont toujours calculees
-//      de (0 0 0)--> (x , y , phi) */
-//   dx       = (c2.dofValue(0) - c1.dofValue(0));
-//   dy       = (c2.dofValue(1) - c1.dofValue(1));
-//   var      = (c2.dofValue(dofRotz) -c1.dofValue(dofRotz));
-//   r        = radius;
-
-//   theta    = atan2(dy , dx);
-//   alpha    = theta - (c1.dofValue(dofRotz));
-//   var_d    = sqrt(dx*dx + dy*dy);
-//   x        = cos(alpha)*var_d;
-//   y        = sin(alpha)*var_d;
-
-
-//   if (fabs(var) <= M_PI)
-//     phi = var;
-//   else {
-//     if (c2.dofValue(dofRotz) >= c1.dofValue(dofRotz))
-//       phi = var - M_2PI;
-//     else
-//       phi = mod2pi(var);
-//   }
-
-
-//   t1 = u1 = v1 = 0.0;
-
-//   if(FEQ(r,0.0,EPS4)) {
-
-//     longueur = csca(x , y , phi , r , t1 , u1 , v1); /* l+ s+ l+ */
-//     var = t1+v1;
-//     num = 9;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-
-//     csca(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ r+ */
-//     if((t1+v1) < (t+v)) {
-//       num = 10;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     csca(-x , y , -phi , r , t1 , u1 , v1); /* l- s- l- */
-//     if((t1+v1) < (t+v)) {
-//       num = 11;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     csca(-x ,-y , phi , r , t1 , u1 , v1); /* r- s- r- */
-//     if((t1+v1) < (t+v)) {
-//       num = 12;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     cscb(x , y , phi , r , t1 , u1 , v1); /* l+ s+ r+ */
-//     if((t1+v1) < (t+v)) {
-//       num = 13;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     cscb(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ l+ */
-//     if((t1+v1) < (t+v)) {
-//       num = 14;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     cscb(-x , y , -phi , r , t1 , u1 , v1); /* l- s- r- */
-//     if((t1+v1) < (t+v)) {
-//       num = 15;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     cscb(-x ,-y , phi , r , t1 , u1 , v1); /* r- s- l- */
-//     if((t1+v1) < (t+v)) {
-//       num = 16;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-
-//     t_r = t;
-//     u_r = u;
-//     v_r = v;
-//     numero = num;
-//     return(longueur);
-//   }
-
-//   /****  C S C ****/
-
-//   longueur = csca(x , y , phi , r , t1 , u1 , v1); /* l+ s+ l+ */
-//   num = 9;
-//   t = t1;
-//   u = u1;
-//   v = v1;
-
-//   var = csca(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 10;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = csca(-x , y , -phi , r , t1 , u1 , v1); /* l- s- l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 11;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = csca(-x ,-y , phi , r , t1 , u1 , v1); /* r- s- r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 12;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-
-//   var = cscb(x , y , phi , r , t1 , u1 , v1); /* l+ s+ r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 13;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = cscb(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ l+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 14;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = cscb(-x , y , -phi , r , t1 , u1 , v1); /* l- s- r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 15;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = cscb(-x ,-y , phi , r , t1 , u1 , v1); /* r- s- l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 16;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   t_r = t;
-//   u_r = u;
-//   v_r = v;
-//   numero = num;
-
-//   return(longueur);
-// }
-
-
-// ==============================================================================
-
-// double CreedsSheppDirectPath::reed_shepp_with_cusp(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r)
-// {
-//   double x , y , phi;
-//   double t , u , v , t1 , u1 , v1;
-//   int num;
-//   double var , var_d, theta , alpha , dx , dy , r, longueur;
-
-
-//   int dofRotz ;
-//   if ( attTypeConfig == PLAN )
-//     dofRotz = 2 ;
-//   else
-//     dofRotz = 5 ;
-
-//   /* Changement de repere,les courbes sont toujours calculees
-//      de (0 0 0)--> (x , y , phi) */
-//   dx       = (c2.dofValue(0) - c1.dofValue(0));
-//   dy       = (c2.dofValue(1) - c1.dofValue(1));
-//   var      = (c2.dofValue(dofRotz) -c1.dofValue(dofRotz));
-//   r        = radius;
-
-//   theta    = atan2(dy , dx);
-//   alpha    = theta - (c1.dofValue(dofRotz));
-//   var_d    = sqrt(dx*dx + dy*dy);
-//   x        = cos(alpha)*var_d;
-//   y        = sin(alpha)*var_d;
-
-
-
-//   if (fabs(var) <= M_PI)
-//     phi = var;
-//   else {
-//     if (c2.dofValue(dofRotz) >= c1.dofValue(dofRotz))
-//       phi = var- 2*M_PI;
-//     else
-//       phi = mod2pi(var);
-//   }
-
-
-//   t1 = u1 = v1 = 0.0;
-
-//   if(FEQ(r,0.0,EPS4)) {
-
-//     longueur = csca(x , y , phi , r , t1 , u1 , v1); /* l+ s+ l+ */
-//     var = t1+v1;
-//     num = 9;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-
-//     csca(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ r+ */
-//     if((t1+v1) < (t+v)) {
-//       num = 10;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     csca(-x , y , -phi , r , t1 , u1 , v1); /* l- s- l- */
-//     if((t1+v1) < (t+v)) {
-//       num = 11;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     csca(-x ,-y , phi , r , t1 , u1 , v1); /* r- s- r- */
-//     if((t1+v1) < (t+v)) {
-//       num = 12;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     cscb(x , y , phi , r , t1 , u1 , v1); /* l+ s+ r+ */
-//     if((t1+v1) < (t+v)) {
-//       num = 13;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     cscb(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ l+ */
-//     if((t1+v1) < (t+v)) {
-//       num = 14;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     cscb(-x , y , -phi , r , t1 , u1 , v1); /* l- s- r- */
-//     if((t1+v1) < (t+v)) {
-//       num = 15;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-//     cscb(-x ,-y , phi , r , t1 , u1 , v1); /* r- s- l- */
-//     if((t1+v1) < (t+v)) {
-//       num = 16;
-//       t = t1;
-//       u = u1;
-//       v = v1;
-//     }
-
-//     t_r = t;
-//     u_r = u;
-//     v_r = v;
-//     numero = num;
-//     return(longueur);
-//   }
-
-//   /****  C | C | C ***/
-
-//   longueur = c_c_c(x , y , phi , r , t1 , u1 , v1); /* l+ r- l+ */
-//   num = 1;
-//   t = t1;
-//   u = u1;
-//   v = v1;
-
-//   var = c_c_c(-x , y , -phi , r , t1 , u1 , v1); /* l- r+ l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 2;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c_c(x ,-y , -phi , r , t1 , u1 , v1); /* r+ l- r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 3;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c_c(-x ,-y , phi , r , t1 , u1 , v1); /* r- l+ r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 4;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   /****  C | C C  ***/
-
-//   var = c_cc(x , y , phi , r , t1 , u1 , v1); /* l+ r- l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 5;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_cc(-x , y , -phi , r , t1 , u1 , v1); /* l- r+ l+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 6;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_cc(x ,-y , -phi , r , t1 , u1 , v1); /* r+ l- r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 7;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_cc(-x ,-y , phi , r , t1 , u1 , v1); /* r- l+ r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 8;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   /*** C Cu | Cu C ***/
-//   var = ccu_cuc(x , y , phi , r , t1 , u1 , v1); /* l+ r+ l- r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 17;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = ccu_cuc(x ,-y , -phi , r , t1 , u1 , v1); /* r+ l+ r- l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 18;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = ccu_cuc(-x , y , -phi , r , t1 , u1 , v1); /* l- r- l+ r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 19;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = ccu_cuc(-x ,-y , phi , r , t1 , u1 , v1); /* r- l- r+ l+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 20;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   /*** C | Cu Cu | C  ***/
-//   var = c_cucu_c(x , y , phi , r , t1 , u1 , v1); /* l+ r- l- r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 21;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_cucu_c(x ,-y , -phi , r , t1 , u1 , v1); /* r+ l- r- l+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 22;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_cucu_c(-x , y , -phi , r , t1 , u1 , v1); /* l- r+ l+ r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 23;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_cucu_c(-x ,-y , phi , r , t1 , u1 , v1); /* r- l+ r+ l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 24;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   /*** C | C2 S C  ***/
-//   var = c_c2sca(x , y , phi , r , t1 , u1 , v1); /* l+ r- s- l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 25;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c2sca(x ,-y , -phi , r , t1 , u1 , v1); /* r+ l- s- r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 26;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c2sca(-x , y , -phi , r , t1 , u1 , v1); /* l- r+ s+ l+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 27;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c2sca(-x ,-y , phi , r , t1 , u1 , v1); /* r- l+ s+ r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 28;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c2scb(x , y , phi , r , t1 , u1 , v1); /* l+ r- s- r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 29;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c2scb(x ,-y , -phi , r , t1 , u1 , v1); /* r+ l- s- l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 30;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c2scb(-x , y , -phi , r , t1 , u1 , v1); /* l- r+ s+ r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 31;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c2scb(-x ,-y , phi , r , t1 , u1 , v1); /* r- l+ s+ l+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 32;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   /*** C | C2 S C2 | C  ***/
-
-//   var = c_c2sc2_c(x , y , phi , r , t1 , u1 , v1); /* l+ r- s- l- r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 33;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c2sc2_c(x ,-y , -phi , r , t1 , u1 , v1); /* r+ l- s- r- l+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 34;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c2sc2_c(-x , y , -phi , r , t1 , u1 , v1); /* l- r+ s+ l+ r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 35;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = c_c2sc2_c(-x ,-y , phi , r , t1 , u1 , v1); /* r- l+ s+ r+ l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 36;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   /***  C C | C  ****/
-
-//   var = cc_c(x , y , phi , r , t1 , u1 , v1); /* l+ r+ l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 37;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = cc_c(x ,-y , -phi , r , t1 , u1 , v1); /* r+ l+ r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 38;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = cc_c(-x , y , -phi , r , t1 , u1 , v1); /* l- r- l+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 39;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = cc_c(-x ,-y , phi , r , t1 , u1 , v1); /* r- l- r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 40;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   /*** C S C2 | C  ***/
-
-//   var = csc2_ca(x , y , phi , r , t1 , u1 , v1); /* l+ s+ r+ l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 41;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = csc2_ca(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ l+ r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 42;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = csc2_ca(-x , y , -phi , r , t1 , u1 , v1); /* l- s- r- l+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 43;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = csc2_ca(-x ,-y , phi , r , t1 , u1 , v1); /* r- s- l- r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 44;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = csc2_cb(x , y , phi , r , t1 , u1 , v1); /* l+ s+ l+ r- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 45;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = csc2_cb(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ r+ l- */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 46;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = csc2_cb(-x , y , -phi , r , t1 , u1 , v1); /* l- s- l- r+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 47;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   var = csc2_cb(-x ,-y , phi , r , t1 , u1 , v1); /* r- s- r- l+ */
-//   if (var < longueur) {
-//     longueur = var;
-//     num = 48;
-//     t = t1;
-//     u = u1;
-//     v = v1;
-//   }
-
-//   t_r = t;
-//   u_r = u;
-//   v_r = v;
-//   numero = num;
-
-//   return(longueur);
-// }
-
 
 // ==============================================================================
 
@@ -2038,7 +1293,7 @@ ktStatus  CreedsSheppDirectPath::computeRsCurveVector(int num , double t, double
 void CreedsSheppDirectPath::addRsCurveToVector(double r, int ty , int se , double val , CkwsConfig &curConfig )
 {
   TrsCurve  curCurve;
-  // WARNING Asign CKwsConfigShPtr
+ 
   curCurve.cd = CkwsConfig::create(curConfig.device()) ;
   curCurve.cf  = CkwsConfig::create(curConfig.device()) ;
 
@@ -2606,12 +1861,15 @@ void CreedsSheppDirectPath::printTrsCurve( const TrsCurve inCurve)
   cout << " curve.valid :" << inCurve.valid << endl ;
 }
 
-void CreedsSheppDirectPath::printDebug()
+// ==============================================================================
+
+
+void CreedsSheppDirectPath::printDebug(std::vector<TrsCurve> RSvector)
 {
 
-  for (unsigned int count=0 ; count < attRsCurveVector.size() ; count++) {
+  for (unsigned int count=0 ; count < RSvector.size() ; count++) {
     cout << " // ---------- " << count << " ----------- // " << endl ;
-    printTrsCurve(attRsCurveVector[count]) ;
+    printTrsCurve(RSvector[count]) ;
   }
 
 }
