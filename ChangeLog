@@ -1,7 +1,7 @@
-<<<<<<< master
 2007/11/14
 	Remove unused classes kwsPlusRoadmap and kwsPlusDrawRdmBuilderDelegate
-=======
+	Minor Changes 
+	Merge with git+ssh://softs.laas.fr/git/jrl/kwsPlus
 
 2007/11/06
 	5. Correct the reeds&sheppDirectPath Class :
@@ -10,7 +10,6 @@
 	      - when you get the RSvectorPartition is now taking count of the uStart and uEnd extracting parameters
 
 
->>>>>>> origin
 2007/10/22
 	4. Added a class to test whether a configuration constraint is continuous and is a projection.	
 	
