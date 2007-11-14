@@ -47,5 +47,5 @@ AC_OUTPUT(Makefile
 	doc/Makefile
 	doc/kwsPlus.dox
 	kwsPlus.pc
-	unitTesting/Makefile
+ 	unitTesting/Makefile
 )

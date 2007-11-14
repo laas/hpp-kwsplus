@@ -14,8 +14,6 @@ libkwsPlus_la_SOURCES = \
 	reedsSheppDirectPath.cpp \
 	reedsSheppSteeringMethod.cpp \
 	kitMat3.cpp \
-	kwsPlusRoadmap.cpp \
-	kwsPlusDrawRdmBuilderDelegate.cpp \
 	hppConfigurationShooter.cpp \
 	hppShooterActiveDof.cpp \
 	hppVisRdmBuilder.cpp

@@ -14,8 +14,6 @@ kwsPlus_HEADERS = \
 	reedsSheppDirectPath.h \
 	reedsSheppSteeringMethod.h \
 	kitMat3.h \
-	kwsPlusRoadmap.h \
-	kwsPlusDrawRdmBuilderDelegate.h \
 	hppActiveDofSetter.h \
 	hppConfigurationShooter.h \
 	hppShooterActiveDof.h \
