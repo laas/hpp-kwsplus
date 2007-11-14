@@ -13,8 +13,10 @@
 **************************************/
 
 
+#include "kwsPlusDirectPath.h"
+
 #include <iostream>
-#include <KineoWorks2/kwsDirectPath.h>
+//#include <KineoWorks2/kwsDirectPath.h>
 #include <KineoWorks2/kwsPath.h>
 #include <KineoWorks2/kwsSteeringMethod.h>
 #include <KineoWorks2/kwsConfig.h>
@@ -95,7 +97,7 @@ KIT_PREDEF_CLASS( CreedsSheppDirectPath );
 /**
    \brief Direct path for Reeds and Shepp steering method
 */
-class CreedsSheppDirectPath : public CkwsDirectPath
+class CreedsSheppDirectPath : public CkwsPlusDirectPath
 {
 
 public :
@@ -140,7 +142,7 @@ public :
      \brief get the internal info Vector of RS
      \return attRsCurveVector
    */
-  std::vector< TrsCurve > getInfoRsCurveVector() const ;
+  std::vector< TrsCurve > getInfoRsCurveVector()  ;
 
 protected :
 
@@ -237,11 +239,12 @@ protected :
   */
   double mod2pi(double a) const ;
   double angleLimitPi(double a) const ;
+  double angleBetween2Vector( CkitVect3 startVect , CkitVect3 endVect) ;
 
   /**
      \brief BEBUG fct TO DELETE
   */
-  void printDebug() ;
+  void printDebug(std::vector<TrsCurve> RSvector) ;
   /**
      \brief BEBUG fct TO DELETE
   */
@@ -274,7 +277,11 @@ private :
   */
   void addRsCurveToVector(double r, int ty , int se , double val , CkwsConfig &inNewStart ) ;
 
-
+  /**
+     \brief re-compute the length of a partition between its startCfg (cd) and endCfg (cf) 
+     \param curCurve the Partition of the curve that you want to re-compute.
+   */
+  void computeNewVal(TrsCurve &curCurve) ;
 
   /**
      \name Calculation Function
@@ -295,47 +302,7 @@ private :
      \return length between c1 and c2
   */
   double reed_shepp(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r) ;
-
-  /**
-     \brief compute the minimun distance between 2 configurations. 
-     note : It check the 4 cases of Dubins to find the min structure CSC||
-     \param c1 :  a RS configuration
-     \param c2 : a RS configuration
-     \param radius : the RS Radius 
-     \param numero  : the number of the curve in the table
-     \param t_r : distance value of the first partition of the curve
-     \param u_r : distance value of the second partition of the curve
-     \param v_r : distance value of the ieme partition of the curve
-     \return length between c1 and c2
-  */
-  //double dubins(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r) ;
-
-  /**
-     \brief compute the minimun distance between 2 configurations. : WITHOUT rebroussement point
-     \param c1 :  a RS configuration
-     \param c2 : a RS configuration
-     \param radius : the RS Radius 
-     \param numero  : the number of the curve in the table
-     \param t_r : distance value of the first partition of the curve
-     \param u_r :  distance value of the second partition of the curve
-     \param v_r : distance value of the ieme partition of the curve
-     \return length between c1 and c2
-  */
-  //double reed_shepp_no_cusp(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r) ;
-
-  /**
-     \brief compute the minimun distance between 2 configurations. : WITHOUT rebroussement point
-     \param c1 :  a RS configuration
-     \param c2 : a RS configuration
-     \param radius : the RS Radius 
-     \param numero  : the number of the curve in the table
-     \param t_r : distance value of the first partition of the curve
-     \param u_r : distance value of the second partition of the curve
-     \param v_r : distance value of the ieme partition of the curve
-     \return length between c1 and c2
-  */
-  //\double reed_shepp_with_cusp(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r) ;
-
+ 
   double c_c_c(double x , double y , double phi , double radius , double &t , double &u ,double &v);
   double c_cc(double x , double y , double phi , double radius , double &t , double &u , double &v);
   double csca(double x , double y , double phi , double radius , double &t , double &u ,double& v);

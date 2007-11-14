@@ -3,6 +3,7 @@
   Author: Florent Lamiraux
 */
 
+
 #include "kwsPlusDirectPath.h"
 
 CkwsPlusDirectPath::CkwsPlusDirectPath(const CkwsConfig& inStartConfig, 
@@ -30,6 +31,7 @@ CkwsPlusDirectPath::~CkwsPlusDirectPath()
 ktStatus CkwsPlusDirectPath::init(const CkwsPlusDirectPathWkPtr& inWeakPtr)
 {
   ktStatus success = CkwsDirectPath::init(inWeakPtr) ;
+
   attUend = privateLength();
   return success;
 }
@@ -37,33 +39,41 @@ ktStatus CkwsPlusDirectPath::init(const CkwsPlusDirectPathWkPtr& inWeakPtr)
 
 ktStatus CkwsPlusDirectPath::extractFrom(double inParam)
 {
+
   if (CkwsDirectPath::extractFrom(inParam) != KD_OK) {
+    //cerr  << "ERROR - CkwsPlusDirectPath::extractFrom : CkwsDirectPath::extractFrom DID NOT WORK "   << endl ;
     return KD_ERROR;
   }
 
+ 
+
   if (attReverse) {
-    if (attUend - inParam < attUstart) {
+    if ((attUend - inParam) < attUstart) {
       return KD_ERROR;
     }
-    attUend -= inParam;
+    attUend = attUend - inParam;
   } else {
-    if (attUstart + inParam > attUend) {
+    if ((attUstart + inParam) > attUend) {
       return KD_ERROR;
     }
     
-    attUstart += inParam;
+    attUstart = attUstart + inParam;
   }
+
   return KD_OK;
 }
 
+
 ktStatus CkwsPlusDirectPath::extractTo(double inParam)
 {
+
   if (CkwsDirectPath::extractTo(inParam) != KD_OK) {
+    //cout  << "ERROR - CkwsPlusDirectPath::extractTo : CkwsDirectPath::extractTo DID NOT WORK  "   << endl ;
     return KD_ERROR;
   }
 
   if (attReverse) {
-    if (inParam > attUend - attUstart) {
+    if (inParam > (attUend - attUstart)) {
       return KD_ERROR;
     }
     attUstart = attUend - inParam;
@@ -73,12 +83,15 @@ ktStatus CkwsPlusDirectPath::extractTo(double inParam)
     }
     attUend = attUstart + inParam;
   }
+
   return KD_OK;
 }
+
 
 ktStatus CkwsPlusDirectPath::reverse()
 {
   if (CkwsDirectPath::reverse() != KD_OK) {
+    //cerr  << "ERROR - CkwsPlusDirectPath::reverse : CkwsDirectPath::reverse DID NOT WORK"  << endl ;
     return KD_ERROR;
   }
   attReverse = !attReverse;

@@ -2,6 +2,9 @@
 #define KWSPLUS_DIRECTPATH_H
 
 #include "KineoWorks2/kwsDirectPath.h"
+#include <iostream>
+
+using namespace std ;
 
 KIT_PREDEF_CLASS(CkwsPlusDirectPath);
 
@@ -62,6 +65,7 @@ public:
   */
   virtual ktStatus extractTo(double inParam);
 
+ 
   /**
      \brief Reimplementation from CkwsDirectPath in order to keep track of the extracted interval.
   */
