@@ -56,6 +56,9 @@ The DifussionShooterActiveDofSetter inherits from CkwsDiffusionShooter
 and from ChppActiveDofShooter. So it could be use to do a diffussing
 roadmap with RLG.
 
+\defgroup PCA PCA Roadmap Builder
+
+
 */
 
 /**

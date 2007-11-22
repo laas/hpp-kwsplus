@@ -41,6 +41,25 @@ AC_ARG_WITH(boost,
 
 AC_SUBST(BOOST_CFLAGS)
 
+
+dnl lapack path
+AC_ARG_WITH(lapack, AC_HELP_STRING([--with-lapack],
+	[prefix of lapack installation]),,with_lapack=no)
+if test x${with_lapack} != xno ; then
+   if test x${with_lapack} != xyes; then
+	LAPACK_CFLAGS="-I${with_lapack}/include"
+	CXXFLAGS="${CXXFLAGS} ${LAPACK_CFLAGS}"
+	LAPACK_LIBS="-Wl -R${with_lapack} -L${with_lapack}/lib -llapack"
+   else
+	LAPACK_LIBS="-Wl -llapack"
+   fi
+   else
+   AC_ERROR([please configure --with-lapack(=PATH_TO_LAPACK)])
+fi
+
+AC_SUBST(LAPACK_CFLAGS)
+AC_SUBST(LAPACK_LIBS)
+
 AC_OUTPUT(Makefile
 	src/Makefile
 	include/Makefile

@@ -6,7 +6,7 @@ untar the package
 cd kwsPlus
 mkdir build
 cd build
-../configure --with-kineo=$PATH_TO_KWS
+../configure --with-kineo=$PATH_TO_KWS  --with-lapack(=$PATH_TO_LAPACK)
 
 Compilation
 -----------

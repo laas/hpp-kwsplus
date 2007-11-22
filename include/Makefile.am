@@ -17,6 +17,6 @@ kwsPlus_HEADERS = \
 	hppActiveDofSetter.h \
 	hppConfigurationShooter.h \
 	hppShooterActiveDof.h \
-	hppVisRdmBuilder.h 
-
+	hppVisRdmBuilder.h \
+	kwsPlusPCARdmBuilder.h 
 

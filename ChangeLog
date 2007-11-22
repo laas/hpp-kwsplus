@@ -1,7 +1,12 @@
+2007/11/22
+	9.Added CkwsPlusPCARdmBuilder class. Derives from any diffusing
+	roadmap builder class and implements a principal component
+	analysis to speed up the diffusion process. Needs lapack installed.
+
 2007/11/14
-	Remove unused classes kwsPlusRoadmap and kwsPlusDrawRdmBuilderDelegate
-	Minor Changes 
-	Merge with git+ssh://softs.laas.fr/git/jrl/kwsPlus
+	8.Remove unused classes kwsPlusRoadmap and kwsPlusDrawRdmBuilderDelegate
+	7.Minor Changes 
+	6.Merge with git+ssh://softs.laas.fr/git/jrl/kwsPlus
 
 2007/11/06
 	5. Correct the reeds&sheppDirectPath Class :
