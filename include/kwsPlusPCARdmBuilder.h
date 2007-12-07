@@ -216,12 +216,6 @@ KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>)
   if (devPtr->init(devWkPtr,i_penetration) != KD_OK){
     devShPtr.reset();
   }
-  devShPtr->diffusionNodePicker(i_picker);
-  devShPtr->diffusionShooter(i_shooter);
-  devShPtr->diffuseFromProblemStart(true);
-  devShPtr->diffuseFromProblemGoal(true);
-  devShPtr->linkNodeStrategy(CkwsRoadmapBuilder::LINK_TO_NEAREST_NODE);
-  devShPtr->nbNearestNodes(2);
 
   return devShPtr;
 
