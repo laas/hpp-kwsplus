@@ -5,6 +5,10 @@
 
 */
 
+/*! \addtogroup hpp
+ *@{
+ */
+
 /*****************************************
 INCLUDES
 *******************************************/
@@ -136,3 +140,5 @@ void CkwsPlusDPLinear::maxAbsoluteDerivative(double inFrom, double inTo, std::ve
 
 }
 
+/** @}
+ */

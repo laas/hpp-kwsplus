@@ -20,5 +20,6 @@ kwsPlus_HEADERS = \
 	hppVisRdmBuilder.h \
 	kwsPlusPCARdmBuilder.h \
 	kwsPlusLTRdmBuilder.h \
-	kwsPlusDPLinear.h
+	kwsPlusDPLinear.h \
+	kwsPlusSMLinear.h 
 

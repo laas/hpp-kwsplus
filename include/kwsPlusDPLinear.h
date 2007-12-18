@@ -5,8 +5,8 @@
 
 */
 
-#ifndef __KWSPLUSDPLINEAR_H
-#define __KWSPLUSDPLINEAR_H
+#ifndef KWSPLUS_DPLINEAR_H
+#define KWSPLUS_DPLINEAR_H
 
 /*************************************
 INCLUDE

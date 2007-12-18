@@ -17,7 +17,8 @@ libkwsPlus_la_SOURCES = \
 	hppConfigurationShooter.cpp \
 	hppShooterActiveDof.cpp \
 	hppVisRdmBuilder.cpp \
-	kwsPlusDPLinear.cpp
+	kwsPlusDPLinear.cpp \
+	kwsPlusSMLinear.cpp
 
 
 libkwsPlus_la_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS)  $(LAPACK_CFLAGS)
