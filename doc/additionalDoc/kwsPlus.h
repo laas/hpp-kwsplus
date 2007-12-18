@@ -62,9 +62,7 @@ roadmap with RLG.
 */
 
 /**
-   \defgroup kwsPlus_graphic_rdm Displaying roadmaps
-
-   This module provides tools to display a roadmap in KPP-interface.
+   \defgroup LT Local Trees Roadmap Builder
 
 */
 

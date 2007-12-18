@@ -1,3 +1,6 @@
+2007/12/18
+	10.Added CkwsPlusLTRdmBuilder class. Derives from any diffusing
+	roadmap builder class and implements a local tree diffusing method.
 2007/11/22
 	9.Added CkwsPlusPCARdmBuilder class. Derives from any diffusing
 	roadmap builder class and implements a principal component
