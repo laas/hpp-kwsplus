@@ -6,6 +6,7 @@
  
 */
 
+#define DEBUG_OUTPUT 0
 
 /*****************************************
 INCLUDES
@@ -530,7 +531,8 @@ CflicBoundManagerDefParam::CflicBoundManagerDefParam(CflicDirectPathShPtr inDire
     const CkwsConfig &inEndCfg) :
     startCfg(inStartCfg),
     endCfg(inEndCfg),
-    attMaxNbIntervals(0)
+    attMaxNbIntervals(0),
+    attMaxCurvature(inDirectPath->attMaxCurvature)
 {
   //debug
   //cout << " CONSTRUCTEUR MANAGER  " << endl ;
@@ -572,8 +574,9 @@ CflicBoundManagerDefParam::~CflicBoundManagerDefParam()
 //==============================================================================
 
 ktStatus CflicBoundManagerDefParam::recursiveBuildBoundLists(unsigned int maxNbIntervals,
-    TflicBoundInterval currentBoundInterval1,
-    TflicBoundInterval currentBoundInterval2)
+							     TflicBoundInterval currentBoundInterval1,
+							     TflicBoundInterval currentBoundInterval2,
+							     TflicBoundInterval& currentBoundIntervalCurv)
 {
 
   // find the intersection point
@@ -582,12 +585,37 @@ ktStatus CflicBoundManagerDefParam::recursiveBuildBoundLists(unsigned int maxNbI
   computeFunctionBoundsFromDerivativeUpperBound(currentBoundInterval2, valueUmin,
       valueUmax, M3);
 
+  double gamma2Min = currentBoundInterval2.valueMin;
+  double gamma2Max = currentBoundInterval2.valueMax;
+
   valueUmin = computeValueGamma1(currentBoundInterval1.uMin) ;
   valueUmax = computeValueGamma1(currentBoundInterval1.uMax) ;
   computeFunctionBoundsFromDerivativeUpperBound(currentBoundInterval1, valueUmin,
-      valueUmax,
-      currentBoundInterval2.valueMax);
+						valueUmax,
+						currentBoundInterval2.valueMax);
 
+  double gamma1Min = currentBoundInterval1.valueMin;
+  if (gamma1Min <= 0) {
+    gamma1Min = 1e-10;
+  }
+  double gamma1Max = currentBoundInterval1.valueMax;
+
+  // Commpute bounds on curvature
+  // The following is not exactly a lower bound of curvature.
+  // As a consequence, some local paths might be rejected although they satisfy curvature bounds.
+  double lowerBoundCurvature = gamma1Min*gamma2Min/pow(gamma1Max, 3.0);
+  double upperBoundCurvature = gamma1Max*gamma2Max/pow(gamma1Min, 3.0);
+  if (lowerBoundCurvature > attMaxCurvature) {
+#if DEBUG_OUTPUT
+    std::cerr << "CflicarBoundManagerDefParam::recursiveBuildBoundLists: curvature overflow" << std::endl;
+    std::cerr << "lowerBoundCurvature = " << lowerBoundCurvature << " attMaxCurvature = " << attMaxCurvature
+	      << std::endl;
+#endif
+    return KD_ERROR;
+  }
+  currentBoundIntervalCurv.valueMin = lowerBoundCurvature;
+  currentBoundIntervalCurv.valueMax = upperBoundCurvature;
+  
   // Test Threshold on gamma' norm
   if (currentBoundInterval1.valueMax <= minNormGamma1)
   {
@@ -634,8 +662,10 @@ ktStatus CflicBoundManagerDefParam::recursiveBuildBoundLists(unsigned int maxNbI
     secondIntervalGamma1.uMin = uMiddle ;
     secondIntervalGamma1.uMax = uMax ;
 
-    if ((recursiveBuildBoundLists(2*maxNbIntervals, firstIntervalGamma1, firstIntervalGamma2) == KD_OK) &&
-        (recursiveBuildBoundLists(2*maxNbIntervals, secondIntervalGamma1, secondIntervalGamma2) == KD_OK))
+    if ((recursiveBuildBoundLists(2*maxNbIntervals, firstIntervalGamma1, firstIntervalGamma2,
+				  currentBoundIntervalCurv) == KD_OK) &&
+        (recursiveBuildBoundLists(2*maxNbIntervals, secondIntervalGamma1, secondIntervalGamma2,
+				  currentBoundIntervalCurv) == KD_OK))
     {
       return KD_OK;
     }
@@ -653,7 +683,7 @@ ktStatus CflicBoundManagerDefParam::buildBoundLists()
   ktStatus status = KD_OK ;
 
   //initialisation
-  TflicBoundInterval boundIntervalGamma1, boundIntervalGamma2 ;
+  TflicBoundInterval boundIntervalGamma1, boundIntervalGamma2, boundIntervalCurvature;
 
 
   maxDistBetweenLowerAndUpperBound = sqrt(pow(flatEndCfg.xp-flatStartCfg.xp, 2.0) + pow(flatEndCfg.yp-flatStartCfg.yp, 2.0))/20;
@@ -678,7 +708,17 @@ ktStatus CflicBoundManagerDefParam::buildBoundLists()
   boundIntervalGamma1.valueMax = 0 ;
   boundIntervalGamma1.valueMin = 0 ;
 
-  status = recursiveBuildBoundLists(1, boundIntervalGamma1, boundIntervalGamma2) ;
+  boundIntervalCurvature.uMin = 0;
+  boundIntervalCurvature.uMax = 1;
+  boundIntervalCurvature.valueMax = 0;
+  boundIntervalCurvature.valueMin = 0;
+
+#if DEBUG_OUTPUT
+  std::cerr << "attMaxCurvature=" << attMaxCurvature << std::endl;
+#endif
+
+  status = recursiveBuildBoundLists(1, boundIntervalGamma1, boundIntervalGamma2,
+				    boundIntervalCurvature);
 
   return status ;
 
@@ -1165,9 +1205,9 @@ CflicDirectPath::~CflicDirectPath()
 // =========================================================================================
 
 CflicDirectPathShPtr CflicDirectPath::create(const CkwsConfig &inStartCfg,
-    const CkwsConfig &inEndCfg,
-    const CkwsSteeringMethodShPtr &inSteeringMethod,
-    bool inOriented)
+					     const CkwsConfig &inEndCfg,
+					     const CkwsSteeringMethodShPtr &inSteeringMethod,
+					     bool inOriented)
 {
 
   CflicDirectPath* pathPtr = new CflicDirectPath(inStartCfg, inEndCfg,inSteeringMethod);
@@ -1317,6 +1357,8 @@ CflicDirectPath::CflicDirectPath(const CkwsConfig &inStartCfg, const CkwsConfig 
   flatEndCfg.tau = inEndCfg.dofValue(RZ_COORD) ; // theta
 
   attFlatV2 = computeFlatV2(&flatStartCfg, &flatEndCfg);
+  attMaxCurvature = max(fabs(inStartCfg.device()->dof(CURV_COORD)->vmin()),
+			fabs(inStartCfg.device()->dof(CURV_COORD)->vmax()));
 
   // debug
   //cout << "Constructor by configurations" << endl;
@@ -1337,6 +1379,7 @@ CflicDirectPath::CflicDirectPath(const CflicDirectPath &inDirectPath):CkwsPlusDi
   flatEndCfg.tau = m_end.dofValue(RZ_COORD) ; // theta
 
   attFlatV2 = inDirectPath.flatV2();
+  attMaxCurvature = inDirectPath.attMaxCurvature;
 
   // debug
   // cout << "Copy constructor" << endl;

@@ -825,6 +825,13 @@ class CflicDirectPath : public CkwsPlusDirectPath {
      \brief Flat configuration corresponding to endCfg
   */
   TflatConfig flatEndCfg ;
+
+  /**
+     \brief Maximal curvature allowed along the path.
+
+     If actual curvature goes beyond this bound, the direct path is rejected.
+  */
+  double attMaxCurvature;
 };
 
 // ==============================================================================
@@ -848,7 +855,7 @@ class CflicBoundManagerDefParam {
       \brief Store pointer to direct path owning object
    */
   CflicBoundManagerDefParam(CflicDirectPathShPtr inDirectPath, const CkwsConfig &inStartCfg, 
-		     const CkwsConfig &inEndCfg);
+			    const CkwsConfig &inEndCfg);
   /**
      \brief Default destructor.
   */
@@ -902,6 +909,7 @@ class CflicBoundManagerDefParam {
      \param maxNbIntervals number of intervals in boundListDeriv1 if all were of the same size as the smallest one.
      \param boundsOnInterval1 iterator a list element representing lower and upper bounds of  \f$ \gamma' \f$  over an interval.
      \param boundsOnInterval2 iterator a list element representing lower and upper bounds of  \f$ \gamma'' \f$  over an interval.
+     \param currentBoundIntervalCurv represents lower and upper bound on curvature over an interval.
      
      The first call of this recursive fonction takes as input two data-structures 
      representing a lower and upper bounds of the norm of  \f$ \gamma' \f$  
@@ -914,7 +922,8 @@ class CflicBoundManagerDefParam {
 
   ktStatus recursiveBuildBoundLists(unsigned int maxNbIntervals,
 				    TflicBoundInterval  boundsOnInterval1,
-				    TflicBoundInterval  boundsOnInterval2);
+				    TflicBoundInterval  boundsOnInterval2,
+				    TflicBoundInterval& currentBoundIntervalCurv);
 
   /**
      \brief compute the upper bound of  \f$ \|\gamma'''\| \f$ 
@@ -985,6 +994,11 @@ class CflicBoundManagerDefParam {
 
   */
   std::list<TflicBoundInterval> boundListDeriv2;
+
+  /**
+     \brief maximal curvature of the associated direct path.
+  */
+  double attMaxCurvature;
 };
 
 
