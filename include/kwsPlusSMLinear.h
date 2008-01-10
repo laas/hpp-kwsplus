@@ -48,9 +48,12 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
 
   /** Static function that creates an instance of the CkwsSMLinear class.
    *   \param         i_oriented : if true, the steering method will produce oriented paths
+   *   \param         i_ratio_vector : the vector of derivative ratio with respect to \\
+   *                  the linear SM for each DoF to calculate maxAbsoluteDerivative
    *   \return        \ref usingSmartPointers "shared pointer" to the newly created steering method
    */
-  static CkwsPlusSMLinearShPtr create(bool i_oriented = false);
+  static CkwsPlusSMLinearShPtr create(const std::vector<double> &i_ratio_vector,
+				      bool i_oriented = false);
 
   // inherited -- for doc see parent class
   virtual CkwsDirectPathShPtr makeDirectPath(const CkwsConfig& i_startCfg, const CkwsConfig& i_endCfg);
@@ -62,8 +65,10 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
 
   /** Constructor.
    *   \param         i_oriented : if true, the steering method will produce oriented paths
+   *   \param         i_ratio_vector : the vector of derivative ratio with respect to \\
+   *                  the linear SM for each DoF to calculate maxAbsoluteDerivative
    */
-  CkwsPlusSMLinear(bool i_oriented);
+  CkwsPlusSMLinear(const std::vector<double> &i_ratio_vector, bool i_oriented);
 
   /** Initialization of the CkwsPlusSMLinear object.
    *   \param         i_smWkPtr : weak pointer to the object itself
@@ -75,7 +80,7 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
 
   CkwsSteeringMethodWkPtr m_weakPtr;	 ///< weak pointer to the object itself
   bool m_oriented;		///< does the steering method produce oriented paths?
-
+  std::vector<double> m_ratio_vector; ///<ratio of vector with respect to linear max absolute derivative
 
 };
 

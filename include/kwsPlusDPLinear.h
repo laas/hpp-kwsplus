@@ -50,13 +50,16 @@ class CkwsPlusDPLinear : public CkwsDPLinear {
      \brief  Create a new instance of a flat Interpolation cart direct path.
      \param  i_start 	: the start configuration
      \param  i_end 	: the end configuration
+      \param   i_ratio_vector : the vector of derivative ratio with respect to \\
+      the linear SM for each DoF to calculate maxAbsoluteDerivative
      \param  i_steeringMethod 	: shared pointer to the instance of the steering method that created the path
      \param inOriented : boolean , direct Path oriented or not
      \return shared pointer to a newly created flicDirectPath
   */
   static CkwsPlusDPLinearShPtr create(const CkwsConfig &i_start,
-				  const CkwsConfig &i_end,
-				  const CkwsSteeringMethodShPtr &i_steeringMethod);
+				      const CkwsConfig &i_end,
+				      const std::vector<double> &i_ratio_vector,
+				      const CkwsSteeringMethodShPtr &i_steeringMethod);
   
   /**
      \brief  Creates by copy a new instance of a flat Interpolation cart direct path.
@@ -81,10 +84,14 @@ class CkwsPlusDPLinear : public CkwsDPLinear {
   /** Constructor.
    *   \param         i_start : the start configuration
    *   \param         i_end : the end configuration
+   *      \param   i_ratio_vector : the vector of derivative ratio with respect to \ \
+   *    the linear SM for each DoF to calculate maxAbsoluteDerivative
    *   \param         i_steeringMethod : \ref usingSmartPointers "shared pointer" to the instance of the steering method
    *                                     that created the path
    */
-  CkwsPlusDPLinear(const CkwsConfig& i_start, const CkwsConfig& i_end, const CkwsSteeringMethodShPtr& i_steeringMethod);
+  CkwsPlusDPLinear(const CkwsConfig& i_start, const CkwsConfig& i_end, 
+		   const std::vector<double> &i_ratio_vector, 
+		   const CkwsSteeringMethodShPtr& i_steeringMethod);
 	
   /** Copy constructor.
    *   \param         i_linearDirectPath : the linear direct path to copy
@@ -104,12 +111,14 @@ class CkwsPlusDPLinear : public CkwsDPLinear {
   virtual double computePrivateLength() const;
 
   // inherited -- for doc see parent class
-  virtual void										maxAbsoluteDerivative(double i_from, double i_to, std::vector< double >& o_derivative) const;
+  // for each Dof, the derivative will be multiplied by the ratio vector.
+  virtual void	maxAbsoluteDerivative(double i_from, double i_to, std::vector< double >& o_derivative) const;
 
  private:
 
   CkwsPlusDPLinearWkPtr	m_weakPtr;		///< weak pointer to itself
 
+  std::vector<double> m_ratio_vector; /// <ratio of vector with respect to linear max absolute derivative
 };
 
 

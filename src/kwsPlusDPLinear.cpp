@@ -26,11 +26,13 @@ CkwsPlusDPLinear::~CkwsPlusDPLinear()
 // =========================================================================================
 
 CkwsPlusDPLinearShPtr CkwsPlusDPLinear::create(const CkwsConfig &inStartCfg,
-    const CkwsConfig &inEndCfg,
-    const CkwsSteeringMethodShPtr &inSteeringMethod)
+					       const CkwsConfig &inEndCfg,
+					       const std::vector<double> &i_ratio_vector,
+					       const CkwsSteeringMethodShPtr &inSteeringMethod)
 {
 
-  CkwsPlusDPLinear* pathPtr = new CkwsPlusDPLinear(inStartCfg, inEndCfg,inSteeringMethod);
+  CkwsPlusDPLinear* pathPtr = new CkwsPlusDPLinear(inStartCfg, inEndCfg, i_ratio_vector, 
+						   inSteeringMethod);
   CkwsPlusDPLinearShPtr pathShPtr(pathPtr);
   CkwsPlusDPLinearWkPtr pathWkPtr(pathShPtr) ;
 
@@ -101,8 +103,9 @@ CkwsAbstractPathShPtr CkwsPlusDPLinear::clone() const
 // =========================================================================================
 
 CkwsPlusDPLinear::CkwsPlusDPLinear(const CkwsConfig &inStartCfg, const CkwsConfig &inEndCfg,
-                                 const CkwsSteeringMethodShPtr &inSteeringMethod) :
-    CkwsDPLinear(inStartCfg, inEndCfg, inSteeringMethod)
+				   const std::vector<double> &i_ratio_vector,
+				   const CkwsSteeringMethodShPtr &inSteeringMethod) :
+  CkwsDPLinear(inStartCfg, inEndCfg, inSteeringMethod), m_ratio_vector(i_ratio_vector)
 {
 
 }
@@ -137,7 +140,28 @@ double CkwsPlusDPLinear::computePrivateLength() const
 
 void CkwsPlusDPLinear::maxAbsoluteDerivative(double inFrom, double inTo, std::vector<double> & outVectorDeriv) const
 {
+  KWS_PRECONDITION( m_start.size() == device()->countDofs() );
 
+  CkwsDeviceShPtr dev(device());
+  outVectorDeriv.resize(dev->countDofs()); // that causes error with 2.04
+
+  // For each DOF, the derivative value will be multiplied by the corresponding ratio.
+  // if minus or zero, the value will be set to 1.
+
+  // get the maxAbsoluteDerive from the parent class of Linear Steering Method
+  std::vector<double> linearVectorDeriv(dev->countDofs());
+  CkwsDPLinear::maxAbsoluteDerivative(inFrom, inTo, linearVectorDeriv);
+
+  std::vector<double> ratio_vector(m_ratio_vector);
+  if(outVectorDeriv.size() > ratio_vector.size()){
+    ratio_vector.resize(outVectorDeriv.size(), 1.0);
+  }
+
+  for(unsigned int i=0; i<outVectorDeriv.size(); i++){
+    if(ratio_vector[i] < 0)
+      ratio_vector[i] = 1.0;
+    outVectorDeriv[i] = linearVectorDeriv[i]*ratio_vector[i];
+  }  
 }
 
 /** @}

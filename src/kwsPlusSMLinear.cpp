@@ -22,7 +22,10 @@ PUBLIC METHODS
 
 // =========================================================================================
 
-CkwsPlusSMLinear::CkwsPlusSMLinear(bool i_oriented) : m_oriented(i_oriented) {
+CkwsPlusSMLinear::CkwsPlusSMLinear(const std::vector<double> &i_ratio_vector, 
+				   bool i_oriented) 
+  : m_oriented(i_oriented), m_ratio_vector(i_ratio_vector)
+{
 	//nothing to do
 }
 
@@ -45,17 +48,18 @@ ktStatus CkwsPlusSMLinear::init(const CkwsSteeringMethodWkPtr& i_smWkPtr) {
 
 // ==========================================================================================
 
-CkwsPlusSMLinearShPtr CkwsPlusSMLinear::create(bool i_oriented)
+CkwsPlusSMLinearShPtr CkwsPlusSMLinear::create(const std::vector<double> &i_ratio_vector,
+					       bool i_oriented)
 {
-	CkwsPlusSMLinear*  flatPtr = new CkwsPlusSMLinear(i_oriented);
-	CkwsPlusSMLinearShPtr flatShPtr(flatPtr);
-	CkwsPlusSMLinearWkPtr flatWkPtr(flatShPtr);
+  CkwsPlusSMLinear*  flatPtr = new CkwsPlusSMLinear(i_ratio_vector, i_oriented);
+  CkwsPlusSMLinearShPtr flatShPtr(flatPtr);
+  CkwsPlusSMLinearWkPtr flatWkPtr(flatShPtr);
 
-	cout << "steering method create" << endl;
+  cout << "steering method create" << endl;
 
-	if(flatPtr->init(flatWkPtr) != KD_OK) flatShPtr.reset();
+  if(flatPtr->init(flatWkPtr) != KD_OK) flatShPtr.reset();
 
-	return flatShPtr;
+  return flatShPtr;
 }
 
 
@@ -65,7 +69,7 @@ CkwsPlusSMLinearShPtr CkwsPlusSMLinear::create(bool i_oriented)
 CkwsDirectPathShPtr CkwsPlusSMLinear::makeDirectPath (const CkwsConfig &i_startCfg, const CkwsConfig &i_endCfg) {
 	
   // bool oriented = isOriented();
-  return CkwsPlusDPLinear::create(i_startCfg, i_endCfg, m_weakPtr.lock()) ;
+  return CkwsPlusDPLinear::create(i_startCfg, i_endCfg, m_ratio_vector, m_weakPtr.lock()) ;
  
 }
 
