@@ -104,8 +104,9 @@ class CkwsPlusDPLinear : public CkwsDPLinear {
    */
   ktStatus init(const CkwsPlusDPLinearWkPtr& i_weakPtr);
 
+
   // inherited -- for doc see parent class
-  virtual void interpolate(double i_s, CkwsConfig& o_cfg) const;
+  virtual void interpolate (double i_s, CkwsConfig &o_cfg) const;
 
   // inherited -- for doc see parent class
   virtual double computePrivateLength() const;

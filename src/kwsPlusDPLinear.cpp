@@ -138,6 +138,14 @@ double CkwsPlusDPLinear::computePrivateLength() const
 
 // =========================================================================================
 
+void CkwsPlusDPLinear::interpolate(double i_s, CkwsConfig& o_cfg) const
+{
+  
+  CkwsDPLinear::interpolate(i_s, o_cfg);
+}
+
+// =========================================================================================
+
 void CkwsPlusDPLinear::maxAbsoluteDerivative(double inFrom, double inTo, std::vector<double> & outVectorDeriv) const
 {
   KWS_PRECONDITION( m_start.size() == device()->countDofs() );
