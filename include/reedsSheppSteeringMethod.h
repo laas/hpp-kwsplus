@@ -5,8 +5,8 @@
 */
 
 
-#ifndef  __REEDS_SHEEP_STEERING_METHOD_H__
-#define __REEDS_SHEPP_STEERING_METHOD_H__
+#ifndef __REEDS_SHEEP_STEERING_METHOD_H__
+#define __REEDS_SHEEP_STEERING_METHOD_H__
 
 /*************************************
             INCLUDE
