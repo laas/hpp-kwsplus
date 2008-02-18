@@ -6,13 +6,13 @@ TESTS = \
 	testFlicMaxDeriv 
 
 noinst_PROGRAMS = \
-	testFlicMaxDeriv \
-	testFlicBoundObj \
-	testFlicStraightLine 
+	testFlicMaxDeriv 	\
+	testFlicBoundObj 	\
+	testFlicStraightLine
 
-license: clean-license \
-	testFlicMaxDeriv.kab \
-	testFlicBoundObj.kab \
+license: clean-license 			\
+	testFlicMaxDeriv.kab 		\
+	testFlicBoundObj.kab 		\
 	testFlicStraightLine.kab
 
 clean-license: 
@@ -54,11 +54,12 @@ testFlicStraightLine_SOURCES = \
 testFlicStraightLine_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
 testFlicStraightLine_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
 
-testProjectionConstraint_SOURCES = \
-	testProjectionConstraint.cpp
+# FIXME: this doesn't compile
+#testProjectionConstraint_SOURCES = \
+#	testProjectionConstraint.cpp
 
-testProjectionConstraint_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
-testProjectionConstraint_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
+#testProjectionConstraint_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
+#testProjectionConstraint_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
 
 %.kab: %
 	mkdir -p bin$<
