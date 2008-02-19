@@ -1,3 +1,6 @@
+2008/02/19
+	12. Added CkwsPlusRoadmap class. Enable user to remove a set of nodes and a set of edges from a roadmap.
+
 2008/01/09
 	11. In flicDirectPath, curvature bound is enforced at the creation of the direct path.
 	
