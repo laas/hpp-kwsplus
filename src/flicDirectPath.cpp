@@ -317,15 +317,6 @@ double CflicPiecewisePolynomial3::value(double u) const
   }
   const CflicPolynomial3& poly3 = attVectorPoly[polyId];
 
-  if ((u < poly3.attU1) || (u > poly3.attU2))
-  {
-    cerr << "CflicPiecewisePolynomial3::value: u out of range. u = " << u
-    << ", poly3.attU1 = " << poly3.attU1
-    << ", poly3.attU2 = " << poly3.attU2
-    << ", polyId = " << polyId
-    << ", attNbIntervals = " << attNbIntervals
-    << endl;
-  }
   double val = poly3.value(u);
   return val;
 }
