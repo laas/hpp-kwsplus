@@ -5,7 +5,7 @@ dnl
 dnl   Author: Florent Lamiraux LAAS-CNRS
 dnl
 
-AC_INIT([kwsPlus],[1.1],[openrobots@laas.fr])
+AC_INIT([kwsPlus],[1.2.99],[openrobots@laas.fr])
 AC_PREREQ(2.59)
 
 AM_INIT_AUTOMAKE
@@ -54,7 +54,7 @@ if test x${with_lapack} != xno ; then
 	LAPACK_LIBS="-Wl -llapack"
    fi
    else
-   AC_ERROR([please configure --with-lapack(=PATH_TO_LAPACK)])
+   AC_MSG_ERROR([please configure --with-lapack(=PATH_TO_LAPACK)])
 fi
 
 AC_SUBST(LAPACK_CFLAGS)

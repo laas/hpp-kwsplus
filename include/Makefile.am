@@ -21,5 +21,6 @@ kwsPlus_HEADERS = \
 	kwsPlusPCARdmBuilder.h \
 	kwsPlusLTRdmBuilder.h \
 	kwsPlusDPLinear.h \
-	kwsPlusSMLinear.h 
+	kwsPlusSMLinear.h \
+	kwsPlusRoadmap.h
 
