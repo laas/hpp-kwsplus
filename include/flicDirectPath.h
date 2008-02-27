@@ -603,7 +603,10 @@ private:
 
 
 /**
-   \brief Direct path for flat interpolation for Cart derivate from CkwsDirectPath.
+   \brief Direct path for flat interpolation for Cart.
+
+   These direct paths are paramterized by arc-length of the curve \f$\gamma \f$ followed by the flat output.
+   
 */
 class CflicDirectPath : public CkwsPlusDirectPath {
   friend class CtestFlicDirectPath;
@@ -719,6 +722,7 @@ class CflicDirectPath : public CkwsPlusDirectPath {
   /**
      \brief   Returns the parameter range of the direct path at the time it was built.
      \return initial parameter range of the direct path
+     \note Private length is equal to \f$ \gamma \f$ -arc-length.
   */
   virtual double computePrivateLength() const ; 
   	
