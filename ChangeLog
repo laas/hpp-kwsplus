@@ -1,3 +1,6 @@
+2008/02/28
+        13. Added CkwsPlusDistance class. Enable user to use other types of steering method for calculating distance. 
+
 2008/02/19
 	12. Added CkwsPlusRoadmap class. Enable user to remove a set of nodes and a set of edges from a roadmap.
 

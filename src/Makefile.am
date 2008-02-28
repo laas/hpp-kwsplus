@@ -19,7 +19,8 @@ libkwsPlus_la_SOURCES = \
 	hppVisRdmBuilder.cpp \
 	kwsPlusDPLinear.cpp \
 	kwsPlusSMLinear.cpp \
-	kwsPlusRoadmap.cpp
+	kwsPlusRoadmap.cpp \
+	kwsPlusDistance.cpp
 
 
 libkwsPlus_la_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS)  $(LAPACK_CFLAGS)
