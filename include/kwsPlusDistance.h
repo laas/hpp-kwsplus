@@ -16,10 +16,6 @@ INCLUDE
 
 #include <iostream>
 
-#include "KineoWorks2/kwsInterface.h"
-#include "KineoUtility/kitInterface.h"
-//#include "kcd2/kcdInterface.h"
-//#include "kwsKcd2/kwsKCDBody.h"
 #include "KineoWorks2/kwsSteeringMethod.h"
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDistance.h"
