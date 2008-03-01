@@ -20,7 +20,8 @@ libkwsPlus_la_SOURCES = \
 	kwsPlusDPLinear.cpp \
 	kwsPlusSMLinear.cpp \
 	kwsPlusRoadmap.cpp \
-	kwsPlusDistance.cpp
+	flicDistance.cpp \
+	flicManager.cpp
 
 
 libkwsPlus_la_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS)  $(LAPACK_CFLAGS)
@@ -29,3 +30,5 @@ libkwsPlus_la_LDFLAGS =\
 	$(LAPACK_LIBS)  \
 	-release ${PACKAGE_VERSION}
 
+EXTRA_DIST = \
+	flicManager.h

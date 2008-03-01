@@ -30,6 +30,12 @@ ktStatus CtestFlicDirectPath::init()
     cerr << "CtestFlicDirectPath::init: Could not create steering method." << endl;
     return KD_ERROR;
   }
+
+  if (createFlicDistance() != KD_OK) {
+    cerr << "CtestFlicDirectPath::init: Could not create distance." << endl;
+    return KD_ERROR;
+  }
+  
   return KD_OK;
 }
 
@@ -471,6 +477,69 @@ ktStatus CtestFlicDirectPath::testStraightLineDirectPath()
   return KD_OK;
 }
 
+ktStatus CtestFlicDirectPath::testApproximateLength(unsigned int nbRndDirectPath)
+{
+  CkwsConfig initConfig(attKwsDevice), goalConfig(attKwsDevice);
+  CkwsDirectPathShPtr kwsDirectPath;
+  double pathLength;
+
+  // Loop over random direct paths.
+  for (unsigned int iDP=0; iDP < nbRndDirectPath; iDP++) {
+    // Pick two random configurations.
+    initConfig.randomize();
+    goalConfig.randomize();
+
+    // Set non planar dof to 0
+    initConfig.dofValue(CflicDirectPath::Z_COORD, 0.0);
+    initConfig.dofValue(CflicDirectPath::RX_COORD, 0.0);
+    initConfig.dofValue(CflicDirectPath::RY_COORD, 0.0);
+
+    goalConfig.dofValue(CflicDirectPath::Z_COORD, 0.0);
+    goalConfig.dofValue(CflicDirectPath::RX_COORD, 0.0);
+    goalConfig.dofValue(CflicDirectPath::RY_COORD, 0.0);
+  
+    if (iDP == 0) {
+      initConfig.dofValue(CflicDirectPath::X_COORD, 0.0);
+      initConfig.dofValue(CflicDirectPath::Y_COORD, 0.0);
+      initConfig.dofValue(CflicDirectPath::RZ_COORD, 0.0);
+
+      goalConfig.dofValue(CflicDirectPath::X_COORD, 2.0);
+      goalConfig.dofValue(CflicDirectPath::Y_COORD, 0.0);
+      goalConfig.dofValue(CflicDirectPath::RZ_COORD, 0.0);
+    }
+
+    if (iDP == 1) {
+      initConfig.dofValue(CflicDirectPath::X_COORD, 0.0);
+      initConfig.dofValue(CflicDirectPath::Y_COORD, 0.0);
+      initConfig.dofValue(CflicDirectPath::RZ_COORD, .5*M_PI);
+
+      goalConfig.dofValue(CflicDirectPath::X_COORD, 0.0);
+      goalConfig.dofValue(CflicDirectPath::Y_COORD, 3.0);
+      goalConfig.dofValue(CflicDirectPath::RZ_COORD, .5*M_PI);
+    }
+
+    if (iDP < nbRndDirectPath/2) {
+      initConfig.dofValue(CflicDirectPath::CURV_COORD, 0.0);
+      goalConfig.dofValue(CflicDirectPath::CURV_COORD, 0.0);
+    }      
+
+    kwsDirectPath = attSteeringMethod->makeDirectPath(initConfig, goalConfig);
+    if (kwsDirectPath) {
+      pathLength = kwsDirectPath->length();
+    }
+    else {
+      pathLength = 1e10;
+    }
+    double approximateLength = attFlicDistance->distance(initConfig, goalConfig);
+    
+    std::cout << "Init config = (" << initConfig << ")" << std::endl;
+    std::cout << "Goal  config = (" << goalConfig << ")" << std::endl;
+    std::cout << "Length direct path = " << pathLength << std::endl;
+    std::cout << "Approximate distance = " << approximateLength << std::endl;
+    std::cout << std::endl;
+  }
+  return KD_OK;
+}
 
 /*--------------------------------------------------
  *
@@ -496,7 +565,7 @@ ktStatus CtestFlicDirectPath::createDevice()
   CkwsDofShPtr kwsExtraDof ;
   kwsExtraDof = CkwsDof::create(false);
   // Bound curvature
-  kwsExtraDof->bounds(-1.0, 1.0);
+  kwsExtraDof->bounds(-5.0, 5.0);
   kwsExtraDof->isBounded(true);
   attKwsDevice->addExtraDof(kwsExtraDof);
   
@@ -557,7 +626,19 @@ ktStatus CtestFlicDirectPath::createSteeringMethod()
   return KD_OK;
 }
 
-
+ktStatus CtestFlicDirectPath::createFlicDistance()
+{
+  if (!attSteeringMethod) {
+    std::cerr << "CtestFlicDirectPath::createFlicDistance: create steering method first." 
+	      << std::endl;
+    return KD_ERROR;
+  }
+  attFlicDistance = CflicDistance::create(attSteeringMethod);
+  if (!attFlicDistance) {
+    return KD_ERROR;
+  }
+  return KD_OK;
+}
 
 double CtestFlicDirectPath::distCircle(double theta1, double theta2)
 {
@@ -571,3 +652,4 @@ double CtestFlicDirectPath::distCircle(double theta1, double theta2)
   }
   return fabs(angle);
 }
+

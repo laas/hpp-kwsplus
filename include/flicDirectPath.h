@@ -613,6 +613,7 @@ class CflicDirectPath : public CkwsPlusDirectPath {
   friend class CflicBoundManagerDefParam;
   friend class CflicArcLengthManager;
   friend class CflicBoundManagerArcLengthParam;
+  friend class CflicDistance;
 
  public :
   /**

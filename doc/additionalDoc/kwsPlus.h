@@ -2,9 +2,10 @@
    \mainpage
    \section intro Introduction
 
-This package includes general extensions to KineoWorks software. These extensions are divided into modules.
+This package includes general extensions to KineoWorks software. 
+Go to <a href="./modules.html">Modules</a> to see the organization of this package.
 
-\defgroup kwsPlus_DP Direct Paths and Steering Methods
+\defgroup kwsPlus_DP Direct Paths Steering Methods and Distances
   @{
 */
 

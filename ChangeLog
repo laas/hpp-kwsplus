@@ -1,3 +1,9 @@
+2008/03/01
+	15. Added class CflicDistance that provides an approximation of the length of flic direct
+	path between two configurations.
+	14. Moved static functions of flicDirectPath.cpp into a class CflicManager in order to use 
+	these functions in other files.
+	
 2008/02/28
         13. Added CkwsPlusDistance class. Enable user to use other types of steering method for calculating distance. 
 

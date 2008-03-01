@@ -8,17 +8,20 @@ TESTS = \
 noinst_PROGRAMS = \
 	testFlicMaxDeriv 	\
 	testFlicBoundObj 	\
-	testFlicStraightLine
+	testFlicStraightLine 	\
+	testFlicApproximateDistance
 
 license: clean-license 			\
 	testFlicMaxDeriv.kab 		\
 	testFlicBoundObj.kab 		\
-	testFlicStraightLine.kab
+	testFlicStraightLine.kab	\
+	testFlicApproximateDistance.kab
 
 clean-license: 
 	rm -rf bintestFlicMaxDeriv
 	rm -rf bintestFlicBoundObj
 	rm -rf bintestFlicStraightLine
+	rm -rf bintestFlicApproximateDistance
 #
 #   Test method maxAbsoluteDerivative of CflicDirectPath
 #
@@ -53,6 +56,17 @@ testFlicStraightLine_SOURCES = \
 
 testFlicStraightLine_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
 testFlicStraightLine_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
+
+#
+#  Test approximation of distance related to  flic steering method
+#
+testFlicApproximateDistance_SOURCES = \
+	testFlicDirectPath.cpp \
+	testFlicApproximateDistance.cpp
+
+testFlicApproximateDistance_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
+testFlicApproximateDistance_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
+
 
 # FIXME: this doesn't compile
 #testProjectionConstraint_SOURCES = \

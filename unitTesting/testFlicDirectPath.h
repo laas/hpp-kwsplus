@@ -8,7 +8,7 @@
 #include "KineoModel/kppDeviceComponent.h"
 #include "flicSteeringMethod.h"
 #include "flicDirectPath.h"
-
+#include "flicDistance.h"
 
 /**
    \brief Test of direct path and steering method FLatORiENTedINtErpolation.
@@ -102,6 +102,11 @@ public:
   */
   ktStatus testStraightLineDirectPath();
 
+  /**
+     \brief Test approximation of direct path length
+  */
+  ktStatus testApproximateLength(unsigned int nbRndDirectPath);
+
 private:
   /**
      \brief Device with which direct path will be tested.
@@ -119,6 +124,11 @@ private:
   std::ofstream fileStream;
 
   /**
+     \brief Approximate distance between config
+  */
+  CflicDistanceShPtr attFlicDistance;
+
+  /**
      \brief create a device and store it in attKwsDevice.
   */
   ktStatus createDevice();
@@ -127,10 +137,17 @@ private:
      \brief Create a FLatORiENTedINtErpolation steering method.
   */
   ktStatus createSteeringMethod();
+
+  /**
+     \brief Create an object that compute an approximation of flic direct path lengths.
+  */
+  ktStatus createFlicDistance();
+
   /**
      \brief Compute the distance on a unit circle
   */
   double distCircle(double theta1, double theta2);
+
 };
 
 

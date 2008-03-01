@@ -25,10 +25,8 @@ INCLUDE
 using namespace std ;
 
 /**
-
-\addtogroup hpp
-@{
-
+   \addtogroup kwsPlus_DP
+   @{
 */
 
 /*************************************
@@ -43,7 +41,7 @@ CLASS
 /**
    \brief Implement a distance which enable the user to measure distance based on a specific steering method.
 
-   CkwsPlusDistance is herited from kwsDistance and eable users to use it as a steering method base distance calculator .
+   CkwsPlusDistance is herited from kwsDistance and enable users to use it as a steering method base distance calculator .
 
 */
 class CkwsPlusDistance : public CkwsDistance
