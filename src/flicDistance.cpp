@@ -50,11 +50,18 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
   CflicDirectPath* path = new CflicDirectPath(inConfig1, inConfig2, attSteeringMethod);
   static unsigned int halfNbSamples=20;
   static unsigned int nbSamples=2*halfNbSamples;
-
+  double tabGamma[6];
   double velocity[201];
   double v2 = path->attFlatV2;
-  double tabGamma[6];
   double maxCurvature = path->attMaxCurvature;
+
+  /*
+    If the steering method is oriented and v2<=0, then the direct path is
+    invalid.
+  */
+  if ((attIsOriented) &&(v2 <= 0)) {
+    return HUGE_VAL;
+  }
 
   for (unsigned int iSample=0; iSample<nbSamples+1; iSample++) {
     double u=1.0*iSample/nbSamples;
@@ -74,12 +81,12 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
 	   << x1 << ", " << y1 << ", " << x2 << ", " << y2 << ")");
     ODEBUG2("v = " << v);
     if (v == 0) {
-      return 1e10;
+      return HUGE_VAL;
     }
     double curvature = fabs(x1*y2-x2*y1)/pow(v,3.0);
     ODEBUG2("curvature = " << curvature);
     if (curvature >= maxCurvature) {
-      return 1e10;
+      return HUGE_VAL;
     }
   }
 

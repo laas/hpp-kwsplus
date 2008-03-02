@@ -20,6 +20,7 @@ libkwsPlus_la_SOURCES = \
 	kwsPlusDPLinear.cpp \
 	kwsPlusSMLinear.cpp \
 	kwsPlusRoadmap.cpp \
+	kwsPlusDistance.cpp \
 	flicDistance.cpp \
 	flicManager.cpp
 

@@ -52,7 +52,8 @@ protected:
      \brief Protected constructor
   */
   CflicDistance(const CkwsSteeringMethodShPtr inSteeringMethod) : 
-    attSteeringMethod(inSteeringMethod){};
+    attSteeringMethod(inSteeringMethod), 
+    attIsOriented(inSteeringMethod->isOriented()){};
 
   /**
      \brief Protected copy constructor
@@ -71,6 +72,11 @@ private:
      \brief Store steering method to create direct paths
   */
   CkwsSteeringMethodShPtr attSteeringMethod;
+
+  /**
+     \brief Whether the steering method is oriented.
+  */
+  bool attIsOriented;
 
 };
 
