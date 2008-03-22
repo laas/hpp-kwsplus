@@ -63,6 +63,7 @@ roadmap with RLG.
 
 \defgroup PCA PCA Roadmap Builder
 
+\defgroup kwsPlusRoadmap Enhanced roadmap management
 
 */
 

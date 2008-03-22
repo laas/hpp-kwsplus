@@ -74,9 +74,14 @@ CLASS
 **************************************/
 
 /**
-   \brief Implement a roadmap which enable the user to remove node or edge.
+   \addtogroup kwsPlusRoadmap
+   @{
+*/
 
-   kwsPlusRoadmap (managable roadmap) is herited from kwsRoadmap and eable users to remove some nodes and edges from that.
+/**
+   \brief Implement a roadmap which enable the user to remove nodes or edges.
+
+   kwsPlusRoadmap (managable roadmap) is herited from kwsRoadmap and enable users to remove some nodes and edges.
 
 */
 
@@ -112,5 +117,7 @@ class CkwsPlusRoadmap : public CkwsRoadmap
 
 };
 
-
+/**
+   @}
+*/
 #endif
