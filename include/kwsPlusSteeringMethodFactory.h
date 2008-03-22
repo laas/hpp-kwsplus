@@ -28,7 +28,7 @@ public:
   /**
      \brief Return a steering method
   */
-  virtual CkwsSteeringMethodShPtr makeSteeringMethod() = 0;
+  virtual CkwsSteeringMethodShPtr makeSteeringMethod(bool inOriented) = 0;
 };
 
 
@@ -37,26 +37,13 @@ public:
 */
 class CkwsPlusLinearSteeringMethodFactory : public CkwsPlusSteeringMethodFactory {
 public:
-  /**
-     \brief Constructor 
-     \param inOriented Whether steering method is oriented
-  */
-  CkwsPlusLinearSteeringMethodFactory(bool inOriented=false) : 
-    attOriented(inOriented) {
-  };
 
   /**
      \brief Return a linear steering method
   */
-  CkwsSteeringMethodShPtr makeSteeringMethod() {
-    return CkwsSMLinear::create(attOriented);
+  CkwsSteeringMethodShPtr makeSteeringMethod(bool inOriented) {
+    return CkwsSMLinear::create(inOriented);
   };
-
-private:
-  /**
-     \brief Whether the steering method is oriented
-  */
-  bool attOriented;
 };
 
 
@@ -70,16 +57,15 @@ public:
      \param inRadius Radius of circular segments
      \param inOriented Whether steering method is oriented
   */
-  CkwsPlusRSSteeringMethodFactory(double inRadius, bool inOriented=false) :
-    attRadius(inRadius),
-    attOriented(inOriented) {
+  CkwsPlusRSSteeringMethodFactory(double inRadius) :
+    attRadius(inRadius) {
   };
 
   /**
      \brief Return a Reeds and Shepp steering method
   */
-  CkwsSteeringMethodShPtr makeSteeringMethod() {
-    return CreedsSheppSteeringMethod::create(attRadius, attOriented);
+  CkwsSteeringMethodShPtr makeSteeringMethod(bool inOriented) {
+    return CreedsSheppSteeringMethod::create(attRadius, inOriented);
   };
 
 private:
@@ -88,10 +74,6 @@ private:
   */
   double attRadius;
 
-  /**
-     \brief Whether the steering method is oriented
-  */
-  bool attOriented;
 };
 
 
@@ -101,25 +83,11 @@ private:
 class CkwsPlusFlicSteeringMethodFactory : public CkwsPlusSteeringMethodFactory {
 public:
   /**
-     \brief Constructor 
-     \param inOriented Whether steering method is oriented
-  */
-  CkwsPlusFlicSteeringMethodFactory(bool inOriented=false) : 
-    attOriented(inOriented) {
-  };
-
-  /**
      \brief Return a flic steering method
   */
-  CkwsSteeringMethodShPtr makeSteeringMethod() {
-    return CflicSteeringMethod::create(attOriented);
+  CkwsSteeringMethodShPtr makeSteeringMethod(bool inOriented) {
+    return CflicSteeringMethod::create(inOriented);
   };
-
-private:
-  /**
-     \brief Whether the steering method is oriented
-  */
-  bool attOriented;
 };
 
 
