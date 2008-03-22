@@ -14,6 +14,10 @@ Go to <a href="./modules.html">Modules</a> to see the organization of this packa
 
   \defgroup flic Flatness-based local steering method for cart-like robot
 
+  \defgroup kwsplusdplinear Extension of linear steering method
+
+  \defgroup smfactory Steering method factory
+
 */
 
 /**

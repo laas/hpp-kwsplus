@@ -1,3 +1,6 @@
+2008/03/22
+	16. Added steering method factories.
+	
 2008/03/01
 	15. Added class CflicDistance that provides an approximation of the length of flic direct
 	path between two configurations.
