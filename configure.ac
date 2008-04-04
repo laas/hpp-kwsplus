@@ -5,7 +5,7 @@ dnl
 dnl   Author: Florent Lamiraux LAAS-CNRS
 dnl
 
-AC_INIT([kwsPlus],[1.3.99],[openrobots@laas.fr])
+AC_INIT([kwsPlus],[1.3],[openrobots@laas.fr])
 AC_PREREQ(2.59)
 
 AM_INIT_AUTOMAKE
@@ -32,6 +32,33 @@ AC_SUBST(KINEOCONTROLLER_PREFIX)
 AC_SUBST(KINEO_LIBDIR,[${KINEOCONTROLLER_PREFIX}/lib])
 AC_SUBST(KINEO_ADDON_BUILD,[${KINEOCONTROLLER_PREFIX}/bin/KineoAddonBuilder])
 
+dnl --- Boost --------------
+AC_ARG_WITH(boost,
+	AS_HELP_STRING([--with-boost], [boost installation prefix]),
+	BOOST_CFLAGS="-I${withval}/include"
+	CXXFLAGS="${CXXFLAGS} ${BOOST_CFLAGS}",
+	)
+
+AC_SUBST(BOOST_CFLAGS)
+
+
+dnl lapack path
+AC_ARG_WITH(lapack, AC_HELP_STRING([--with-lapack],
+	[prefix of lapack installation]),,with_lapack=no)
+if test x${with_lapack} != xno ; then
+   if test x${with_lapack} != xyes; then
+	LAPACK_CFLAGS="-I${with_lapack}/include"
+	CXXFLAGS="${CXXFLAGS} ${LAPACK_CFLAGS}"
+	LAPACK_LIBS="-Wl,-R${with_lapack} -L${with_lapack}/lib -llapack"
+   else
+	LAPACK_LIBS="-llapack"
+   fi
+   else
+   AC_MSG_ERROR([please configure --with-lapack(=PATH_TO_LAPACK)])
+fi
+
+AC_SUBST(LAPACK_CFLAGS)
+AC_SUBST(LAPACK_LIBS)
 
 AC_OUTPUT(Makefile
 	src/Makefile

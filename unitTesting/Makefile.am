@@ -80,3 +80,4 @@ testFlicApproximateDistance_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS)
 	cp $< bin$<
 	cd bin$<; LD_LIBRARY_PATH=@KINEO_LIBDIR@  @KINEO_ADDON_BUILD@ -a ./$< 
 	rm -f $<
+
