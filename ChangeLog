@@ -1,87 +1,72 @@
-2008/03/22
-	16. Added steering method factories.
-	
-2008/03/01
-	15. Added class CflicDistance that provides an approximation of the length of flic direct
-	path between two configurations.
-	14. Moved static functions of flicDirectPath.cpp into a class CflicManager in order to use 
-	these functions in other files.
-	
-2008/02/28
-        13. Added CkwsPlusDistance class. Enable user to use other types of steering method for calculating distance. 
+2008/04/04      kwsPlus release 1.3
 
-2008/02/19
-	12. Added CkwsPlusRoadmap class. Enable user to remove a set of nodes and a set of edges from a roadmap.
+        29. Added steering method factories.
+        28. Added class CflicDistance that provides an approximation of
+            the length of flic direct path between two configurations.
+        27. Moved static functions of flicDirectPath.cpp into a class
+            CflicManager in order to use these functions in other files.
+        26. Added CkwsPlusDistance class. Enable user to use other types
+            of steering method for calculating distance.
+        25. Added CkwsPlusRoadmap class. Enable user to remove a set of
+            nodes and a set of edges from a roadmap.
 
-2008/01/09
-	11. In flicDirectPath, curvature bound is enforced at the creation of the direct path.
+2008/02/18      kwsPlus release 1.2
 	
-2007/12/18
-	10.Added CkwsPlusLTRdmBuilder class. Derives from any diffusing
-	roadmap builder class and implements a local tree diffusing method.
-2007/11/22
-	9.Added CkwsPlusPCARdmBuilder class. Derives from any diffusing
-	roadmap builder class and implements a principal component
-	analysis to speed up the diffusion process. Needs lapack installed.
+        24. In flicDirectPath, curvature bound is enforced at the creation
+            of the direct path.
+        23. Added CkwsPlusLTRdmBuilder class. Derives from any diffusing
+            roadmap builder class and implements a local tree diffusing
+            method.
+        22. Added CkwsPlusPCARdmBuilder class. Derives from any diffusing
+            roadmap builder class and implements a principal component
+            analysis to speed up the diffusion process. Needs lapack
+            installed.
+        21. Remove unused classes kwsPlusRoadmap and
+            kwsPlusDrawRdmBuilderDelegate
+        20. Minor Changes
+        19. Merge with git+ssh://softs.laas.fr/git/jrl/kwsPlus
+        18. Correct the reeds&sheppDirectPath Class :
+              - is now derivated from kwsPlusDirectPath
+              - you can acess to uStart and uEnd parameters which are
+                configurated with extractTo and extractFrom
+              - when you get the RSvectorPartition is now taking count of
+                the uStart and uEnd extracting parameters
+        17. Added a class to test whether a configuration constraint is
+            continuous and is a projection.
+        16. Reorganization of documentation.
+        15. Added class CkwsPlusDirectPath that manages extraction and
+            reverse of direct paths.
+        14. Added a class in unitTesting to test whether a configuration
+            constraint is a projection.
 
-2007/11/14
-	8.Remove unused classes kwsPlusRoadmap and kwsPlusDrawRdmBuilderDelegate
-	7.Minor Changes 
-	6.Merge with git+ssh://softs.laas.fr/git/jrl/kwsPlus
+2007/10/10      kwsPlus release 1.1
 
-2007/11/06
-	5. Correct the reeds&sheppDirectPath Class :
-	      - is now derivated from kwsPlusDirectPath
-	      - you can acess to uStart and uEnd parameters which are configurated with extractTo and extractFrom
-	      - when you get the RSvectorPartition is now taking count of the uStart and uEnd extracting parameters
+        13. Correct a bug in  findRsCurveNumInVector() :
+           - put an Epsilon for the test else there is a bug when u ~= val
+        12. Added visibility algorithm.
+        11. Added a roadmap builder delegate to display the roadmap.
+        10. Modified construction of CkwsPlusRoadmap.
+        9. Completed the implementation of the Reeds&Shepp Curve
+                  - MaxAbsoluteDerivative
+                  - Reduce the option RS_ALL type of curve
 
+2007/07/13      kwsPlus release 1.0
 
-2007/10/22
-	4. Added a class to test whether a configuration constraint is continuous and is a projection.	
-	
-2007/10/17
-	3. Reorganization of documentation.
-	2. Added class CkwsPlusDirectPath that manages extraction and reverse of direct paths.
-	
-2007/10/16
-	1. Added a class in unitTesting to test whether a configuration constraint is a projection.
-	
-2007/10/10
-	kwsPlus release 1.1
-	
-2007/10/09
-	1. Correct a bug in  findRsCurveNumInVector() : 
-	   - put an Epsilon for the test else there is a bug when u ~= val 
-	
-2007/09/29
-	1. Added visibility algorithm.
-	2. Added a roadmap builder delegate to display the roadmap.
-	3. Modified construction of CkwsPlusRoadmap.
-	
-2007/09/16
-	Completed the implementation of the Reeds&Shepp Curve
-		  - MaxAbsoluteDerivative 
-		  - Reduce the option RS_ALL type of curve
-
-2007/07/13
-	kwsPlus release 1.0
-	
-2007/05/02
-	Added methods and attributes to keep track of extration and reversion of KineoWorks direct paths.
-	
-2007/04/27
-	1. Class CkwsPlusRoadmap now inherits from CkppKCDAssembly instead of CkppKCDPolyhedron, in order to allow roadmap building on
-	run-time.
-	2. Added a method "lastEdge" to this class. To use with a roadmap builder delegate and a progress delegate for a "real-time" display
-
-2007/04/26
-	Added class CkwsPlusRoadmap: derives from CkwsRoadmap and from CkppKCDPolyhedron and implements a display() method that
-	puts the roadmap in the geometry node of the model tree if any.
-	
-2007/04/20
-	1. Documentation is now generated at installation
-	2. kwsPlus.doxytag is produced by doxygen and installed.
-	
-2007/04/03
-	1. Flatness based computations for carlike robot are now externalized in another library in order to be reused for other purposes.
-	2. Removed reference to package angle. angle is provided by flatCarDirectPath.
+        8. Added methods and attributes to keep track of extration and
+           reversion of KineoWorks direct paths.
+        7. Class CkwsPlusRoadmap now inherits from CkppKCDAssembly instead
+           of CkppKCDPolyhedron, in order to allow roadmap building on
+           run-time.
+        6. Added a method "lastEdge" to this class. To use with a roadmap
+           builder delegate and a progress delegate for a "real-time"
+           display
+        5. Added class CkwsPlusRoadmap: derives from CkwsRoadmap and from
+           CkppKCDPolyhedron and implements a display() method that
+           puts the roadmap in the geometry node of the model tree if any.
+        4. Documentation is now generated at installation
+        3. kwsPlus.doxytag is produced by doxygen and installed.
+        2. Flatness based computations for carlike robot are now
+           externalized in another library in order to be reused for other
+           purposes.
+        1. Removed reference to package angle. angle is provided by
+           flatCarDirectPath.
