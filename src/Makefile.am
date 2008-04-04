@@ -25,10 +25,9 @@ libkwsPlus_la_SOURCES = \
 	flicManager.cpp
 
 
-libkwsPlus_la_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS)  $(LAPACK_CFLAGS)
+libkwsPlus_la_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS)
 libkwsPlus_la_LDFLAGS =\
 	$(KWSIO_LIBS) 	\
-	$(LAPACK_LIBS)  \
 	-release ${PACKAGE_VERSION}
 
 EXTRA_DIST = \
