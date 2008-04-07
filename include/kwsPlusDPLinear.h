@@ -53,7 +53,7 @@ class CkwsPlusDPLinear : public CkwsDPLinear {
       \param   i_ratio_vector : the vector of derivative ratio with respect to \\
       the linear SM for each DoF to calculate maxAbsoluteDerivative
      \param  i_steeringMethod 	: shared pointer to the instance of the steering method that created the path
-     \param inOriented : boolean , direct Path oriented or not
+
      \return shared pointer to a newly created flicDirectPath
   */
   static CkwsPlusDPLinearShPtr create(const CkwsConfig &i_start,
@@ -62,9 +62,9 @@ class CkwsPlusDPLinear : public CkwsDPLinear {
 				      const CkwsSteeringMethodShPtr &i_steeringMethod);
   
   /**
-     \brief  Creates by copy a new instance of a flat Interpolation cart direct path.
-     \param i_flatDirectPath : a shared pointer to flicDirectPath that already exist
-     \return shared pointer to a newly created flicDirectPath
+     \brief  Copy a direct path of type CkwsPlusDPLinear.
+     \param i_kwsDPLinear input direct path
+     \return shared pointer to a newly created direct path.
   */
   static CkwsPlusDPLinearShPtr createCopy (const CkwsPlusDPLinearConstShPtr &i_kwsDPLinear) ; 
 
@@ -86,21 +86,20 @@ class CkwsPlusDPLinear : public CkwsDPLinear {
    *   \param         i_end : the end configuration
    *      \param   i_ratio_vector : the vector of derivative ratio with respect to \ \
    *    the linear SM for each DoF to calculate maxAbsoluteDerivative
-   *   \param         i_steeringMethod : \ref usingSmartPointers "shared pointer" to the instance of the steering method
-   *                                     that created the path
+   *   \param         i_steeringMethod Shared pointer to the instance of the steering method that created the path.
    */
   CkwsPlusDPLinear(const CkwsConfig& i_start, const CkwsConfig& i_end, 
 		   const std::vector<double> &i_ratio_vector, 
 		   const CkwsSteeringMethodShPtr& i_steeringMethod);
 	
   /** Copy constructor.
-   *   \param         i_linearDirectPath : the linear direct path to copy
+   *   \param         i_kwsDPLinear the linear direct path to copy
    */
   CkwsPlusDPLinear(const CkwsPlusDPLinear& i_kwsDPLinear);
 
   /** Initialization.
    *   \param         i_weakPtr : weak pointer to the object itself
-   *   \return        #KD_OK | #KD_ERROR
+   *   \return        KD_OK | KD_ERROR
    */
   ktStatus init(const CkwsPlusDPLinearWkPtr& i_weakPtr);
 

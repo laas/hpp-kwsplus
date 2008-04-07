@@ -55,11 +55,13 @@ class CkwsPlusDistance : public CkwsDistance
 		virtual ~CkwsPlusDistance() ;
 
 		/**
-		   \brief  create a steering method and return the shared pointer corresponding
-		   \param  is_oriented : a bool (default = true) ;
-		   \return a shared pointer on the Steering Method
+		   \brief  create a distance function related to a steering method.
+
+		   \param inSteeringMethod the distance between two config is the length of the path returned by this steering method.
+
+		   \return a shared pointer on the distance function
 		*/
-		static CkwsPlusDistanceShPtr create(CkwsSteeringMethodShPtr inStreeingMethod) ;
+		static CkwsPlusDistanceShPtr create(CkwsSteeringMethodShPtr inSteeringMethod) ;
 
 		ktStatus init ( const CkwsPlusDistanceWkPtr& i_smWkPtr );
 

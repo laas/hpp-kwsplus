@@ -34,15 +34,15 @@ public:
 
  /**
      \brief Constructor.
-     \param i_roadmap: The roadmap to construct.
-     \param i_penetration: The penetration allowed.
-     \param i_shooter: The shooter used to generate the configurations.
-     \param i_evaluator: The class used to evaluate the distance between two configurations.
+     \param inRoadmap: The roadmap to construct.
+     \param inPenetration: The penetration allowed.
+     \param inShooter: The shooter used to generate the configurations.
+     \param inEvaluator: The class used to evaluate the distance between two configurations.
  */
-  static ChppVisRdmBuilderShPtr create (const CkwsRoadmapShPtr &i_roadmap,
-                                        double i_penetration,
-                                        const ChppShooterActiveDofShPtr& i_shooter=ChppShooterActiveDof::create(),
-                                        const CkwsDistanceShPtr &i_evaluator=CkwsDistance::create());
+  static ChppVisRdmBuilderShPtr create (const CkwsRoadmapShPtr &inRoadmap,
+                                        double inPenetration,
+                                        const ChppShooterActiveDofShPtr& inShooter=ChppShooterActiveDof::create(),
+                                        const CkwsDistanceShPtr &inEvaluator=CkwsDistance::create());
 
  /**
      \brief Destructor.
@@ -54,20 +54,19 @@ protected:
 
   /**
     \brief Constructor
-    \param i_roadmap: The roadmap of the roadmapBuilder.
-    \param i_evaluator: The class used to evaluate the distance between two configurations.
+    \param inRoadmap: The roadmap of the roadmapBuilder.
   */
-  ChppVisRdmBuilder(const CkwsRoadmapShPtr& i_roadmap,
-                     const CkwsDistanceShPtr &i_evaluator=CkwsDistance::create());
+  ChppVisRdmBuilder(const CkwsRoadmapShPtr& inRoadmap);
 
  /**
      \brief Init function.
-     \param i_weakPtr: The weak pointer to the visibiltyRdmBuilder.
-     \param i_penetration: The penetration allowed.
-     \param i_shooter: The shooter to generate the configurations.
+
+     \param inWeakPtr: The weak pointer to the visibiltyRdmBuilder.
+     \param inShooter: The shooter to generate the configurations.
+
      \return ktStatus KD_OK or KD_ERROR
  */
-  ktStatus init(const ChppVisRdmBuilderWkPtr& i_weakPtr, double i_penetration, const ChppShooterActiveDofShPtr &i_shooter);
+  ktStatus init(const ChppVisRdmBuilderWkPtr& inWeakPtr, const ChppShooterActiveDofShPtr &inShooter);
 
   /**
     \brief This function is inherited and is modified here in order to give the visibility property to the roadmapbuilder.

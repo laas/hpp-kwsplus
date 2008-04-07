@@ -145,19 +145,15 @@ class CkwsPlusLTRdmBuilder : public T
   /**
      \brief initialization
      \param i_weakPtr
-     \param i_penetration
-     \param i_picker
-     \param i_shooter
      \return KD_OK | KD_ERROR 
    */
-  ktStatus init(const KIT_WEAK_PTR(CkwsPlusLTRdmBuilder<T>) &i_weakPtr, double i_penetration, CkwsDiffusionNodePickerShPtr i_picker=CkwsDiffusionNodePickerShPtr(), CkwsDiffusionShooterShPtr i_shooter=CkwsDiffusionShooterShPtr());
+  ktStatus init(const KIT_WEAK_PTR(CkwsPlusLTRdmBuilder<T>) &i_weakPtr);
 
   /**
      \brief Constructor
      \param i_roadmap roadmap to work with
-     \param i_evaluator distance evaluator (defaults to CkwsDistance)
    */
-  CkwsPlusLTRdmBuilder(const CkwsRoadmapShPtr &i_roadmap, const CkwsDistanceShPtr &i_evaluator=CkwsDistance::create());
+  CkwsPlusLTRdmBuilder(const CkwsRoadmapShPtr &i_roadmap);
 
  private :
 
@@ -306,17 +302,17 @@ CkwsNodeShPtr CkwsPlusLTRdmBuilder<T>::extend (const CkwsNodeShPtr& i_node, cons
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 template <class T>
-CkwsPlusLTRdmBuilder<T>::CkwsPlusLTRdmBuilder(const CkwsRoadmapShPtr &i_roadmap, const CkwsDistanceShPtr &i_evaluator): T(i_roadmap,i_evaluator){
+CkwsPlusLTRdmBuilder<T>::CkwsPlusLTRdmBuilder(const CkwsRoadmapShPtr &i_roadmap): T(i_roadmap){
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 template <class T>
-ktStatus CkwsPlusLTRdmBuilder<T>::init(const KIT_WEAK_PTR(CkwsPlusLTRdmBuilder<T>) &i_weakPtr, double i_penetration, CkwsDiffusionNodePickerShPtr i_picker, CkwsDiffusionShooterShPtr i_shooter){
+ktStatus CkwsPlusLTRdmBuilder<T>::init(const KIT_WEAK_PTR(CkwsPlusLTRdmBuilder<T>) &i_weakPtr){
 
   ktStatus res = KD_OK;
   oldStep = 0;
-  res = T::init(i_weakPtr,i_penetration,i_picker,i_shooter);
+  res = T::init(i_weakPtr);
 
   return res;
 
@@ -325,19 +321,31 @@ ktStatus CkwsPlusLTRdmBuilder<T>::init(const KIT_WEAK_PTR(CkwsPlusLTRdmBuilder<T
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 template <class T>
-KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) CkwsPlusLTRdmBuilder<T>::create(const CkwsRoadmapShPtr &i_roadmap, double i_penetration, const CkwsDistanceShPtr &i_evaluator, const CkwsDiffusionNodePickerShPtr &i_picker, const CkwsDiffusionShooterShPtr &i_shooter){
+KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) CkwsPlusLTRdmBuilder<T>::create(const CkwsRoadmapShPtr &i_roadmap, double i_penetration, 
+									const CkwsDistanceShPtr &i_evaluator, 
+									const CkwsDiffusionNodePickerShPtr &i_picker, 
+									const CkwsDiffusionShooterShPtr &i_shooter)
+{
 
   cout<<endl;
 
-  CkwsPlusLTRdmBuilder<T>* ptr = new CkwsPlusLTRdmBuilder(i_roadmap,i_evaluator);
-  KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) shPtr(ptr);
-  KIT_WEAK_PTR(CkwsPlusLTRdmBuilder<T>) wkPtr(shPtr);
+  CkwsPlusLTRdmBuilder<T>* rdmBuilderPtr = new CkwsPlusLTRdmBuilder(i_roadmap);
+  KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) rdmBuilderShPtr(rdmBuilderPtr);
+  KIT_WEAK_PTR(CkwsPlusLTRdmBuilder<T>) rdmBuilderWkPtr(rdmBuilderShPtr);
 
-  if(KD_OK != ptr->init(wkPtr,i_penetration,i_picker,i_shooter)){
-    shPtr.reset();
+  if(KD_OK != rdmBuilderPtr->init(rdmBuilderWkPtr)){
+    rdmBuilderShPtr.reset();
+  }
+  else {
+    rdmBuilderShPtr->diffusionNodePicker(i_picker);
+    rdmBuilderShPtr->diffusionShooter(i_shooter);
+    rdmBuilderShPtr->distance(i_evaluator);
+    if(KD_ERROR == CkwsValidatorDPCollision::setPenetration(rdmBuilderShPtr->builderDirectPathValidator(), i_penetration)) {
+      rdmBuilderShPtr.reset();
+    }
   }
 
-  return shPtr;
+  return rdmBuilderShPtr;
 
 }
 
@@ -348,5 +356,9 @@ typedef  CkwsPlusLTRdmBuilder<CkwsIPPRdmBuilder> CkwsPlusLTIPPRdmBuilder;
 
 KIT_POINTER_DEFS(  CkwsPlusLTDiffusingRdmBuilder );
 KIT_POINTER_DEFS(  CkwsPlusLTIPPRdmBuilder );
+
+/**
+   @}
+*/
 
 #endif //KWS_PLUS_LT_ROADMAP_BUILDER

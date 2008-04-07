@@ -1305,15 +1305,15 @@ CflicDirectPath::CflicDirectPath(const CkwsConfig &inStartCfg, const CkwsConfig 
 CflicDirectPath::CflicDirectPath(const CflicDirectPath &inDirectPath):CkwsPlusDirectPath(inDirectPath)
 {
   //configuration convertion
-  flatStartCfg.kappa = m_start.dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  flatStartCfg.xp = m_start.dofValue(X_COORD) ;  // x
-  flatStartCfg.yp = m_start.dofValue(Y_COORD) ;  // y
-  flatStartCfg.tau = m_start.dofValue(RZ_COORD) ; // theta
+  flatStartCfg.kappa = privateStart().dofValue(CURV_COORD) ; //Kappa (dof fictif)
+  flatStartCfg.xp = privateStart().dofValue(X_COORD) ;  // x
+  flatStartCfg.yp = privateStart().dofValue(Y_COORD) ;  // y
+  flatStartCfg.tau = privateStart().dofValue(RZ_COORD) ; // theta
 
-  flatEndCfg.kappa = m_end.dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  flatEndCfg.xp = m_end.dofValue(X_COORD) ;  // x
-  flatEndCfg.yp = m_end.dofValue(Y_COORD) ;  // y
-  flatEndCfg.tau = m_end.dofValue(RZ_COORD) ; // theta
+  flatEndCfg.kappa = privateEnd().dofValue(CURV_COORD) ; //Kappa (dof fictif)
+  flatEndCfg.xp = privateEnd().dofValue(X_COORD) ;  // x
+  flatEndCfg.yp = privateEnd().dofValue(Y_COORD) ;  // y
+  flatEndCfg.tau = privateEnd().dofValue(RZ_COORD) ; // theta
 
   attFlatV2 = inDirectPath.flatV2();
   attMaxCurvature = inDirectPath.attMaxCurvature;
@@ -1371,8 +1371,8 @@ double CflicDirectPath::computePrivateLength()const
 void CflicDirectPath::interpolateDefaultParam(double u, CkwsConfig & outCfg) const
 {
 
-  KWS_PRECONDITION( m_start.size() == device()->countDofs() );
-  KWS_PRECONDITION( m_start.size() == outCfg.size() );
+  KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
+  KWS_PRECONDITION( privateStart().size() == outCfg.size() );
 
 #if 0
   double theta, K;
@@ -1381,16 +1381,16 @@ void CflicDirectPath::interpolateDefaultParam(double u, CkwsConfig & outCfg) con
   double Tab_gamma[6] ;
   TflatConfig f1, f2 ;
 
-  f1.kappa = m_start.dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  f1.xp = m_start.dofValue(X_COORD) ;  // x
-  f1.yp = m_start.dofValue(Y_COORD) ;  // y
-  f1.tau = m_start.dofValue(RZ_COORD) ; // theta
+  f1.kappa = privateStart().dofValue(CURV_COORD) ; //Kappa (dof fictif)
+  f1.xp = privateStart().dofValue(X_COORD) ;  // x
+  f1.yp = privateStart().dofValue(Y_COORD) ;  // y
+  f1.tau = privateStart().dofValue(RZ_COORD) ; // theta
 
 
-  f2.kappa = m_end.dofValue(CURV_COORD) ; // Kappa (dof fictif)
-  f2.xp = m_end.dofValue(X_COORD) ; //  x
-  f2.yp = m_end.dofValue(Y_COORD) ; //  y
-  f2.tau = m_end.dofValue(RZ_COORD); // theta
+  f2.kappa = privateEnd().dofValue(CURV_COORD) ; // Kappa (dof fictif)
+  f2.xp = privateEnd().dofValue(X_COORD) ; //  x
+  f2.yp = privateEnd().dofValue(Y_COORD) ; //  y
+  f2.tau = privateEnd().dofValue(RZ_COORD); // theta
 
 
   // compute the Tflatconfiguration corresponding to the i
@@ -1421,8 +1421,8 @@ void CflicDirectPath::interpolateDefaultParam(double u, CkwsConfig & outCfg) con
 void CflicDirectPath::interpolate(double s, CkwsConfig & outCfg) const
 {
 
-  KWS_PRECONDITION( m_start.size() == device()->countDofs() );
-  KWS_PRECONDITION( m_start.size() == outCfg.size() );
+  KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
+  KWS_PRECONDITION( privateStart().size() == outCfg.size() );
 
   double u = attArcLengthManager->defaultParam(s);
   interpolateDefaultParam(u, outCfg);
@@ -1437,11 +1437,11 @@ void CflicDirectPath::maxAbsoluteDerivDefaultParam(double inFrom, double inTo, s
   //cout << " - MAX ABSOLUTE DERIVATE - " << endl ;
   //-----------------------------------------
 
-  KWS_PRECONDITION( m_start.size() == device()->countDofs() );
+  KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
 
   CkwsDeviceShPtr dev(device());
   outVectorDeriv.resize(dev->countDofs()); // that causes error with 2.04
-  // outVectorDeriv.resize(m_start.size());
+  // outVectorDeriv.resize(privateStart().size());
 
   double mini2 = 1 , max2 =1 , mini1 =1   , max1 =1 ;
   attBoundManagerDefParam->getBoundsOnInterval(attBoundManagerDefParam->getBoundListDeriv2(), inFrom,  inTo,  mini2,  max2) ;
@@ -1469,11 +1469,11 @@ void CflicDirectPath::maxAbsoluteDerivDefaultParam(double inFrom, double inTo, s
 
 void CflicDirectPath::maxAbsoluteDerivative(double inFrom, double inTo, std::vector<double> & outVectorDeriv) const
 {
-  KWS_PRECONDITION( m_start.size() == device()->countDofs() );
+  KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
 
   CkwsDeviceShPtr dev(device());
   outVectorDeriv.resize(dev->countDofs()); // that causes error with 2.04
-  // outVectorDeriv.resize(m_start.size());
+  // outVectorDeriv.resize(privateStart().size());
 
   double max3 = attBoundManagerArcLengthParam->maxD3gammaOverDs3();
   double min2 = 1 , max2 =1 , min1 =1   , max1 =1 ;
@@ -1499,8 +1499,8 @@ void CflicDirectPath::maxAbsoluteDerivative(double inFrom, double inTo, std::vec
 
 double CflicDirectPath::normGammaDeriv1(double u)
 {
-  KWS_PRECONDITION( m_start.size() == device()->countDofs() );
-  KWS_PRECONDITION( m_start.size() == outCfg.size() );
+  KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
+  KWS_PRECONDITION( privateStart().size() == outCfg.size() );
 
 
   double v2;
@@ -1509,16 +1509,16 @@ double CflicDirectPath::normGammaDeriv1(double u)
   TflatConfig f1, f2 ;
   double normDeriv;
 
-  f1.kappa = m_start.dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  f1.xp = m_start.dofValue(X_COORD) ;  // x
-  f1.yp = m_start.dofValue(Y_COORD) ;  // y
-  f1.tau = m_start.dofValue(RZ_COORD) ; // theta
+  f1.kappa = privateStart().dofValue(CURV_COORD) ; //Kappa (dof fictif)
+  f1.xp = privateStart().dofValue(X_COORD) ;  // x
+  f1.yp = privateStart().dofValue(Y_COORD) ;  // y
+  f1.tau = privateStart().dofValue(RZ_COORD) ; // theta
 
 
-  f2.kappa = m_end.dofValue(CURV_COORD) ; // Kappa (dof fictif)
-  f2.xp = m_end.dofValue(X_COORD) ; //  x
-  f2.yp = m_end.dofValue(Y_COORD) ; //  y
-  f2.tau = m_end.dofValue(RZ_COORD); // theta
+  f2.kappa = privateEnd().dofValue(CURV_COORD) ; // Kappa (dof fictif)
+  f2.xp = privateEnd().dofValue(X_COORD) ; //  x
+  f2.yp = privateEnd().dofValue(Y_COORD) ; //  y
+  f2.tau = privateEnd().dofValue(RZ_COORD); // theta
 
 
   // compute the Tflatconfiguration corresponding to the i
@@ -1536,23 +1536,23 @@ double CflicDirectPath::normGammaDeriv1(double u)
 ktStatus CflicDirectPath::gammaDeriv1and2(double u, double& xGamma_1, double& yGamma_1,
     double& xGamma_2, double& yGamma_2)
 {
-  KWS_PRECONDITION( m_start.size() == device()->countDofs() );
-  KWS_PRECONDITION( m_start.size() == outCfg.size() );
+  KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
+  KWS_PRECONDITION( privateStart().size() == outCfg.size() );
 
   int deriv_order = 2 ;
   double Tab_gamma[6] ;
   TflatConfig f1, f2 ;
 
-  f1.kappa = m_start.dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  f1.xp = m_start.dofValue(X_COORD) ;  // x
-  f1.yp = m_start.dofValue(Y_COORD) ;  // y
-  f1.tau = m_start.dofValue(RZ_COORD) ; // theta
+  f1.kappa = privateStart().dofValue(CURV_COORD) ; //Kappa (dof fictif)
+  f1.xp = privateStart().dofValue(X_COORD) ;  // x
+  f1.yp = privateStart().dofValue(Y_COORD) ;  // y
+  f1.tau = privateStart().dofValue(RZ_COORD) ; // theta
 
 
-  f2.kappa = m_end.dofValue(CURV_COORD) ; // Kappa (dof fictif)
-  f2.xp = m_end.dofValue(X_COORD) ; //  x
-  f2.yp = m_end.dofValue(Y_COORD) ; //  y
-  f2.tau = m_end.dofValue(RZ_COORD); // theta
+  f2.kappa = privateEnd().dofValue(CURV_COORD) ; // Kappa (dof fictif)
+  f2.xp = privateEnd().dofValue(X_COORD) ; //  x
+  f2.yp = privateEnd().dofValue(Y_COORD) ; //  y
+  f2.tau = privateEnd().dofValue(RZ_COORD); // theta
 
 
   // compute the Tflatconfiguration corresponding to the i

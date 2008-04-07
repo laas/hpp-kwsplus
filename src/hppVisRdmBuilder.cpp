@@ -23,44 +23,50 @@
 
 // ==========================================================================
 
-ChppVisRdmBuilderShPtr ChppVisRdmBuilder::create(const CkwsRoadmapShPtr &i_roadmap,
-                                                 double i_penetration,
-                                                 const ChppShooterActiveDofShPtr &i_shooter,
-                                                 const CkwsDistanceShPtr &i_evaluator)
+ChppVisRdmBuilderShPtr ChppVisRdmBuilder::create(const CkwsRoadmapShPtr &inRoadmap,
+                                                 double inPenetration,
+                                                 const ChppShooterActiveDofShPtr &inShooter,
+                                                 const CkwsDistanceShPtr &inEvaluator)
 {
 
-  ChppVisRdmBuilder* devPtr = new ChppVisRdmBuilder(i_roadmap,i_evaluator);
-  ChppVisRdmBuilderShPtr devShPtr(devPtr);
-  ChppVisRdmBuilderWkPtr devWkPtr(devShPtr);
+  ChppVisRdmBuilder* rdmBuilderPtr = new ChppVisRdmBuilder(inRoadmap);
+  ChppVisRdmBuilderShPtr rdmBuilderShPtr(rdmBuilderPtr);
+  ChppVisRdmBuilderWkPtr rdmBuilderWkPtr(rdmBuilderShPtr);
 
-  if (devPtr->init(devWkPtr,i_penetration,i_shooter) != KD_OK){
-    devShPtr.reset();
+  if (rdmBuilderPtr->init(rdmBuilderWkPtr,inShooter) != KD_OK){
+    rdmBuilderShPtr.reset();
+  }
+  else {
+    rdmBuilderPtr->distance(inEvaluator);
+    if(KD_ERROR == CkwsValidatorDPCollision::setPenetration(rdmBuilderShPtr->builderDirectPathValidator(), inPenetration)) {
+      rdmBuilderShPtr.reset();
+    }
   }
 
-  return devShPtr;
+  return rdmBuilderShPtr;
 
 }
 
 // ==========================================================================
 
-ChppVisRdmBuilder::ChppVisRdmBuilder(const CkwsRoadmapShPtr& i_roadmap,
-                                     const CkwsDistanceShPtr& i_evaluator)
-  : CkwsRoadmapBuilder(i_roadmap,i_evaluator)
+ChppVisRdmBuilder::ChppVisRdmBuilder(const CkwsRoadmapShPtr& inRoadmap)
+  : CkwsRoadmapBuilder(inRoadmap)
 {}
 
 // ==========================================================================
 
-ktStatus ChppVisRdmBuilder::init(const ChppVisRdmBuilderWkPtr& i_weakPtr, double i_penetration,
-                                 const ChppShooterActiveDofShPtr &i_shooter)
+ktStatus ChppVisRdmBuilder::init(const ChppVisRdmBuilderWkPtr& inWeakPtr,
+                                 const ChppShooterActiveDofShPtr &inShooter)
 {
-  ktStatus success = CkwsRoadmapBuilder::init(i_weakPtr,i_penetration);
+  ktStatus success = CkwsRoadmapBuilder::init(inWeakPtr);
   att_n_iterations = 0;
-  att_shooter=i_shooter;
+  att_shooter=inShooter;
 
+#if 0 // Florent: I do not understand the following lines
   this->roadmap()->device()->userDirectPathValidators()->add(CkwsValidatorDPCollision::create(this->roadmap()->device(),0.0001));
   this->roadmap()->device()->userPathValidators()->add(CkwsValidatorPathCollision::create(this->roadmap()->device(),0.0001));
   this->roadmap()->device()->userConfigValidators()->add(CkwsValidatorCfgCollision::create (this->roadmap()->device()));
-
+#endif
 
   return success ;
 }

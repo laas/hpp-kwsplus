@@ -55,7 +55,6 @@ public:
   /**
      \brief Constructor 
      \param inRadius Radius of circular segments
-     \param inOriented Whether steering method is oriented
   */
   CkwsPlusRSSteeringMethodFactory(double inRadius) :
     attRadius(inRadius) {

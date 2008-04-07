@@ -126,12 +126,10 @@ class CkwsPlusPCARdmBuilder : public T
 /**
      \brief Copy constructor.
      \param inRdmpBuilder The roadmap builder to copy.
-     \param i_penetration The penetration allowed.
 */
   static 
     KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>)
-    createCopy(const  KIT_SHARED_PTR_CONST(CkwsPlusPCARdmBuilder<T>) &inRdmpBuilder, 
-	       double i_penetration);
+    createCopy(const  KIT_SHARED_PTR_CONST(CkwsPlusPCARdmBuilder<T>) &inRdmpBuilder);
 
 
 
@@ -139,20 +137,17 @@ class CkwsPlusPCARdmBuilder : public T
   /**
      \brief Constructor
      \param i_roadmap: The roadmap to be built,
-     \param i_evaluator: The class used to evaluate the distance between two configurations.
   */
-  CkwsPlusPCARdmBuilder(const CkwsRoadmapShPtr& i_roadmap, 
-			const CkwsDistanceShPtr& i_evaluator = CkwsDistance::create());
+  CkwsPlusPCARdmBuilder(const CkwsRoadmapShPtr& i_roadmap);
 
 
   /**
      \brief Init function
      \param i_weakPtr The weak pointer to the PCARdmBuilder.
-     \param i_penetration The penetration allowed.
      \return ktStatus KD_OK or KD_ERROR
   */
 
-  ktStatus init(const KIT_WEAK_PTR(CkwsPlusPCARdmBuilder<T>)& i_weakPtr, double i_penetration);
+  ktStatus init(const KIT_WEAK_PTR(CkwsPlusPCARdmBuilder<T>)& i_weakPtr);
 
 
   /**
@@ -209,51 +204,68 @@ KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>)
 				   )
 {
   cout << "CkwsPlusPCARdmBuilder::create" << endl;
-  CkwsPlusPCARdmBuilder<T> * devPtr = new CkwsPlusPCARdmBuilder<T>(i_roadmap,i_evaluator);
-  KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>) devShPtr(devPtr);
-  KIT_WEAK_PTR(CkwsPlusPCARdmBuilder<T>) devWkPtr(devShPtr);
+  CkwsPlusPCARdmBuilder<T> * pcaRdmBuilderPtr = new CkwsPlusPCARdmBuilder<T>(i_roadmap);
+  KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>) pcaRdmBuilderShPtr(pcaRdmBuilderPtr);
+  KIT_WEAK_PTR(CkwsPlusPCARdmBuilder<T>) pcaRdmBuilderWkPtr(pcaRdmBuilderShPtr);
 
-  if (devPtr->init(devWkPtr,i_penetration) != KD_OK){
-    devShPtr.reset();
+  if (pcaRdmBuilderPtr->init(pcaRdmBuilderWkPtr) != KD_OK){
+    pcaRdmBuilderShPtr.reset();
+  }
+  else {
+    pcaRdmBuilderPtr->distance(i_evaluator);
+    pcaRdmBuilderPtr->diffusionNodePicker(i_picker);
+    pcaRdmBuilderPtr->diffusionShooter(i_shooter);
+    if(KD_ERROR == CkwsValidatorDPCollision::setPenetration(pcaRdmBuilderShPtr->builderDirectPathValidator(), i_penetration)) {
+      pcaRdmBuilderShPtr.reset();
+    }
   }
 
-  return devShPtr;
+  return pcaRdmBuilderShPtr;
 
 }
 
 template<class T>
 KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>)
-  CkwsPlusPCARdmBuilder<T>::createCopy(const KIT_SHARED_PTR_CONST(CkwsPlusPCARdmBuilder<T>) &inRdmpBuilder,
-				       double i_penetration)
+  CkwsPlusPCARdmBuilder<T>::createCopy(const KIT_SHARED_PTR_CONST(CkwsPlusPCARdmBuilder<T>) &inRdmpBuilder)
 {
   if(inRdmpBuilder != NULL) {
-    CkwsPlusPCARdmBuilder<T>* devPtr = new CkwsPlusPCARdmBuilder<T>(*inRdmpBuilder);
-    KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>) devShPtr(devPtr);
-    KIT_WEAK_PTR(CkwsPlusPCARdmBuilder<T>) devWkPtr(devShPtr);
+    CkwsPlusPCARdmBuilder<T>* pcaRdmBuilderPtr = new CkwsPlusPCARdmBuilder<T>(*inRdmpBuilder);
+    KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>) pcaRdmBuilderShPtr(pcaRdmBuilderPtr);
+    KIT_WEAK_PTR(CkwsPlusPCARdmBuilder<T>) pcaRdmBuilderWkPtr(pcaRdmBuilderShPtr);
 
-    if(devPtr->init(devWkPtr,i_penetration) != KD_OK){
-      devShPtr.reset();
+    if(pcaRdmBuilderPtr->init(pcaRdmBuilderWkPtr) != KD_OK){
+      pcaRdmBuilderShPtr.reset();
     }
-    return devShPtr;
+    else {
+      pcaRdmBuilderPtr->distance(inRdmpBuilder->distance());
+      double penetration;
+      if (KD_ERROR == CkwsValidatorDPCollision::getPenetration(inRdmpBuilder->builderDirectPathValidator(), penetration)) {
+	pcaRdmBuilderShPtr.reset();
+      }
+      else {
+	if(KD_ERROR == CkwsValidatorDPCollision::setPenetration(pcaRdmBuilderShPtr->builderDirectPathValidator(), penetration)) {
+	  pcaRdmBuilderShPtr.reset();
+	}
+      }
+    }
+    return pcaRdmBuilderShPtr;
   }
   return KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>)();
 }
 
 
 template<class T>
-CkwsPlusPCARdmBuilder<T>::CkwsPlusPCARdmBuilder(const CkwsRoadmapShPtr& i_roadmap,
-						const CkwsDistanceShPtr& i_evaluator)
-  : T(i_roadmap,i_evaluator)
+CkwsPlusPCARdmBuilder<T>::CkwsPlusPCARdmBuilder(const CkwsRoadmapShPtr& i_roadmap)
+  : T(i_roadmap)
 {
 
 }
 
 
 template<class T>
-ktStatus CkwsPlusPCARdmBuilder<T>::init(const KIT_WEAK_PTR(CkwsPlusPCARdmBuilder<T>)& i_weakPtr, 
-					double i_penetration)
+ktStatus CkwsPlusPCARdmBuilder<T>::init(const KIT_WEAK_PTR(CkwsPlusPCARdmBuilder<T>)& i_weakPtr)
 {
-  ktStatus success = T::init(i_weakPtr,i_penetration);
+  ktStatus success = T::init(i_weakPtr);
 
   if (KD_OK == success){
     m_weakPtr = i_weakPtr;
@@ -447,7 +459,8 @@ typedef  CkwsPlusPCARdmBuilder<CkwsIPPRdmBuilder> CkwsPlusPCAIPPRdmBuilder;
 KIT_POINTER_DEFS(  CkwsPlusPCADiffusingRdmBuilder );
 KIT_POINTER_DEFS(  CkwsPlusPCAIPPRdmBuilder );
 
-
-
+/**
+   @}
+*/
 
 #endif
