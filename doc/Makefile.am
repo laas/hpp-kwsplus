@@ -24,8 +24,10 @@ EXTRA_DIST = \
 	figures/flatCar.png	\
 	figures/pca.png \
 	figures/pcaDiff.png \
+	figures/diagrammeVisibility.png \
+	figures/LocalTreesProblem.png \
 	papers/rapport-mathieu.pdf \
-	papers/rapport-sebastien.pdf
+	papers/rapport-sebastien.pdf \
 
 install: html-doc
 	mkdir -p $(kwsPlusdir)
