@@ -27,7 +27,7 @@ EXTRA_DIST = \
 	figures/diagrammeVisibility.png \
 	figures/LocalTreesProblem.png \
 	papers/rapport-mathieu.pdf \
-	papers/rapport-sebastien.pdf \
+	papers/rapport-sebastien.pdf 
 
 install: html-doc
 	mkdir -p $(kwsPlusdir)
