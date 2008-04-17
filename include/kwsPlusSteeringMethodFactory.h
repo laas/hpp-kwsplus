@@ -25,6 +25,7 @@
 
 class CkwsPlusSteeringMethodFactory {
 public:
+  virtual ~CkwsPlusSteeringMethodFactory() {};
   /**
      \brief Return a steering method
   */

@@ -30,7 +30,7 @@ It's goal is to allow the definition of ActiveDofSetters that modify the values 
 class ChppActiveDofSetter {
 
 public:
-
+  virtual ~ChppActiveDofSetter() {};
  /**
      \brief The only function of ChppActiveDofSetter is the abstract funcion that modify the values of the actives dofs.
      \param io_cfg Configuration to be modified.

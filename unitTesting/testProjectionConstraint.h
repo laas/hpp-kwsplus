@@ -5,27 +5,7 @@
 #include "KineoWorks2/kwsConstraint.h"
 #include "KineoWorks2/kwsDiffusionShooter.h"
 #include "KineoWorks2/kwsDevice.h"
-
-
-#if TOYOTA
-
-std::ostream& operator<<(std::ostream& os, const CkwsConfig& config);
-
-std::ostream& operator<<(std::ostream& os, const CkwsConfig& config)
-{
-  std::vector<double> vec;
-  config.getDofValues(vec);
-  unsigned int dim = config.size();
-  
-  for (unsigned int i=0; i < dim; i++) {
-    os << vec[i] << " ";
-  }
-  return os;
-}
-
-#else
 #include "kwsioConfig.h"
-#endif
 
 
 /**

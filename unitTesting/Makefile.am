@@ -9,7 +9,7 @@ noinst_PROGRAMS = \
 	testFlicMaxDeriv 	\
 	testFlicBoundObj 	\
 	testFlicStraightLine 	\
-	testFlicApproximateDistance
+	testFlicApproximateDistance 
 
 license: clean-license 			\
 	testFlicMaxDeriv.kab 		\
@@ -67,13 +67,6 @@ testFlicApproximateDistance_SOURCES = \
 testFlicApproximateDistance_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
 testFlicApproximateDistance_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
 
-
-# FIXME: this doesn't compile
-#testProjectionConstraint_SOURCES = \
-#	testProjectionConstraint.cpp
-
-#testProjectionConstraint_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
-#testProjectionConstraint_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
 
 %.kab: %
 	mkdir -p bin$<
