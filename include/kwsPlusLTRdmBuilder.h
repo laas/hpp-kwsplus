@@ -161,7 +161,7 @@ class CkwsPlusLTRdmBuilder : public T
 
  private :
 
-  int oldStep;
+  unsigned int oldStep;
 
 };
 
@@ -174,9 +174,8 @@ bool CkwsPlusLTRdmBuilder<T>::updateRoadmapConnectivity(CkwsNodeShPtr i_node, Ck
   CkwsDirectPathShPtr o_dp_in;
   CkwsDirectPathShPtr o_dp_out;
   bool success = false;
-  unsigned int nbConnectedComponents = T::roadmap()->countConnectedComponents();
   
-  for(int i=0;i<T::roadmap()->countConnectedComponents();i++){ //Checking if one or more of the existing connected components can be reached with i_node
+  for(unsigned int i=0;i<T::roadmap()->countConnectedComponents();i++){ //Checking if one or more of the existing connected components can be reached with i_node
     if(!success){
       if(i_node){ 
 	if(T::roadmap()->connectedComponent(i) != i_node->connectedComponent()){
@@ -192,7 +191,7 @@ bool CkwsPlusLTRdmBuilder<T>::updateRoadmapConnectivity(CkwsNodeShPtr i_node, Ck
 	    }
 
 	    int sum=0;
-	    for(int i=0;i<T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE);i++){
+	    for(unsigned int i=0;i<T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE);i++){
 	      
 	      if(i_picked->connectedComponent() == T::diffusionNode(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE,i)->connectedComponent()){
 		if(i_picked != T::diffusionNode(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE,i)) sum++;
@@ -203,14 +202,14 @@ bool CkwsPlusLTRdmBuilder<T>::updateRoadmapConnectivity(CkwsNodeShPtr i_node, Ck
 	    if(continuer || sum){//then update diffusion nodes list
 	      if(!isAShootedNode){
 		std::vector<CkwsNodeShPtr> diffusion_nodes_list;
-		for(int i=0; i<T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE);i++){
+		for(unsigned int i=0; i<T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE);i++){
 		  diffusion_nodes_list.push_back(T::diffusionNode(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE,i));
 		}
 		T::resetDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE);
 		
 		int found = false;
 		
-		for(int i=0; i<diffusion_nodes_list.size();i++){
+		for(unsigned int i=0; i<diffusion_nodes_list.size();i++){
 		  if(!found){//to avoid deletion of 2 diffusion nodes, and then having a connected component without a diffusion node.
 		    if(!diffusion_nodes_list[i]->config().isEquivalent(i_picked->config())){
 		      if(diffusion_nodes_list[i]->connectedComponent() != i_picked->connectedComponent() ){
@@ -247,12 +246,10 @@ CkwsPlusLTRdmBuilder<T>::~CkwsPlusLTRdmBuilder(){
 template <class T>
 ktStatus CkwsPlusLTRdmBuilder<T>::addingDiffusionNodes(CkwsNodeShPtr i_newnode, CkwsNodeShPtr i_shootednode, CkwsNodeShPtr i_picked){
 
-  bool collision = false;
   if(i_newnode){
     if(i_newnode != i_shootednode){ 
       bool linked = false;
       bool success = false;
-      int tries = 0;
       if(T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)<10){
 	if(KD_OK == T::addNode(i_shootednode)){
 	  success = true; 
