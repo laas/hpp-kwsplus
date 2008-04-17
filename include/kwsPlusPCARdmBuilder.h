@@ -267,7 +267,7 @@ CkwsNodeShPtr CkwsPlusPCARdmBuilder<T>::extend(const CkwsNodeShPtr & i_node,
 					       const CkwsConfig & i_cfg,
 					       CkwsRoadmapBuilder::EDirection i_direction )
 {
-  int n = T::roadmap()->device()->countDofs();
+  unsigned int n = T::roadmap()->device()->countDofs();
   
 
   double do_project = (double) rand()/(INT_MAX);
@@ -327,7 +327,7 @@ void CkwsPlusPCARdmBuilder<T>::doPCA(const CkwsNodeShPtr fatherNode,
     CkwsNodeShPtr current = F.front();
     if (distance[current] > d_max)
       break;
-    int i;
+    unsigned int i;
     for(i = 0; i< current->countOutEdges();i++){
       CkwsNodeShPtr son = current->outEdge(i)->endNode();
       if ((color[son] != 1)&&(color[son] != 2)){
