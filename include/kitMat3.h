@@ -5,7 +5,7 @@
  
 */
 
-#ifndef  __KITMAt3_H__
+#ifndef  __KITMAT3_H__
 #define  __KITMAT3_H__
 
 
