@@ -102,7 +102,7 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
     ODEBUG2("iSample = " << 2*iSample+1 << ", v = " << velocity[2*iSample+1]);
   }
   double length = sum/(3*nbSamples);
-
+  delete path;
   return length;
 }
 
