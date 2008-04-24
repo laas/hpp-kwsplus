@@ -1,3 +1,4 @@
+        34. Fix memory leak in flicDistance.
 	33. Added some debugging code in flicDistance.cpp and flicDistance.h.
 	32. Corrected some warning and removed useless KWSPRECOND() in flicDirectPath.cpp.
         31. Adaptation to KPP version 2.04.500.

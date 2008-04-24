@@ -79,6 +79,7 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
     invalid.
   */
   if ((attIsOriented) &&(v2 <= 0)) {
+    delete path;
     return HUGE_VAL;
   }
 
@@ -101,11 +102,13 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
 	   << x1 << ", " << y1 << ", " << x2 << ", " << y2 << ")");
     ODEBUG2("v = " << v);
     if (v == 0) {
+      delete path;
       return HUGE_VAL;
     }
     double curvature = fabs(x1*y2-x2*y1)/pow(v,3.0);
     ODEBUG2("curvature = " << curvature);
     if (curvature >= maxCurvature) {
+      delete path;
       return HUGE_VAL;
     }
   }
