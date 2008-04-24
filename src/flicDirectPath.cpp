@@ -887,7 +887,7 @@ double CflicArcLengthManager::findDefaultParameter(double arcLengthParam)
   }
 
   // Dichotomy
-  double middleParam, middleValue;
+  double middleParam=0, middleValue=0;
   double lowerParam = attDefaultToArcLength.uMin();
   double upperParam = attDefaultToArcLength.uMax();
   double lowerValue = attDefaultToArcLength.value(lowerParam);
@@ -1499,10 +1499,6 @@ void CflicDirectPath::maxAbsoluteDerivative(double inFrom, double inTo, std::vec
 
 double CflicDirectPath::normGammaDeriv1(double u)
 {
-  KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
-  KWS_PRECONDITION( privateStart().size() == outCfg.size() );
-
-
   double v2;
   int deriv_order = 2 ;
   double Tab_gamma[6] ;
@@ -1536,9 +1532,6 @@ double CflicDirectPath::normGammaDeriv1(double u)
 ktStatus CflicDirectPath::gammaDeriv1and2(double u, double& xGamma_1, double& yGamma_1,
     double& xGamma_2, double& yGamma_2)
 {
-  KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
-  KWS_PRECONDITION( privateStart().size() == outCfg.size() );
-
   int deriv_order = 2 ;
   double Tab_gamma[6] ;
   TflatConfig f1, f2 ;

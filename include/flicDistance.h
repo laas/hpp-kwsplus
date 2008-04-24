@@ -26,6 +26,9 @@ KIT_PREDEF_CLASS(CflicDistance);
 class CflicDistance : public CkwsDistance
 {
 public:
+  
+  virtual ~CflicDistance();
+
   /**
      \brief Return a shared pointer to a distance object
   */
@@ -51,15 +54,12 @@ protected:
   /**
      \brief Protected constructor
   */
-  CflicDistance(const CkwsSteeringMethodShPtr inSteeringMethod) : 
-    attSteeringMethod(inSteeringMethod), 
-    attIsOriented(inSteeringMethod->isOriented()){};
+  CflicDistance(const CkwsSteeringMethodShPtr inSteeringMethod);
 
   /**
      \brief Protected copy constructor
   */
-  CflicDistance(const CflicDistance& inDistance) : 
-    attSteeringMethod(inDistance.attSteeringMethod) {};
+  CflicDistance(const CflicDistance& inDistance);
 
 private:
 
@@ -78,6 +78,14 @@ private:
   */
   bool attIsOriented;
 
+  /**
+     \if 0
+     \brief Count the number of object created and not destroyed
+  */
+  static unsigned int nbObject;
+  /**
+     \endif
+  */
 };
 
 /**

@@ -322,7 +322,7 @@ bool CreedsSheppDirectPath::isOriented () const
 ktStatus CreedsSheppDirectPath::computeRSCurve(CkwsConfig  inStartCfg , CkwsConfig inEndCfg , double inRadius)
 {
   int      numero;
-  double    longueur_rs , t , u , v;
+  double    longueur_rs=0 , t , u , v;
   CkwsConfig curConfig(inStartCfg);
 
   int dofRotz ;

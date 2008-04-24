@@ -7,8 +7,27 @@
 #include "flicDistance.h"
 #include "flicManager.h"
 
-#define ODEBUG(x) std::cout << "CflicDistance: " << x << std::endl
+// Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
+#if DEBUG==2
+#define ODEBUG2(x) std::cout << "flicDistance:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "flicDistance:" << x << std::endl
+#elif DEBUG==1
 #define ODEBUG2(x)
+#define ODEBUG1(x) std::cerr << "flicDistance:" << x << std::endl
+#else
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
+
+unsigned int CflicDistance::nbObject = 0;
+
+CflicDistance::~CflicDistance()
+{
+#if DEBUG==2
+  nbObject--;
+  std::cout << "number of CflicDistance objects: " << nbObject << std::endl;
+#endif
+}
 
 CflicDistanceShPtr CflicDistance::create(const CkwsSteeringMethodShPtr inSteeringMethod)
 {
@@ -67,9 +86,10 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
     double u=1.0*iSample/nbSamples;
     CflicManager::flatCombination(&(path->flatStartCfg), &(path->flatEndCfg),
 				  u, v2, 2, tabGamma);
-
+#if DEBUG==2
     double x = tabGamma[0];
     double y = tabGamma[1];
+#endif
     double x1 = tabGamma[2];
     double y1 = tabGamma[3];
     double x2 = tabGamma[4];
@@ -115,4 +135,23 @@ ktStatus CflicDistance::init(const CflicDistanceWkPtr &inWeakPtr)
   }
 
   return success;
+}
+
+CflicDistance::CflicDistance(const CkwsSteeringMethodShPtr inSteeringMethod) : 
+  attSteeringMethod(inSteeringMethod), 
+  attIsOriented(inSteeringMethod->isOriented())
+{
+#if DEBUG==2
+  nbObject++;
+  std::cout << "number of CflicDistance objects: " << nbObject << std::endl;
+#endif
+}
+
+CflicDistance::CflicDistance(const CflicDistance& inDistance) : 
+  attSteeringMethod(inDistance.attSteeringMethod) 
+{
+#if DEBUG==2
+  nbObject++;
+  std::cout << "number of CflicDistance objects: " << nbObject << std::endl;
+#endif
 }

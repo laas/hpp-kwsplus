@@ -148,7 +148,7 @@ void CkwsPlusDPLinear::interpolate(double i_s, CkwsConfig& o_cfg) const
 
 void CkwsPlusDPLinear::maxAbsoluteDerivative(double inFrom, double inTo, std::vector<double> & outVectorDeriv) const
 {
-  KWS_PRECONDITION( m_start.size() == device()->countDofs() );
+  KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
 
   CkwsDeviceShPtr dev(device());
   outVectorDeriv.resize(dev->countDofs()); // that causes error with 2.04
