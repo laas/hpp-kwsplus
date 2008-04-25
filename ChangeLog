@@ -1,6 +1,7 @@
-
-        38. Added some debugging code in flicDistance.cpp and flicDistance.h.
-        37. Corrected some warning and removed useless KWSPRECOND() in
+2008/04/25
+	34. Added distance function factory.
+        33. Added some debugging code in flicDistance.cpp and flicDistance.h.
+        32. Corrected some warning and removed useless KWSPRECOND() in
             flicDirectPath.cpp.
         31. Adaptation to KPP version 2.04.500.
 

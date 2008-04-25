@@ -31,6 +31,8 @@ public:
 
   /**
      \brief Return a shared pointer to a distance object
+
+     \param inSteeringMethod To create a direct path, a shared pointer to a steering method is required. This shared pointer is thus given at the construction of CflicDistance. The steering method also indicates whether distance is oriented (see CflicDistance::distance).
   */
   static CflicDistanceShPtr create(const CkwsSteeringMethodShPtr inSteeringMethod);
 
@@ -40,7 +42,14 @@ public:
   static CflicDistanceShPtr createCopy(const CflicDistanceConstShPtr& inDistance);
 
   /**
-     \brief Compute an approximation of the distance
+     \brief Compute an approximation of the distance between two configurations
+     \param inConfig1 first configuration.
+     \param inConfig2 second configuration.
+
+     \return Length of direct path if distance is non oriented, HUGE_VAL if distance is oriented and path from first to second configuration goes backward.
+
+     Builds a CflicDirectPath between the configurations and approximate the length of this path by a Simpson integral.
+
   */
   double distance(const CkwsConfig &inConfig1, const CkwsConfig &inConfig2) const;
 
@@ -79,12 +88,12 @@ private:
   bool attIsOriented;
 
   /**
-     \if 0
+     \cond 0
      \brief Count the number of object created and not destroyed
   */
   static unsigned int nbObject;
   /**
-     \endif
+     \endcond
   */
 };
 

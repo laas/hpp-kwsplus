@@ -25,6 +25,7 @@ kwsPlus_HEADERS = \
 	kwsPlusSMLinear.h \
 	kwsPlusRoadmap.h \
 	kwsPlusDistance.h \
-	kwsPlusSteeringMethodFactory.h
+	kwsPlusSteeringMethodFactory.h \
+	kwsPlusDistanceFactory.h
 
 

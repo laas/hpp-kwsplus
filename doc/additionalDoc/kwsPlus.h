@@ -18,6 +18,8 @@ Go to <a href="./modules.html">Modules</a> to see the organization of this packa
 
   \defgroup smfactory Steering method factory
 
+  \defgroup distanceFactory Distance function factory
+
 */
 
 /**
