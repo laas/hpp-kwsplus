@@ -20,6 +20,18 @@
 #include "hppVisRdmBuilder.h"
 #include "hppShooterActiveDof.h"
 
+// Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
+#if DEBUG==2
+#define ODEBUG2(x) std::cout << "hppvisRdmBuilder:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "hppvisRdmBuilder:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG2(x)
+#define ODEBUG1(x) std::cerr << "hppvisRdmBuilder:" << x << std::endl
+#else
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
+
 
 // ==========================================================================
 
@@ -38,7 +50,9 @@ ChppVisRdmBuilderShPtr ChppVisRdmBuilder::create(const CkwsRoadmapShPtr &inRoadm
   }
   else {
     rdmBuilderPtr->distance(inEvaluator);
-    if(KD_ERROR == CkwsValidatorDPCollision::setPenetration(rdmBuilderShPtr->builderDirectPathValidator(), inPenetration)) {
+    if(KD_ERROR == CkwsValidatorDPCollision::setPenetration(rdmBuilderShPtr->builderDirectPathValidator(), 
+							    inPenetration)) {
+      ODEBUG1(" Unvalid penetration: " << inPenetration);
       rdmBuilderShPtr.reset();
     }
   }

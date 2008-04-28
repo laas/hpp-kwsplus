@@ -10,6 +10,7 @@
 #include "KineoWorks2/kwsSMLinear.h"
 #include "reedsSheppSteeringMethod.h"
 #include "flicDistance.h"
+#include "kwsPlusDistance.h"
 
 /**
 
