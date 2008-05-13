@@ -5,7 +5,7 @@ dnl
 dnl   Author: Florent Lamiraux LAAS-CNRS
 dnl
 
-AC_INIT([kwsPlus],[1.3.99],[openrobots@laas.fr])
+AC_INIT([kwsPlus],[1.4],[hpp@laas.fr])
 AC_PREREQ(2.59)
 
 if test "$CFLAGS$CXXFLAGS" = ""; then
@@ -31,6 +31,8 @@ if test "$setdefaultflags" = "yes"; then
   fi
 fi
 
+define(kwsio_reqd, [kwsIO >= 1.0.1])
+AC_SUBST(KWSIO_REQD, "kwsio_reqd")
 PKG_CHECK_MODULES(KWSIO, kwsIO)
 KWSIO_PREFIX=`$PKG_CONFIG kwsIO --variable=prefix`
 AC_SUBST(KWSIO_CFLAGS)

@@ -8,6 +8,6 @@ docdir=@datadir@/doc/@PACKAGE_NAME@
 Name: @PACKAGE@
 Description: Extension to KineoWorks software
 Version: @VERSION@
-Requires: kwsIO
+Requires: @KWSIO_REQD@
 Libs: -L${libdir} -lkwsPlus @LAPACK_LIBS@	
 Cflags: -I${includedir}/kwsPlus @LAPACK_CFLAGS@
