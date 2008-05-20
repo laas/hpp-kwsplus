@@ -27,6 +27,7 @@ kwsPlus_HEADERS = \
 	kwsPlusDistance.h \
 	kwsPlusSteeringMethodFactory.h \
 	kwsPlusDistanceFactory.h \
-	kwsPlusDiffusionNodePickerFactory.h
+	kwsPlusDiffusionNodePickerFactory.h \
+	kwsPlusDiffusionShooterFactory.h
 
 

@@ -1,6 +1,6 @@
 /**
    \mainpage
-   \section intro Introduction
+   \section kwsPlus_intro Introduction
 
 This package includes general extensions to KineoWorks software. 
 Go to <a href="./modules.html">Modules</a> to see the organization of this package.
@@ -79,6 +79,13 @@ roadmap with RLG.
 
    Diffusion node picker are objects defined in KineoWorks. They define
    the way a diffusing roadmap builder picks a node to extend in the current roadmap.
+*/
+
+/**
+   \defgroup diffusionShooterFactory Diffusion shooter factory
+
+   Diffusion shooter are objects defined in KineoWorks. They define
+   the way a diffusing roadmap builder randomly shoots configurations.
 */
 
 /**
