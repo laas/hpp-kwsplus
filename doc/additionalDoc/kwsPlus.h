@@ -75,6 +75,13 @@ roadmap with RLG.
 */
 
 /**
+   \defgroup diffusionNodePickerFactory Diffusion node picker factory
+
+   Diffusion node picker are objects defined in KineoWorks. They define
+   the way a diffusing roadmap builder picks a node to extend in the current roadmap.
+*/
+
+/**
 @}
 */
 

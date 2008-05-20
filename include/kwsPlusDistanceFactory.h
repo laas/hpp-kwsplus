@@ -1,5 +1,5 @@
 /*
-  Copyright CNRS-LAAS 2008
+  Copyright CNRS 2008
 
   Author: Florent Lamiraux
 */
