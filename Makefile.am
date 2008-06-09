@@ -8,8 +8,12 @@
 SUBDIRS = \
 	src 	\
 	doc	\
-	include \
+	include 
+
+if UNITTESTING
+SUBDIRS += \
 	unitTesting
+endif
 
 kwsPlusdir = $(libdir)/pkgconfig
 kwsPlus_DATA = kwsPlus.pc

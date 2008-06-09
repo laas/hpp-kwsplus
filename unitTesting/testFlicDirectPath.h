@@ -1,31 +1,20 @@
 #ifndef TEST_FLAT_INTER_CART_DP_H
 #define TEST_FLAT_INTER_CART_DP_H
 
-#include <iostream>
-#include <fstream>
-#include <string>
-
 #include "KineoModel/kppDeviceComponent.h"
 #include "flicSteeringMethod.h"
 #include "flicDirectPath.h"
 #include "flicDistance.h"
 
+#include "testKwsDirectPath/testKwsDirectPath.h"
 /**
    \brief Test of direct path and steering method FLatORiENTedINtErpolation.
 */
 
-class CtestFlicDirectPath {
+class CtestFlicDirectPath : public CtestKwsDirectPath {
 public:
-  CtestFlicDirectPath() : fileStream() {};
+  CtestFlicDirectPath() {};
 
-  /**
-     \brief Return a shared pointer to the device.
-  */
-  const CkppDeviceComponentShPtr device() const {return attKwsDevice;};
-  /**
-     \brief Return a shared pointer to the steering method.
-  */
-  const CkwsSteeringMethodShPtr steeringMethod() const {return attSteeringMethod;};
   /**
    \brief Initialization of the object: create a device and a steering method.
   */
@@ -80,21 +69,6 @@ public:
   void plotBoundsD2gammaOverDs2(std::string dirName,
 				CflicDirectPathShPtr flicDirectPath);
 
-
-  /**
-     \brief Test local method maxAbsoluteDerivative of direct path.
-     \param nbRndDirectPath number of random direct paths created.
-     \param nbIntervalPerDP number of random interval tested on each direct path.
-
-     Random configurations are produced and a direct path is created between these 
-     configurations. If the direct path exists, a random number of intervals are created
-     and over each interval, the absolute value of the difference of each dof-value is 
-     compared to the product of the maximum derivative of this dof by the interval length. 
-     The latter value should be bigger.
-  */
-  ktStatus testMaxAbsoluteDerivative(unsigned int nbRndDirectPath, 
-				     unsigned int nbIntervalPerDP);
-
   /**
      \brief Test a straight line direct path between two aligned configurations.
 
@@ -109,32 +83,21 @@ public:
 
 private:
   /**
-     \brief Device with which direct path will be tested.
-  */
-  CkppDeviceComponentShPtr attKwsDevice;
-
-  /**
-     \brief FLatORiENTedINtErpolation steering method.
-  */
-  CflicSteeringMethodShPtr attSteeringMethod;
-
-  /**
-    \brief File stream to write debug information.
-  */
-  std::ofstream fileStream;
-
-  /**
      \brief Approximate distance between config
   */
   CflicDistanceShPtr attFlicDistance;
 
   /**
-     \brief create a device and store it in attKwsDevice.
+     \brief create a device 
+
+     Device is stored in parent class CtestKwsDirectPath.
   */
   ktStatus createDevice();
   
   /**
      \brief Create a FLatORiENTedINtErpolation steering method.
+
+     Steering method is stored in parent class CtestKwsDirectPath.
   */
   ktStatus createSteeringMethod();
 
@@ -142,11 +105,6 @@ private:
      \brief Create an object that compute an approximation of flic direct path lengths.
   */
   ktStatus createFlicDistance();
-
-  /**
-     \brief Compute the distance on a unit circle
-  */
-  double distCircle(double theta1, double theta2);
 
 };
 

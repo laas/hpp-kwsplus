@@ -1,3 +1,6 @@
+2008/06/09
+	37. UnitTesting is now compiled on demand configure --enable-untTesting.
+	
 2008/05/20
 
 	36. Added diffusion shooter factory.

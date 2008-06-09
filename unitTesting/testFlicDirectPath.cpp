@@ -1,4 +1,14 @@
-//#include <iostream>
+/*
+  Copyright CNRS 2006
+
+  Author: Florent Lamiraux
+*/
+
+#include <iostream>
+#include <fstream>
+
+#include "angle/angle.h"
+
 #include "testFlicDirectPath.h"
 #include "kwsioConfig.h"
 
@@ -102,7 +112,7 @@ void CtestFlicDirectPath::plotMappingDefaultToArcLengthParam(std::string dirName
   arcLengthManager = flicDirectPath->attArcLengthManager;
 
   unsigned int nbSamples = 10*arcLengthManager->attNbSampleIntervals;
-
+  std::ofstream fileStream;
   //
   // Plot mapping u to s
   //
@@ -144,6 +154,7 @@ void CtestFlicDirectPath::plotMappingArcLengthToDefaultParam(std::string dirName
   arcLengthManager = flicDirectPath->attArcLengthManager;
 
   unsigned int nbSamples = 10*arcLengthManager->attNbSampleIntervals;
+  std::ofstream fileStream;
 
   //
   // Plot mapping u to s
@@ -176,6 +187,7 @@ double CtestFlicDirectPath::plotBoundsDgammaOverDu(std::string dirName,
   std::list<TflicBoundInterval>::iterator iterEnd = boundManager->boundListDeriv1.end();
 
   // Open file
+  std::ofstream fileStream;
   filename = dirName + "/boundsDgammaOverDu.plot";
   fileStream.open(filename.c_str());
 
@@ -208,6 +220,7 @@ void CtestFlicDirectPath::plotBoundsD2gammaOverDu2(std::string dirName,
   std::list<TflicBoundInterval>::iterator iter;
   std::list<TflicBoundInterval>::iterator iterEnd = boundManager->boundListDeriv2.end();
 
+  std::ofstream fileStream;
   // Open file
   filename = dirName + "/boundsD2gammaOverDu2.plot";
   fileStream.open(filename.c_str());
@@ -241,6 +254,7 @@ double CtestFlicDirectPath::plotBoundsDgammaOverDs(std::string dirName,
   std::vector<TflicBoundInterval>::iterator iter;
   std::vector<TflicBoundInterval>::iterator iterEnd = boundManager->boundVectorDeriv1.end();
 
+  std::ofstream fileStream;
   // Open file
   filename = dirName + "/boundsDgammaOverDs.plot";
   fileStream.open(filename.c_str());
@@ -274,6 +288,7 @@ void CtestFlicDirectPath::plotBoundsD2gammaOverDs2(std::string dirName,
   std::vector<TflicBoundInterval>::iterator iter;
   std::vector<TflicBoundInterval>::iterator iterEnd = boundManager->boundVectorDeriv2.end();
 
+  std::ofstream fileStream;
   // Open file
   filename = dirName + "/boundsD2gammaOverDs2.plot";
   fileStream.open(filename.c_str());
@@ -293,150 +308,9 @@ void CtestFlicDirectPath::plotBoundsD2gammaOverDs2(std::string dirName,
 }
 
 
-
-
-ktStatus CtestFlicDirectPath::testMaxAbsoluteDerivative(unsigned int nbRndDirectPath, 
-							unsigned int nbIntervalPerDP)
-{
-  CkwsConfig initConfig(attKwsDevice), goalConfig(attKwsDevice);
-  CkwsDirectPathShPtr kwsDirectPath;
-  unsigned int successSM=0;
-  // Vector that stores the maximal ratio between actual dof difference and upper bound.
-  std::vector<double> vecMaxRatio;
-  double ratio;
-
-  // Set initial maximal values to 0.
-  for (unsigned int iDof=0; iDof < attKwsDevice->countDofs(); iDof++) {
-    vecMaxRatio.push_back(0);
-  }
-
-  // Loop over random direct paths.
-  for (unsigned int iDP=0; iDP < nbRndDirectPath; iDP++) {
-    // Pick two random configurations.
-    initConfig.randomize();
-    goalConfig.randomize();
-
-    // Set non planar dof to 0
-    initConfig.dofValue(CflicDirectPath::Z_COORD, 0.0);
-    initConfig.dofValue(CflicDirectPath::RX_COORD, 0.0);
-    initConfig.dofValue(CflicDirectPath::RY_COORD, 0.0);
-
-    goalConfig.dofValue(CflicDirectPath::Z_COORD, 0.0);
-    goalConfig.dofValue(CflicDirectPath::RX_COORD, 0.0);
-    goalConfig.dofValue(CflicDirectPath::RY_COORD, 0.0);
-
-    // Build direct path in between.
-    kwsDirectPath = attSteeringMethod->makeDirectPath(initConfig, goalConfig);
-    if (kwsDirectPath) {
-      double pathLength = kwsDirectPath->length();
-      
-      // Count steering method success rate.
-      successSM++;
-      // Write path information into standard output
-      cout << "------------------------------------------" << endl;
-      cout << "Direct Path " << successSM << endl;
-      cout << "q_init = ( " ;
-      for (unsigned int iDof=0; iDof<initConfig.size(); iDof++) {
-	cout << initConfig.dofValue(iDof) << " ";
-      }
-      cout << ")" << endl;
-      
-      cout << "q_end = ( " ;
-      for (unsigned int iDof=0; iDof<initConfig.size(); iDof++) {
-	cout << goalConfig.dofValue(iDof) << " ";
-      }
-      cout << ")" << endl;
-      
-      // Loop over random intervals
-      for (unsigned int iInt=0; iInt < nbIntervalPerDP; iInt++) {
-	// Pick a random interval.
-	double lowerBound = CkwsUtility::random(0.0, pathLength);
-	double upperBound = CkwsUtility::random(lowerBound, pathLength);
-	std::vector<double> vecMaxDeriv;
-	
-	// Filter out too small intervals.
-	if (upperBound-lowerBound > 1e-3) {
-	  kwsDirectPath->maxAbsoluteDerivative(lowerBound, upperBound, vecMaxDeriv);
-	  CkwsConfigShPtr q1 = kwsDirectPath->configAtDistance(lowerBound);
-	  CkwsConfigShPtr q2 = kwsDirectPath->configAtDistance(upperBound);
-	  
-	  // For each dof, check that variation of dof is upper bounded by the product of the 
-	  // interval length by the maximal derivative of the dof.
-	  for (unsigned int iDof=0; iDof<initConfig.size(); iDof++) {
-	    // Distance between dof value is different if Dof is revolute.
-	    if (attKwsDevice->dof(iDof)->isRevolute()) {
-	      if (vecMaxDeriv[iDof]*(upperBound-lowerBound) != 0) {
-		ratio = distCircle(q2->dofValue(iDof),q1->dofValue(iDof))/(vecMaxDeriv[iDof]*(upperBound-lowerBound));
-		// If ration bigger than maximum, update maximum.
-		if (ratio > vecMaxRatio[iDof]) {
-		  vecMaxRatio[iDof] = ratio;
-		}
-	      }
-	      if (distCircle(q2->dofValue(iDof),q1->dofValue(iDof)) > 
-		  vecMaxDeriv[iDof]*(upperBound-lowerBound)) {
-		cout << "ERROR: wrong bound" << endl;
-		cout << "length interval = " << pathLength << endl;
-		cout << "lower bound interval = " << lowerBound << endl;
-		cout << "upper bound interval = " << upperBound << endl;
-		cout << "q1[" << iDof << "] = " << q1->dofValue(iDof) << endl;
-		cout << "q2[" << iDof << "] = " << q2->dofValue(iDof) << endl;
-		cout << "max q'[" << iDof << "] = " << vecMaxDeriv[iDof] << endl;
-	      }
-	      else {
-		if (vecMaxDeriv[iDof] != 0) {
-#if 0
-		  cout << "| q2[" << iDof << "]-q1[" << iDof << "] |/((max q'[" << iDof << "])*(u2-u1) = " 
-		       << ratio << endl;
-#endif
-		} 
-	      }
-	    } else {
-	      if (vecMaxDeriv[iDof]*(upperBound-lowerBound) != 0) {
-		ratio = fabs(q2->dofValue(iDof)-q1->dofValue(iDof))/(vecMaxDeriv[iDof]*(upperBound-lowerBound));
-		// If ration bigger than maximum, update maximum.
-		if (ratio > vecMaxRatio[iDof]) {
-		  vecMaxRatio[iDof] = ratio;
-		}
-	      }
-	      if ((iDof != 0) && (fabs(q2->dofValue(iDof) - q1->dofValue(iDof)) > vecMaxDeriv[iDof]*(upperBound-lowerBound))) {
-		cout << "ERROR: wrong bound" << endl;
-		cout << "length interval = " << pathLength << endl;
-		cout << "lower bound interval = " << lowerBound << endl;
-		cout << "upper bound interval = " << upperBound << endl;
-		cout << "q1[" << iDof << "] = " << q1->dofValue(iDof) << endl;
-		cout << "q2[" << iDof << "] = " << q2->dofValue(iDof) << endl;
-		cout << "max q'[" << iDof << "] = " << vecMaxDeriv[iDof] << endl;
-	      }
-	      else {
-		if (vecMaxDeriv[iDof] != 0) {
-#if 0
-		  cout << "| q2[" << iDof << "]-q1[" << iDof << "] |/((max q'[" << iDof << "])*(u2-u1) = " 
-		       << ratio << endl;
-#endif
-		} 
-	      }
-	    }
-	  }
-	}
-      }
-    }
-  }
-  // Display upper bounds of ratios for each dof.
-
-  cout << endl;
-  cout << endl;
-  cout << "------------------------------------------" << endl;
-  for (unsigned int iDof=0; iDof < attKwsDevice->countDofs(); iDof++) {
-    cout << "Maximal ratio between actual dof values and upper bound for dof " 
-	 << iDof << ": " << vecMaxRatio[iDof] << endl;
-  }
-  return KD_OK;
-}
-
-
 ktStatus CtestFlicDirectPath::testStraightLineDirectPath()
 {
-  CkwsConfig initConfig(attKwsDevice), goalConfig(attKwsDevice);
+  CkwsConfig initConfig(device()), goalConfig(device());
   CkwsDirectPathShPtr kwsDirectPath;
 
   // Set non planar dof to 0
@@ -456,7 +330,7 @@ ktStatus CtestFlicDirectPath::testStraightLineDirectPath()
   goalConfig.dofValue(CflicDirectPath::RX_COORD, 0.0);
   goalConfig.dofValue(CflicDirectPath::RY_COORD, 0.0);
   
-  kwsDirectPath = attSteeringMethod->makeDirectPath(initConfig, goalConfig);
+  kwsDirectPath = steeringMethod()->makeDirectPath(initConfig, goalConfig);
   if (kwsDirectPath) {
     double pathLength = kwsDirectPath->length();
     std::cout << "  path length = " << pathLength << std::endl;
@@ -479,7 +353,7 @@ ktStatus CtestFlicDirectPath::testStraightLineDirectPath()
 
 ktStatus CtestFlicDirectPath::testApproximateLength(unsigned int nbRndDirectPath)
 {
-  CkwsConfig initConfig(attKwsDevice), goalConfig(attKwsDevice);
+  CkwsConfig initConfig(device()), goalConfig(device());
   CkwsDirectPathShPtr kwsDirectPath;
   double pathLength;
 
@@ -523,7 +397,7 @@ ktStatus CtestFlicDirectPath::testApproximateLength(unsigned int nbRndDirectPath
       goalConfig.dofValue(CflicDirectPath::CURV_COORD, 0.0);
     }      
 
-    kwsDirectPath = attSteeringMethod->makeDirectPath(initConfig, goalConfig);
+    kwsDirectPath = steeringMethod()->makeDirectPath(initConfig, goalConfig);
     if (kwsDirectPath) {
       pathLength = kwsDirectPath->length();
     }
@@ -551,10 +425,10 @@ ktStatus CtestFlicDirectPath::createDevice()
 {
 
   // Create empty device and store it in object
-   attKwsDevice=CkppDeviceComponent::create("HRP2.BB");
+  CkppDeviceComponentShPtr kppDevice=CkppDeviceComponent::create("Cart");
 
   CkitMat4 absPos;
-  CkppKCDBoxShPtr polyBox = CkppKCDBox::create("HRP2BOX",0.40,0.85,1.10);
+  CkppKCDBoxShPtr polyBox = CkppKCDBox::create("CartBox",0.40,0.85,1.10);
   polyBox->diffuseColor( CkppColor( 0.2f, 0.2f, 0.6f, 0.4f ) );
   absPos.translate(0.0,0.0,0.55);
   polyBox->setAbsolutePosition( absPos );
@@ -567,7 +441,7 @@ ktStatus CtestFlicDirectPath::createDevice()
   // Bound curvature
   kwsExtraDof->bounds(-5.0, 5.0);
   kwsExtraDof->isBounded(true);
-  attKwsDevice->addExtraDof(kwsExtraDof);
+  kppDevice->addExtraDof(kwsExtraDof);
   
   
   // build plan root joint
@@ -594,62 +468,49 @@ ktStatus CtestFlicDirectPath::createDevice()
   kppJoint->doesDisplayPath( true );
   
   //attach the joint to the device
-  attKwsDevice->rootJointComponent(kppJoint);
+  kppDevice->rootJointComponent(kppJoint);
 
   // create to config for test
-  CkwsConfigShPtr startConfig=CkwsConfig::create(attKwsDevice->kwsDevice()) ;
-  CkwsConfigShPtr endConfig  =CkwsConfig::create(attKwsDevice->kwsDevice()) ;
+  CkwsConfigShPtr startConfig=CkwsConfig::create(kppDevice->kwsDevice()) ;
+  CkwsConfigShPtr endConfig  =CkwsConfig::create(kppDevice->kwsDevice()) ;
 
-   startConfig->dofValue(0, 0.0) ;  // Kappa
-   startConfig->dofValue(1, 0.0) ;  // x  
-   startConfig->dofValue(2, 0.0) ;  // y
-   startConfig->dofValue(6, 0.0) ;  // theta
-
-   endConfig->dofValue(0, 0.0) ; // Kappa  
-   endConfig->dofValue(1, 2.0) ; // x
-   endConfig->dofValue(2, 1.0) ; // y
-   endConfig->dofValue(6, 0.0) ; // theta 
-
-
+  startConfig->dofValue(0, 0.0) ;  // Kappa
+  startConfig->dofValue(1, 0.0) ;  // x  
+  startConfig->dofValue(2, 0.0) ;  // y
+  startConfig->dofValue(6, 0.0) ;  // theta
   
-
+  endConfig->dofValue(0, 0.0) ; // Kappa  
+  endConfig->dofValue(1, 2.0) ; // x
+  endConfig->dofValue(2, 1.0) ; // y
+  endConfig->dofValue(6, 0.0) ; // theta 
+  
+  device(kppDevice);
+  
   return KD_OK;
 }
 
 ktStatus CtestFlicDirectPath::createSteeringMethod()
 {
   // Create steering method : Flat Interpolation 
-  attSteeringMethod = CflicSteeringMethod::create();
-  if (!attSteeringMethod) {
+  CflicSteeringMethodShPtr kwsSteeringMethod = CflicSteeringMethod::create();
+  if (!kwsSteeringMethod) {
     return KD_ERROR;
   }
+  steeringMethod(kwsSteeringMethod);
   return KD_OK;
 }
 
 ktStatus CtestFlicDirectPath::createFlicDistance()
 {
-  if (!attSteeringMethod) {
+  if (!steeringMethod()) {
     std::cerr << "CtestFlicDirectPath::createFlicDistance: create steering method first." 
 	      << std::endl;
     return KD_ERROR;
   }
-  attFlicDistance = CflicDistance::create(attSteeringMethod);
+  attFlicDistance = CflicDistance::create(steeringMethod());
   if (!attFlicDistance) {
     return KD_ERROR;
   }
   return KD_OK;
-}
-
-double CtestFlicDirectPath::distCircle(double theta1, double theta2)
-{
-  double angle = theta2 - theta1;
-
-  while (angle < -M_PI){
-    angle += 2*M_PI;
-  }
-  while (angle > M_PI){
-    angle -= 2*M_PI;
-  }
-  return fabs(angle);
 }
 

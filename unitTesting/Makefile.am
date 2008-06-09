@@ -31,8 +31,8 @@ testFlicMaxDeriv_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicDirectPathMaxAbsDeriv.cpp
 
-testFlicMaxDeriv_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
-testFlicMaxDeriv_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
+testFlicMaxDeriv_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
+testFlicMaxDeriv_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
 
 
 #
@@ -43,8 +43,8 @@ testFlicBoundObj_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicDirectPathBoundingObjects.cpp
 
-testFlicBoundObj_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
-testFlicBoundObj_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
+testFlicBoundObj_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
+testFlicBoundObj_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
 
 
 #
@@ -54,8 +54,8 @@ testFlicStraightLine_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicStraightLine.cpp
 
-testFlicStraightLine_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
-testFlicStraightLine_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
+testFlicStraightLine_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
+testFlicStraightLine_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
 
 #
 #  Test approximation of distance related to  flic steering method
@@ -64,8 +64,8 @@ testFlicApproximateDistance_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicApproximateDistance.cpp
 
-testFlicApproximateDistance_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS) 
-testFlicApproximateDistance_LDFLAGS = ../src/.libs/libkwsPlus.a $(KWSIO_LIBS) 
+testFlicApproximateDistance_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
+testFlicApproximateDistance_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
 
 
 %.kab: %

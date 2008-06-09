@@ -79,11 +79,41 @@ fi
 AC_SUBST(LAPACK_CFLAGS)
 AC_SUBST(LAPACK_LIBS)
 
+dnl ---If unitTesting enables, make dependence to testKwsDirectPath
+AC_ARG_ENABLE(unitTesting, AC_HELP_STRING([--enable-unitTesting],
+	[Implement unitTesting. In this case, a dependence to testKwsDirectPath is added]),,[enable_unitTesting=no])
+
+AC_SUBST(TESTKWSDIRECTPATH_REQD)
+AC_SUBST(TESTKWSDIRECTPATH_CFLAGS)
+AC_SUBST(TESTKWSDIRECTPATH_LIBS)
+AC_SUBST(TESTKWSDIRECTPATH_TAGFILE, [])
+AC_SUBST(TESTKWSDIRECTPATH_PREFIX)
+
+if test x${enable_unitTesting} = xyes; then
+	UNITTESTING_CFLAGS="UNITTESTING=1"
+	PKG_CHECK_MODULES(TESTKWSDIRECTPATH, [testKwsDirectPath >= 1.0])
+	AC_SUBST(TESTKWSDIRECTPATH_CFLAGS)
+	AC_SUBST(TESTKWSDIRECTPATH_LIBS)
+	TESTKWSDIRECTPATH_PREFIX=`$PKG_CONFIG --variable=prefix testKwsDirectPath`
+	TESTKWSDIRECTPATH_TAGFILE="$TESTKWSDIRECTPATH_PREFIX/share/doc/doxytag/testKwsDirectPath.doxytag=$TESTKWSDIRECTPATH_PREFIX/share/doc/testKwsDirectPath"
+	TESTKWSDIRECTPATH_REQD=", testKwsDirectPath >= 1.0"
+	AC_MSG_NOTICE([Implement direct path unit testing])
+
+AC_CONFIG_FILES(
+	unitTesting/Makefile
+)
+
+else
+	UNITTESTING_CFLAGS="UNITTESTING=0"
+	AC_MSG_NOTICE([Direct path unit testing not implemented])
+fi
+
+AM_CONDITIONAL(UNITTESTING, test x${enable_unitTesting} = xyes)
+
 AC_OUTPUT(Makefile
 	src/Makefile
 	include/Makefile
 	doc/Makefile
 	doc/kwsPlus.dox
 	kwsPlus.pc
- 	unitTesting/Makefile
 )
