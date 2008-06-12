@@ -1,11 +1,8 @@
-2008/06/09
-	37. UnitTesting is now compiled on demand configure --enable-untTesting.
+2008/06/12	kwsPlus release 1.4.1
 	
-2008/05/20
-
+	37. UnitTesting is now compiled on demand configure --enable-unitTesting.
 	36. Added diffusion shooter factory.
 	35. Added diffusion node picker factory.
-	
 	
 2008/05/13	kwsPlus release 1.4
 	
