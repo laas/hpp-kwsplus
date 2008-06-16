@@ -74,7 +74,7 @@ CLASS
 **************************************/
 
 /**
-   \addtogroup kwsPlusRoadmap
+   \addtogroup kwsPlusEnhancedRoadmapManagement
    @{
 */
 

@@ -1,3 +1,7 @@
+2008/06/16
+	38. Implemented a roadmap builder delegate to interrupt a
+	    roadmap builder during path planning.
+	
 2008/06/12	kwsPlus release 1.4.1
 	
 	37. UnitTesting is now compiled on demand configure --enable-unitTesting.
