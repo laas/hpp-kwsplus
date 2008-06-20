@@ -68,8 +68,7 @@ testFlicApproximateDistance_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPAT
 testFlicApproximateDistance_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
 
 
-%.kab: %
-	mkdir -p bin$<
+%.kab: 	mkdir -p bin$<
 	cp $< bin$<
 	cd bin$<; LD_LIBRARY_PATH=@KINEO_LIBDIR@  @KINEO_ADDON_BUILD@ -a ./$< 
 	rm -f $<

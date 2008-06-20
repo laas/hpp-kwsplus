@@ -41,20 +41,43 @@ class CkwsPlusTalkingBuilder : public T
   static const std::string DIFFUSED_NODE_KEY;
   static const std::string CREATED_NODE_KEY;
 
+  /**
+     \brief Destructor
+   */
   ~CkwsPlusTalkingBuilder();
 
-  static KIT_SHARED_PTR(CkwsPlusTalkingBuilder<T>) create (const CkwsRoadmapShPtr &i_roadmap);
+  /**
+     \brief Create Method.
+     \param inRoadmap the kwsRoadmap to use for the builder
+     \return A shared pointer on the newly created object.
+   */
+  static KIT_SHARED_PTR(CkwsPlusTalkingBuilder<T>) create (const CkwsRoadmapShPtr &inRoadmap);
 
  protected:
 
-  ktStatus init(const KIT_WEAK_PTR(CkwsPlusTalkingBuilder<T>) &i_weakPtr);
+  /**
+     \brief Initialisation method.
+     \param inWeakPtr Weak pointer on the object itself.
+     \return KD_OK | KD_ERROR
+   */
+  ktStatus init(const KIT_WEAK_PTR(CkwsPlusTalkingBuilder<T>) &inWeakPtr);
 
+  /**
+     \brief Constructor
+   */
   CkwsPlusTalkingBuilder(const CkwsRoadmapShPtr& i_roadmap);
 
+  /**
+     \brief Intherithed methods
+     @{
+   */
   virtual ktStatus buildOneStep ();
   virtual CkwsNodeShPtr diffuse(const CkwsNodeShPtr &i_node, CkwsDiffusingRdmBuilder::EDiffusionNodeType i_type, CkwsRoadmapBuilder::EDirection &o_direction);
   virtual CkwsNodeShPtr chooseExtendedNode(const CkwsConfig &i_cfg, CkwsConnectedComponent::TNodeConstLinkedIterator &i_beginNodeIterator, CkwsConnectedComponent::TNodeConstLinkedIterator &i_endNodeIterator);
   virtual CkwsNodeShPtr extend(const CkwsNodeShPtr &i_node, const CkwsConfig &i_cfg, CkwsRoadmapBuilder::EDirection i_direction);
+  /**
+     @}
+   */
 
  private:
   KIT_WEAK_PTR(CkwsPlusTalkingBuilder<T>) m_weakPtr;

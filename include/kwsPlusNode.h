@@ -14,7 +14,10 @@
 
 KIT_PREDEF_CLASS(CkwsPlusNode);
 using namespace std ;
-
+/**
+   \addtogroup kwsPlusEnhancedRoadmapManagement
+   @{
+*/
 
 /**
    This class implements a classical kineo node augmented with several attributes :
@@ -218,4 +221,7 @@ class CkwsPlusNode : public CkwsNode
 
 };
 
+/**
+   @}
+*/
 #endif /* KWS_PLUS_NODE_H */

@@ -65,4 +65,7 @@ class CkwsPlusEdgeFactory : public CkwsEdgeFactory
 
 };
 
+/**
+   @}
+*/
 #endif

@@ -15,7 +15,10 @@
 KIT_PREDEF_CLASS(CkwsPlusEdge);
 using namespace std ;
 
-
+/**
+   \addtogroup kwsPlusEnhancedRoadmapManagement
+   @{
+*/
 /**
    This class implements a classic kineo edge augmented with a color attribute, for graphical purposes, and an activation
    flag. Since there is no way to remove a node from a roadmap at run-time, this flag can be used to simulate a remove process.
@@ -88,4 +91,7 @@ class CkwsPlusEdge : public CkwsEdge
 
 };
 
+/**
+   @}
+*/
 #endif /* KWS_PLUS_EDGE_H */
