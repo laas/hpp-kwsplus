@@ -29,4 +29,10 @@ kwsPlus_HEADERS = \
 	kwsPlusDistanceFactory.h \
 	kwsPlusDiffusionNodePickerFactory.h \
 	kwsPlusDiffusionShooterFactory.h \
-	kwsPlusStopRdmBuilderDelegate.h
+	kwsPlusStopRdmBuilderDelegate.h \
+	kwsPlusTalkingShooter.h \
+	kwsPlusTalkingBuilder.h \
+	kwsPlusNode.h \
+	kwsPlusNodeFactory.h \
+	kwsPlusEdge.h \
+	kwsPlusEdgeFactory.h

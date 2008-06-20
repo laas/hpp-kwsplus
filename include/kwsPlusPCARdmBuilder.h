@@ -12,6 +12,7 @@
 INCLUDE
 **************************************/
 
+#include "KineoWorks2/kwsValidatorDPCollision.h"
 #include "KineoWorks2/kwsDiffusingRdmBuilder.h"
 #include "KineoWorks2/kwsIPPRdmBuilder.h"
 #include "KineoWorks2/kwsRoadmapBuilder.h"
@@ -21,6 +22,8 @@ INCLUDE
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDiffusionNodePicker.h"
 #include "KineoWorks2/kwsDiffusionShooter.h"
+#include "KineoWorks2/kwsPickerBasic.h"
+#include "KineoWorks2/kwsShooterRoadmapBox.h"
 #include "KineoWorks2/kwsConnectedComponent.h"
 #include "KineoWorks2/kwsNode.h"
 #include "KineoWorks2/kwsDof.h"
@@ -120,9 +123,15 @@ class CkwsPlusPCARdmBuilder : public T
     KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>)
     create(const CkwsRoadmapShPtr& i_roadmap,
 	   double i_penetration,
+//	   const CkwsDistanceShPtr& i_evaluator = CkwsDistance::create(),
+//	   const CkwsDiffusionNodePickerShPtr &i_picker=CkwsDiffusionNodePickerShPtr(), 
+//	   const CkwsDiffusionShooterShPtr &i_shooter=CkwsDiffusionShooterShPtr());
+
 	   const CkwsDistanceShPtr& i_evaluator = CkwsDistance::create(),
-	   const CkwsDiffusionNodePickerShPtr &i_picker=CkwsDiffusionNodePickerShPtr(), 
-	   const CkwsDiffusionShooterShPtr &i_shooter=CkwsDiffusionShooterShPtr());
+	   const CkwsDiffusionNodePickerShPtr &i_picker = CkwsPickerBasic::create(), 
+	   const CkwsDiffusionShooterShPtr &i_shooter = CkwsShooterRoadmapBox::create());
+
+
 /**
      \brief Copy constructor.
      \param inRdmpBuilder The roadmap builder to copy.

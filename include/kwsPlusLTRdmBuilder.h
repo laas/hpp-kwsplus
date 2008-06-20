@@ -12,6 +12,7 @@
 INCLUDE
 **************************************/
 
+#include "KineoWorks2/kwsValidatorDPCollision.h"
 #include "KineoWorks2/kwsDiffusingRdmBuilder.h"
 #include "KineoWorks2/kwsIPPRdmBuilder.h"
 #include "KineoWorks2/kwsRoadmapBuilder.h"
@@ -21,6 +22,8 @@ INCLUDE
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDiffusionNodePicker.h"
 #include "KineoWorks2/kwsDiffusionShooter.h"
+#include "KineoWorks2/kwsPickerBasic.h"
+#include "KineoWorks2/kwsShooterRoadmapBox.h"
 #include "KineoWorks2/kwsConnectedComponent.h"
 #include "KineoWorks2/kwsNode.h"
 #include "KineoWorks2/kwsDof.h"
@@ -40,14 +43,6 @@ template<class T = CkwsDiffusingRdmBuilder > class CkwsPlusLTRdmBuilder;
 
 class CkwsDiffusingRdmBuilder;
 class CkwsIPPRdmBuilder;
-
-#if 0
-typedef  CkwsPlusLTRdmBuilder<CkwsDiffusingRdmBuilder> CkwsPlusLTDiffusingRdmBuilder;
-typedef  CkwsPlusLTRdmBuilder<CkwsIPPRdmBuilder> CkwsPlusLTIPPRdmBuilder;
-
-KIT_POINTER_DEFS(  CkwsPlusLTDiffusingRdmBuilder );
-KIT_POINTER_DEFS(  CkwsPlusLTIPPRdmBuilder );
-#endif
 
 /*************************************
 CLASS
@@ -104,10 +99,10 @@ class CkwsPlusLTRdmBuilder : public T
   static 
     KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) 
     create(const CkwsRoadmapShPtr& i_roadmap, 
-	   double i_penetration, 
-	   const CkwsDistanceShPtr& i_evaluator=CkwsDistance::create(), 
-	   const CkwsDiffusionNodePickerShPtr& i_picker=CkwsDiffusionNodePickerShPtr(), 
-	   const CkwsDiffusionShooterShPtr &i_shooter=CkwsDiffusionShooterShPtr());
+	   double i_penetration,
+	   const CkwsDistanceShPtr &i_evaluator = CkwsDistance::create(),
+	   const CkwsDiffusionNodePickerShPtr &i_picker = CkwsPickerBasic::create(), 
+	   const CkwsDiffusionShooterShPtr &i_shooter = CkwsShooterConfigSpace::create());
   
   /**
      \brief Updates the connectivity of the roadmap by checking if the new node can be linked with a Connected Component. When a connection happens, it updates the list of diffusion nodes (trees' roots), removing when necessary (You can't have 2 diffusion nodes in the same connected component)
@@ -142,6 +137,8 @@ class CkwsPlusLTRdmBuilder : public T
    */
   virtual CkwsNodeShPtr extend (const CkwsNodeShPtr& i_node, const CkwsConfig& i_cfg, CkwsRoadmapBuilder::EDirection i_direction);
 
+  virtual CkwsNodeShPtr diffuse (const CkwsNodeShPtr &i_node, CkwsDiffusingRdmBuilder::EDiffusionNodeType i_type, CkwsRoadmapBuilder::EDirection &o_direction);
+
   /**
      \brief initialization
      \param i_weakPtr
@@ -157,6 +154,7 @@ class CkwsPlusLTRdmBuilder : public T
 
  private :
 
+  KIT_WEAK_PTR(CkwsPlusLTRdmBuilder<T>) m_weakPtr;
   unsigned int oldStep;
 
 };
@@ -172,11 +170,11 @@ bool CkwsPlusLTRdmBuilder<T>::updateRoadmapConnectivity(CkwsNodeShPtr i_node, Ck
   bool success = false;
   
   for(unsigned int i=0;i<T::roadmap()->countConnectedComponents();i++){ //Checking if one or more of the existing connected components can be reached with i_node
-    if(!success){
-      if(i_node){ 
-	if(T::roadmap()->connectedComponent(i) != i_node->connectedComponent()){
+    if(!success){ //cout<< "have not performed a connection yet." <<endl; getchar();
+      if(i_node){ //cout<< "New Node exists!." <<endl;getchar();
+	if(T::roadmap()->connectedComponent(i) != i_node->connectedComponent()){ //cout<< "Trying to reach another CC." <<endl;getchar();
 	  if(T::canLinkNodeWithComponent ( CkwsRoadmapBuilder::NODE_TO_ROADMAP ,i_node, T::roadmap()->connectedComponent(i), linkNode,o_dp_in) || T::canLinkNodeWithComponent ( CkwsRoadmapBuilder::ROADMAP_TO_NODE ,i_node, T::roadmap()->connectedComponent(i), linkNode,o_dp_out)){
-	    
+	    //cout<< "Succeeding to reach another CC." <<endl;getchar();
 	    bool continuer = false;
 	  
 	    CkwsDirectPathConstShPtr c_dp_in(CkwsDirectPath::createCopy(o_dp_in));
@@ -194,40 +192,49 @@ bool CkwsPlusLTRdmBuilder<T>::updateRoadmapConnectivity(CkwsNodeShPtr i_node, Ck
 	      }
 	      
 	    }
-	    	    
+	    //cout<< "Found "<< sum<<"diffusin nodes in the picked CC." <<endl;getchar();
 	    if(continuer || sum){//then update diffusion nodes list
-	      if(!isAShootedNode){
+	      //cout<<"Updating diffusion nodes list ("<< T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)<<" waypoint nodes). "<<endl;getchar();
+	      if(!isAShootedNode){ //cout<<"is not a Shooted Node !"<<endl;getchar();
 		std::vector<CkwsNodeShPtr> diffusion_nodes_list;
 		for(unsigned int i=0; i<T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE);i++){
 		  diffusion_nodes_list.push_back(T::diffusionNode(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE,i));
 		}
 		T::resetDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE);
+		//cout<<"temp list has "<<diffusion_nodes_list.size()<<" nodes"<<endl;getchar();
+		//cout<<"initial list has "<<T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)<<" nodes"<<endl;getchar();
 		
+
 		int found = false;
 		
 		for(unsigned int i=0; i<diffusion_nodes_list.size();i++){
-		  if(!found){//to avoid deletion of 2 diffusion nodes, and then having a connected component without a diffusion node.
-		    if(!diffusion_nodes_list[i]->config().isEquivalent(i_picked->config())){
-		      if(diffusion_nodes_list[i]->connectedComponent() != i_picked->connectedComponent() ){
-			if(KD_OK != T::addDiffusionNode(diffusion_nodes_list[i],CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)) ;
-		      }else{
+		  if(!found){ //cout<<"not found"<<endl;getchar();//to avoid deletion of 2 diffusion nodes, and then having a connected component without a diffusion node.
+		    if(!diffusion_nodes_list[i]->config().isEquivalent(i_picked->config())){ //cout<<" Not the same Config"<<endl;getchar();
+		      if(diffusion_nodes_list[i]->connectedComponent() != i_picked->connectedComponent() ){ //cout<<" Not the same CC"<<endl;getchar();
+			if(KD_OK != T::addDiffusionNode(diffusion_nodes_list[i],CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)) ;//cout<<"Can't Add THE diffusion Node"<<endl;
+			//else //cout<<"Added The diffusion Node"<<endl;
+			//getchar();
+		      }else{//cout<<"found a diffusion node in the same CC!"<<endl;
 			found = true;
-		      }
-		    }else{
+		      }//getchar();
+		    }else{//cout<<"found the picked config!"<<endl;
 		      found = true;
-		    }
-		  }else if(KD_OK != T::addDiffusionNode(diffusion_nodes_list[i],CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)) ;
-		  
+		    }//getchar();
+		  }else if(KD_OK != T::addDiffusionNode(diffusion_nodes_list[i],CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)) ;//cout<<"Can't Add one diffusion Node"<<endl;
+			//else //cout<<"Add one diffusion Node"<<endl;
+		  //getchar();
 		}
 		
 		return true;
-	      }
-	    }
-	  }
-	}
-      }
-    }
+	      }//else //cout<<"is a Shooted Node !"<<endl;
+	      //cout<< "After Update : "<<T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)<<endl;getchar();
+	    }//else cout<<"no need to update (no connection or every CC has only 1 D-Node)"<<endl;getchar();
+	  }//else cout<<"Can't link node with any CC (means that the can potientially be a diffusio node)"<<endl;getchar();
+	}//else cout<<"We are in the same CC as the new node"<<endl;getchar();
+      }//else cout<< "New Node does not exists!." <<endl;getchar();
+    }//else cout<< "have performed a connection." <<endl;getchar();
   }
+
   return success;
   
 }
@@ -242,28 +249,28 @@ CkwsPlusLTRdmBuilder<T>::~CkwsPlusLTRdmBuilder(){
 template <class T>
 ktStatus CkwsPlusLTRdmBuilder<T>::addingDiffusionNodes(CkwsNodeShPtr i_newnode, CkwsNodeShPtr i_shootednode, CkwsNodeShPtr i_picked){
 
-  if(i_newnode){
-    if(i_newnode != i_shootednode){ 
+  if(i_newnode){ //cout<<"New Node Created! "<<endl;getchar();
+    if(i_newnode != i_shootednode){ //cout<<"- Shooted Node Not Reached! "<<endl;getchar();
       bool linked = false;
       bool success = false;
-      if(T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)<10){
-	if(KD_OK == T::addNode(i_shootednode)){
+      if(T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)<10){ //cout<<"- Can Add Diffusion Node! "<<endl;getchar();
+	if(KD_OK == T::addNode(i_shootednode)){ //cout<<"- Adding Node! "<<endl;getchar();
 	  success = true; 
 	  linked = updateRoadmapConnectivity(i_shootednode,i_picked,true);
-	  if(!linked){ 
-	    if(KD_OK == T::addDiffusionNode(i_shootednode,CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)){
-	      if(KD_OK != T::roadmap()->device()->setCurrentConfig(i_shootednode->config())) cout<<"unable to set current config"<<endl;
-	     }
-	    if(KD_OK != T::roadmap()->removeNode(i_shootednode)) ;
-	    
-	  }
-	}
-      }
-    }
-  }
+	  if(!linked){ //cout<<"- Adding Diffusion Node! "<<endl;getchar();
+	    if(KD_OK == T::addDiffusionNode(i_shootednode,CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)){ //cout<<"- OK : "<< T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)<<"! "<<endl;
+	      if(KD_OK != T::roadmap()->device()->setCurrentConfig(i_shootednode->config())) ;//cout<<"unable to set current config"<<endl;getchar();
+	     }else{ //cout<<"- Can't Add a Diffusion Node"<<endl;getchar();
+	    	if(KD_OK != T::roadmap()->removeNode(i_shootednode)); //cout<<"haven't removed the shooted node"<<endl;
+	    	//else cout<<"have removed the shooted node"<<endl;
+	    	//getchar();
+	    }
+	  }//else cout<<"- No Diffusion Node Created! "<<endl;getchar();
+	}//else cout<<"- No Node Added! "<<endl;getchar();
+      }//else cout<<"- Already 10 Diffusion Node! "<<endl;getchar();
+    }//else cout<<"- Shooted Node Reached! "<<endl;getchar();
+  }//else cout<<"- No New Node! "<<endl;getchar();
   
-
-
     return KD_OK;
     
 }
@@ -272,7 +279,7 @@ ktStatus CkwsPlusLTRdmBuilder<T>::addingDiffusionNodes(CkwsNodeShPtr i_newnode, 
 template <class T>
 CkwsNodeShPtr CkwsPlusLTRdmBuilder<T>::extend (const CkwsNodeShPtr& i_node, const CkwsConfig& i_cfg, CkwsRoadmapBuilder::EDirection i_direction){
 
-
+//cout<<"Extend Begin -----"<<T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)<<"-------------------------------------------------------"<<endl;
   bool collision = true;
 
   if(T::roadmap()->countNodes() < oldStep){
@@ -282,7 +289,7 @@ CkwsNodeShPtr CkwsPlusLTRdmBuilder<T>::extend (const CkwsNodeShPtr& i_node, cons
 
   CkwsNodeShPtr newNode = T::extend(i_node,i_cfg,i_direction);
   if(!newNode){;
-  }else{
+  }else{ 
     updateRoadmapConnectivity(newNode,i_node,false);
   }
   if(KD_OK == i_cfg.isColliding(collision)){
@@ -291,11 +298,29 @@ CkwsNodeShPtr CkwsPlusLTRdmBuilder<T>::extend (const CkwsNodeShPtr& i_node, cons
     }
   }
   oldStep=T::roadmap()->countNodes();
-  
+//cout<<"Extend End -------"<<T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)<<"-------------------------------------------------------"<<endl;
+//system(clear);
+	//getchar();
   return newNode;
 
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+template <class T>
+CkwsNodeShPtr CkwsPlusLTRdmBuilder<T>::diffuse (const CkwsNodeShPtr &i_node, CkwsDiffusingRdmBuilder::EDiffusionNodeType i_type, CkwsRoadmapBuilder::EDirection &o_direction){
+
+//   if(i_type == CkwsDiffusingRdmBuilder::START_LIKE) cout<<"Type d'arbre : START"<<endl;
+//   else if(i_type == CkwsDiffusingRdmBuilder::GOAL_LIKE) cout<<"Type d'arbre : GOAL"<<endl;
+//   else if(i_type == CkwsDiffusingRdmBuilder::WAYPOINT_LIKE) cout<<"Type d'arbre : WAYPOINT"<<endl;
+// 
+//   cout<<"Nb diffusion Nodes (START):    "<< T::countDiffusionNodes(CkwsDiffusingRdmBuilder::START_LIKE)<<endl;
+//   cout<<"Nb diffusion Nodes (GOAL):     "<< T::countDiffusionNodes(CkwsDiffusingRdmBuilder::GOAL_LIKE)<<endl;
+//   cout<<"Nb diffusion Nodes (WAYPOINT): "<< T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)<<endl;
+
+  CkwsNodeShPtr result = T::diffuse(i_node,i_type,o_direction);
+  return result;
+
+}
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 template <class T>
@@ -307,9 +332,12 @@ CkwsPlusLTRdmBuilder<T>::CkwsPlusLTRdmBuilder(const CkwsRoadmapShPtr &i_roadmap)
 template <class T>
 ktStatus CkwsPlusLTRdmBuilder<T>::init(const KIT_WEAK_PTR(CkwsPlusLTRdmBuilder<T>) &i_weakPtr){
 
-  ktStatus res = KD_OK;
-  oldStep = 0;
-  res = T::init(i_weakPtr);
+  ktStatus res = T::init(i_weakPtr);
+
+  if(res == KD_OK){
+    oldStep = 0;
+    m_weakPtr = i_weakPtr;
+  }
 
   return res;
 
@@ -318,13 +346,10 @@ ktStatus CkwsPlusLTRdmBuilder<T>::init(const KIT_WEAK_PTR(CkwsPlusLTRdmBuilder<T
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 template <class T>
-KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) CkwsPlusLTRdmBuilder<T>::create(const CkwsRoadmapShPtr &i_roadmap, double i_penetration, 
-									const CkwsDistanceShPtr &i_evaluator, 
-									const CkwsDiffusionNodePickerShPtr &i_picker, 
-									const CkwsDiffusionShooterShPtr &i_shooter)
+KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) CkwsPlusLTRdmBuilder<T>::create(const CkwsRoadmapShPtr &i_roadmap, double i_penetration,const CkwsDistanceShPtr &i_evaluator, const CkwsDiffusionNodePickerShPtr &i_picker, const CkwsDiffusionShooterShPtr &i_shooter)
 {
 
-  cout<<endl;
+  //cout<<endl;
 
   CkwsPlusLTRdmBuilder<T>* rdmBuilderPtr = new CkwsPlusLTRdmBuilder(i_roadmap);
   KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) rdmBuilderShPtr(rdmBuilderPtr);
@@ -334,9 +359,9 @@ KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) CkwsPlusLTRdmBuilder<T>::create(const Ck
     rdmBuilderShPtr.reset();
   }
   else {
+    rdmBuilderShPtr->distance(i_evaluator);
     rdmBuilderShPtr->diffusionNodePicker(i_picker);
     rdmBuilderShPtr->diffusionShooter(i_shooter);
-    rdmBuilderShPtr->distance(i_evaluator);
     if(KD_ERROR == CkwsValidatorDPCollision::setPenetration(rdmBuilderShPtr->builderDirectPathValidator(), i_penetration)) {
       rdmBuilderShPtr.reset();
     }

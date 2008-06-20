@@ -1,3 +1,9 @@
+2008/06/18
+	41. Fix some bugs in Local Trees.
+	40. Added node and edge classes with additionnal informations.
+	39. Added template builder and shooter that sends additionnal
+	    notifications.
+	
 2008/06/16
 	38. Implemented a roadmap builder delegate to interrupt a
 	    roadmap builder during path planning.

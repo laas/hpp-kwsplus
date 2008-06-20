@@ -21,6 +21,10 @@ libkwsPlus_la_SOURCES = \
 	kwsPlusSMLinear.cpp \
 	kwsPlusRoadmap.cpp \
 	kwsPlusDistance.cpp \
+	kwsPlusNode.cpp \
+	kwsPlusNodeFactory.cpp \
+	kwsPlusEdge.cpp \
+	kwsPlusEdgeFactory.cpp \
 	flicDistance.cpp \
 	flicManager.cpp \
 	kwsPlusStopRdmBuilderDelegate.cpp
