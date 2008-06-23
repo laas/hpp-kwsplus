@@ -85,7 +85,7 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
 
   for (unsigned int iSample=0; iSample<nbSamples+1; iSample++) {
     double u=1.0*iSample/nbSamples;
-    CflicManager::flatCombination(&(path->flatStartCfg), &(path->flatEndCfg),
+    CflicManager::flatCombination(&(path->attFlatStartCfg), &(path->attFlatEndCfg),
 				  u, v2, 2, tabGamma);
 #if DEBUG==2
     double x = tabGamma[0];

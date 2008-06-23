@@ -492,7 +492,7 @@ ktStatus CtestFlicDirectPath::createDevice()
 ktStatus CtestFlicDirectPath::createSteeringMethod()
 {
   // Create steering method : Flat Interpolation 
-  CflicSteeringMethodShPtr kwsSteeringMethod = CflicSteeringMethod::create();
+  CflicSteeringMethodShPtr kwsSteeringMethod = CflicSteeringMethod::create(false);
   if (!kwsSteeringMethod) {
     return KD_ERROR;
   }

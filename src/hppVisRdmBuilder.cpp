@@ -22,11 +22,11 @@
 
 // Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
 #if DEBUG==2
-#define ODEBUG2(x) std::cout << "hppvisRdmBuilder:" << x << std::endl
-#define ODEBUG1(x) std::cerr << "hppvisRdmBuilder:" << x << std::endl
+#define ODEBUG2(x) std::cout << "ChppvisRdmBuilder:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "ChppvisRdmBuilder:" << x << std::endl
 #elif DEBUG==1
 #define ODEBUG2(x)
-#define ODEBUG1(x) std::cerr << "hppvisRdmBuilder:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "ChppvisRdmBuilder:" << x << std::endl
 #else
 #define ODEBUG2(x)
 #define ODEBUG1(x)
@@ -143,7 +143,7 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
 
     CkwsNodeShPtr o_node = CkwsNode::create(node->config());
     CkwsDirectPathShPtr o_dp;
-    std::cout<<"Nbr cc "<<this->roadmap()->countConnectedComponents()<<std::endl;
+    ODEBUG2(" nbr cc " << this->roadmap()->countConnectedComponents());
 
     for(unsigned int i=0; i<this->roadmap()->countConnectedComponents(); i++)
     {
@@ -160,7 +160,7 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
     }
     if(ncc==0)
     {
-      std::cout<<"Isolated node"<<std::endl;
+      ODEBUG2(" isolated node");
       if(this->roadmap()->addNode(node)!=KD_ERROR)
       {
         this->link(CkwsRoadmapBuilder::NODE_TO_ROADMAP,node);
@@ -170,7 +170,7 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
     }
     else if(ncc>=2)
     {
-      std::cout<<"Node Link two cc "<<ncc<<std::endl;
+      ODEBUG2(" node Link two cc " << ncc);
       if(this->roadmap()->addNode(node)!=KD_ERROR)
       {
 
@@ -186,7 +186,7 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
 bool ChppVisRdmBuilder::shouldStopBuilding ( ) const
 {
   if (att_n_iterations>2000){
-    std::cout << "max number of iterations reached" << std::endl;
+    ODEBUG1(" max number of iterations reached");
     return true;
   }
   return false;

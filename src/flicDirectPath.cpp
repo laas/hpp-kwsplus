@@ -18,6 +18,16 @@ INCLUDES
 #include "kwsioInterface.h"
 #include "flicManager.h"
 
+#if DEBUG==2
+#define ODEBUG2(x) std::cout << "CflicDirectPath:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CflicDirectPath:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG2(x) 
+#define ODEBUG1(x) std::cerr << "CflicDirectPath:" << x << std::endl
+#else
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
 
 
 CflicPolynomial3::CflicPolynomial3(double u1, double u2, double valueU1, double valueU2,
@@ -235,7 +245,7 @@ ktStatus CflicPiecewisePolynomial3::setDefIntervalBounds()
   unsigned int vectorSize = attVectorPoly.size();
   if (vectorSize == 0)
   {
-    cerr << "CflicPiecewisePolynomial3::setDefIntervalBounds: vector of polynomials is empty." << endl;
+    ODEBUG1(":CflicPiecewisePolynomial3::setDefIntervalBounds: vector of polynomials is empty.");
     return KD_ERROR;
   }
   attUmin = attVectorPoly[0].attU1;
@@ -251,8 +261,8 @@ double CflicPiecewisePolynomial3::value(double u) const
 {
   if (attUmax <= attUmin)
   {
-    cerr << "CflicPiecewisePolynomial3::value: attUmax <= attUmin. attUmin = "
-    << attUmin << ", attUmax = " << attUmax << endl;
+    ODEBUG1(":CflicPiecewisePolynomial3::value: attUmax <= attUmin. attUmin = "
+	     << attUmin << ", attUmax = " << attUmax);
     return 0;
   }
 
@@ -273,7 +283,7 @@ double CflicPiecewisePolynomial3::valueDeriv(double u) const
 {
   if (attUmax <= attUmin)
   {
-    cerr << "CflicPiecewisePolynomial3::valueDeriv: attUmax <= attUmin" << endl;
+    ODEBUG1(":CflicPiecewisePolynomial3::valueDeriv: attUmax <= attUmin");
     return 0;
   }
 
@@ -286,12 +296,11 @@ double CflicPiecewisePolynomial3::valueDeriv(double u) const
 
   if ((u < poly3.attU1) || (u > poly3.attU2))
   {
-    cerr << "CflicPiecewisePolynomial3::valueDeriv: u out of range"
-    << ", poly3.attU1 = " << poly3.attU1
-    << ", poly3.attU2 = " << poly3.attU2
-    << ", polyId = " << polyId
-    << ", attNbIntervals = " << attNbIntervals
-    << endl;
+    ODEBUG1(":CflicPiecewisePolynomial3::valueDeriv: u out of range"
+	    << ", poly3.attU1 = " << poly3.attU1
+	    << ", poly3.attU2 = " << poly3.attU2
+	    << ", polyId = " << polyId
+	    << ", attNbIntervals = " << attNbIntervals);
   }
   double valueDeriv = poly3.valueDeriv(u);
   return valueDeriv;
@@ -304,8 +313,8 @@ ktStatus CflicPiecewisePolynomial3::u1(unsigned int rank, double inU1)
 {
   if (rank >= attVectorPoly.size())
   {
-    cerr << "CflicPiecewisePolynomial3::u1: rank bigger than vector size. rank = "
-    << rank << "vector size = " << attVectorPoly.size() << endl;
+    ODEBUG1(":CflicPiecewisePolynomial3::u1: rank bigger than vector size. rank = "
+	    << rank << "vector size = " << attVectorPoly.size());
     return KD_ERROR;
   }
   attVectorPoly[rank].attU1 = inU1;
@@ -318,8 +327,8 @@ ktStatus CflicPiecewisePolynomial3::u2(unsigned int rank, double inU2)
 {
   if (rank >= attVectorPoly.size())
   {
-    cerr << "CflicPiecewisePolynomial3::u2: rank bigger than vector size. rank = "
-    << rank << "vector size = " << attVectorPoly.size() << endl;
+    ODEBUG1(":CflicPiecewisePolynomial3::u2: rank bigger than vector size. rank = "
+	    << rank << "vector size = " << attVectorPoly.size());
     return KD_ERROR;
   }
   attVectorPoly[rank].attU2 = inU2;
@@ -332,8 +341,8 @@ ktStatus CflicPiecewisePolynomial3::valueU1(unsigned int rank, double inValueU1)
 {
   if (rank >= attVectorPoly.size())
   {
-    cerr << "CflicPiecewisePolynomial3::valueU1: rank bigger than vector size. rank = "
-    << rank << "vector size = " << attVectorPoly.size() << endl;
+    ODEBUG1(":CflicPiecewisePolynomial3::valueU1: rank bigger than vector size. rank = "
+	    << rank << "vector size = " << attVectorPoly.size());
     return KD_ERROR;
   }
   attVectorPoly[rank].attValueU1 = inValueU1;
@@ -346,8 +355,8 @@ ktStatus CflicPiecewisePolynomial3::valueU2(unsigned int rank, double inValueU2)
 {
   if (rank >= attVectorPoly.size())
   {
-    cerr << "CflicPiecewisePolynomial3::valueU2: rank bigger than vector size. rank = "
-    << rank << "vector size = " << attVectorPoly.size() << endl;
+    ODEBUG1(":CflicPiecewisePolynomial3::valueU2: rank bigger than vector size. rank = "
+	    << rank << "vector size = " << attVectorPoly.size());
     return KD_ERROR;
   }
   attVectorPoly[rank].attValueU2 = inValueU2;
@@ -360,8 +369,8 @@ ktStatus CflicPiecewisePolynomial3::valueDerivU1(unsigned int rank, double inVal
 {
   if (rank >= attVectorPoly.size())
   {
-    cerr << "CflicPiecewisePolynomial3::valueDerivU1: rank bigger than vector size. rank = "
-    << rank << "vector size = " << attVectorPoly.size() << endl;
+    ODEBUG1(":CflicPiecewisePolynomial3::valueDerivU1: rank bigger than vector size. rank = "
+	    << rank << "vector size = " << attVectorPoly.size());
     return KD_ERROR;
   }
   attVectorPoly[rank].attValueDerivU1 = inValueDerivU1;
@@ -374,8 +383,8 @@ ktStatus CflicPiecewisePolynomial3::valueDerivU2(unsigned int rank, double inVal
 {
   if (rank >= attVectorPoly.size())
   {
-    cerr << "CflicPiecewisePolynomial3::valueDerivU2: rank bigger than vector size. rank = "
-    << rank << "vector size = " << attVectorPoly.size() << endl;
+    ODEBUG1(":CflicPiecewisePolynomial3::valueDerivU2: rank bigger than vector size. rank = "
+	    << rank << "vector size = " << attVectorPoly.size());
     return KD_ERROR;
   }
   attVectorPoly[rank].attValueDerivU2 = inValueDerivU2;
@@ -424,11 +433,11 @@ void  CflicBoundManagerDefParam::getBoundsOnInterval(std::list<TflicBoundInterva
 {
 
   //-----debug
-  //cout << " =====VERIF LISTE===== " << endl ;
+  //cout << " =====VERIF LISTE===== " << std::endl ;
   //for( std::list<TflicBoundInterval>::iterator itera = liste.begin(); itera !=liste.end() ; itera++ ) {
-  //  cout << itera->uMin << "\t" << itera->uMax << "\t" << itera->valueMin << "\t" << itera->valueMax << endl ;
+  //  cout << itera->uMin << "\t" << itera->uMax << "\t" << itera->valueMin << "\t" << itera->valueMax << std::endl ;
   //}
-  //cout << " Get bounds Intervale " << endl ;
+  //cout << " Get bounds Intervale " << std::endl ;
   //----------------------------------
 
 
@@ -472,20 +481,20 @@ CflicBoundManagerDefParam::CflicBoundManagerDefParam(CflicDirectPathShPtr inDire
     attMaxCurvature(inDirectPath->attMaxCurvature)
 {
   //debug
-  //cout << " CONSTRUCTEUR MANAGER  " << endl ;
+  //cout << " CONSTRUCTEUR MANAGER  " << std::endl ;
   //------------------
 
   // Configuration convertion
   // assume that root joint is freeflyer
-  flatStartCfg.kappa = inStartCfg.dofValue(CflicDirectPath::CURV_COORD) ; //Kappa (dof fictif)
-  flatStartCfg.xp = inStartCfg.dofValue(CflicDirectPath::X_COORD) ;  // x
-  flatStartCfg.yp = inStartCfg.dofValue(CflicDirectPath::Y_COORD) ;  // y
-  flatStartCfg.tau = inStartCfg.dofValue(CflicDirectPath::RZ_COORD) ; // theta
+  attFlatStartCfg.kappa = inStartCfg.dofValue(CflicDirectPath::CURV_COORD) ; //Kappa (dof fictif)
+  attFlatStartCfg.xp = inStartCfg.dofValue(CflicDirectPath::X_COORD) ;  // x
+  attFlatStartCfg.yp = inStartCfg.dofValue(CflicDirectPath::Y_COORD) ;  // y
+  attFlatStartCfg.tau = inStartCfg.dofValue(CflicDirectPath::RZ_COORD) ; // theta
 
-  flatEndCfg.kappa = inEndCfg.dofValue(CflicDirectPath::CURV_COORD) ; //Kappa (dof fictif)
-  flatEndCfg.xp = inEndCfg.dofValue(CflicDirectPath::X_COORD) ;  // x
-  flatEndCfg.yp = inEndCfg.dofValue(CflicDirectPath::Y_COORD) ;  // y
-  flatEndCfg.tau = inEndCfg.dofValue(CflicDirectPath::RZ_COORD) ; // theta
+  attFlatEndCfg.kappa = inEndCfg.dofValue(CflicDirectPath::CURV_COORD) ; //Kappa (dof fictif)
+  attFlatEndCfg.xp = inEndCfg.dofValue(CflicDirectPath::X_COORD) ;  // x
+  attFlatEndCfg.yp = inEndCfg.dofValue(CflicDirectPath::Y_COORD) ;  // y
+  attFlatEndCfg.tau = inEndCfg.dofValue(CflicDirectPath::RZ_COORD) ; // theta
 
   attFlatV2 = inDirectPath->flatV2();
 
@@ -495,7 +504,7 @@ CflicBoundManagerDefParam::CflicBoundManagerDefParam(CflicDirectPathShPtr inDire
   boundListDeriv2.clear();
 
   //debug
-  //cout << "M3 : "  << M3  << " V2 : " << attFlatV2 << endl ;
+  //cout << "M3 : "  << M3  << " V2 : " << attFlatV2 << std::endl ;
   //--------------------------------
 }
 
@@ -504,7 +513,7 @@ CflicBoundManagerDefParam::CflicBoundManagerDefParam(CflicDirectPathShPtr inDire
 CflicBoundManagerDefParam::~CflicBoundManagerDefParam()
 {
   // debug
-  // cout << "Destructor of CflicBoundManagerDefParam" << endl;
+  // cout << "Destructor of CflicBoundManagerDefParam" << std::endl;
   //----------------------
 }
 
@@ -543,11 +552,8 @@ ktStatus CflicBoundManagerDefParam::recursiveBuildBoundLists(unsigned int maxNbI
   double lowerBoundCurvature = gamma1Min*gamma2Min/pow(gamma1Max, 3.0);
   double upperBoundCurvature = gamma1Max*gamma2Max/pow(gamma1Min, 3.0);
   if (lowerBoundCurvature > attMaxCurvature) {
-#if DEBUG_OUTPUT
-    std::cerr << "CflicarBoundManagerDefParam::recursiveBuildBoundLists: curvature overflow" << std::endl;
-    std::cerr << "lowerBoundCurvature = " << lowerBoundCurvature << " attMaxCurvature = " << attMaxCurvature
-	      << std::endl;
-#endif
+    ODEBUG2(":CflicarBoundManagerDefParam::recursiveBuildBoundLists: curvature overflow");
+    ODEBUG2("lowerBoundCurvature = " << lowerBoundCurvature << " attMaxCurvature = " << attMaxCurvature);
     return KD_ERROR;
   }
   currentBoundIntervalCurv.valueMin = lowerBoundCurvature;
@@ -557,7 +563,8 @@ ktStatus CflicBoundManagerDefParam::recursiveBuildBoundLists(unsigned int maxNbI
   if (currentBoundInterval1.valueMax <= minNormGamma1)
   {
 
-    //cerr << " FAILURE -- currentBoundInterval1.valueMax <= minNormGamma1 " << currentBoundInterval1.valueMax <<" <= " << minNormGamma1 << endl ;
+    ODEBUG2(" FAILURE -- currentBoundInterval1.valueMax <= minNormGamma1 " 
+	    << currentBoundInterval1.valueMax << " <= " << minNormGamma1);
 
     return KD_ERROR;
   }
@@ -623,14 +630,13 @@ ktStatus CflicBoundManagerDefParam::buildBoundLists()
   TflicBoundInterval boundIntervalGamma1, boundIntervalGamma2, boundIntervalCurvature;
 
 
-  maxDistBetweenLowerAndUpperBound = sqrt(pow(flatEndCfg.xp-flatStartCfg.xp, 2.0) + pow(flatEndCfg.yp-flatStartCfg.yp, 2.0))/20;
+  maxDistBetweenLowerAndUpperBound = sqrt(pow(attFlatEndCfg.xp-attFlatStartCfg.xp, 2.0) + pow(attFlatEndCfg.yp-attFlatStartCfg.yp, 2.0))/20;
   minNormGamma1 = 2*maxDistBetweenLowerAndUpperBound;
 
   if (maxDistBetweenLowerAndUpperBound < 10e-8)
   {
 
-    //debug
-    //cerr << " FAILURE  ---  maxDistBetweenLowerAndUpperBound < 10e-8 : " << maxDistBetweenLowerAndUpperBound << endl ;
+    ODEBUG2(" FAILURE  ---  maxDistBetweenLowerAndUpperBound < 10e-8 : " << maxDistBetweenLowerAndUpperBound);
 
     return KD_ERROR;
   }
@@ -650,10 +656,7 @@ ktStatus CflicBoundManagerDefParam::buildBoundLists()
   boundIntervalCurvature.valueMax = 0;
   boundIntervalCurvature.valueMin = 0;
 
-#if DEBUG_OUTPUT
-  std::cerr << "attMaxCurvature=" << attMaxCurvature << std::endl;
-#endif
-
+  ODEBUG2(" attMaxCurvature=" << attMaxCurvature);
   status = recursiveBuildBoundLists(1, boundIntervalGamma1, boundIntervalGamma2,
 				    boundIntervalCurvature);
 
@@ -668,19 +671,19 @@ double CflicBoundManagerDefParam::computeUpperBoundGamma3()
 {
   double maxGamma3;
 
-  double tau1 = flatStartCfg.tau ;
-  double tau2 = flatEndCfg.tau ;
-  double kap1 = flatStartCfg.kappa ;
-  double kap2 = flatEndCfg.kappa ;
+  double tau1 = attFlatStartCfg.tau ;
+  double tau2 = attFlatEndCfg.tau ;
+  double kap1 = attFlatStartCfg.kappa ;
+  double kap2 = attFlatEndCfg.kappa ;
   double tauB2 = tau2 - kap2*fabs(attFlatV2) ;
 
   // ||Gamma2(0)-Gamma1(0)||
   double tabDeriv[6] ;
-  CflicManager::flatGamma(&flatEndCfg, -attFlatV2, 2, tabDeriv ) ;
-  double normeGamma0 = sqrt(pow(tabDeriv[0]-flatStartCfg.xp, 2.0)+pow(tabDeriv[1]-flatStartCfg.yp,2.0)) ;
+  CflicManager::flatGamma(&attFlatEndCfg, -attFlatV2, 2, tabDeriv ) ;
+  double normeGamma0 = sqrt(pow(tabDeriv[0]-attFlatStartCfg.xp, 2.0)+pow(tabDeriv[1]-attFlatStartCfg.yp,2.0)) ;
 
   // debug
-  //cout << "tau1 : " << tau1 << " tau2 : " << tau2 <<" kap1 : " << kap1 <<" kap2 : " << kap2 <<" tauB2 : " << tauB2 << " normeGamma0 : " << normeGamma0 << endl ;
+  //cout << "tau1 : " << tau1 << " tau2 : " << tau2 <<" kap1 : " << kap1 <<" kap2 : " << kap2 <<" tauB2 : " << tauB2 << " normeGamma0 : " << normeGamma0 << std::endl ;
   //-----------------------------
 
   maxGamma3 =	fabs(pow(kap1,2)*pow(attFlatV2,3)) +
@@ -699,7 +702,7 @@ double CflicBoundManagerDefParam::computeValueGamma2(double u)
 
   double tabDeriv[6] ;
 
-  CflicManager::flatCombination(&flatStartCfg, &flatEndCfg, u, attFlatV2, 2, tabDeriv) ;
+  CflicManager::flatCombination(&attFlatStartCfg, &attFlatEndCfg, u, attFlatV2, 2, tabDeriv) ;
 
   return sqrt(pow(tabDeriv[4], 2)  + pow(tabDeriv[5], 2))  ;
 
@@ -712,7 +715,7 @@ double CflicBoundManagerDefParam::computeValueGamma1(double u)
 
   double tabDeriv[6] ;
 
-  CflicManager::flatCombination(&flatStartCfg, &flatEndCfg, u, attFlatV2, 2, tabDeriv) ;
+  CflicManager::flatCombination(&attFlatStartCfg, &attFlatEndCfg, u, attFlatV2, 2, tabDeriv) ;
 
   return sqrt(pow(tabDeriv[2], 2)  + pow(tabDeriv[3], 2))  ;
 
@@ -992,8 +995,7 @@ ktStatus CflicBoundManagerArcLengthParam::buildBoundVectors(CflicDirectPathShPtr
     if (inDirectPath->gammaDeriv1and2(uMin, xDgammaOverDu, yDgammaOverDu,
                                       xD2gammaOverDu2,yD2gammaOverDu2) != KD_OK)
     {
-      cerr << "CflicBoundManagerArcLengthParam::buildBoundVectors: unable to compute gamma derivatives"
-      << endl;
+      ODEBUG1(":CflicBoundManagerArcLengthParam::buildBoundVectors: unable to compute gamma derivatives");
       return KD_ERROR;
     }
     // First and second derivatives of u wrt s at sMin.
@@ -1022,8 +1024,7 @@ ktStatus CflicBoundManagerArcLengthParam::buildBoundVectors(CflicDirectPathShPtr
     if (inDirectPath->gammaDeriv1and2(uMax, xDgammaOverDu, yDgammaOverDu,
                                       xD2gammaOverDu2,yD2gammaOverDu2) != KD_OK)
     {
-      cerr << "CflicBoundManagerArcLengthParam::buildBoundVectors: unable to compute gamma derivatives"
-      << endl;
+      ODEBUG2(":CflicBoundManagerArcLengthParam::buildBoundVectors: unable to compute gamma derivatives");
       return KD_ERROR;
     }
     // First and second derivatives of u wrt s at sMax.
@@ -1132,10 +1133,10 @@ void CflicBoundManagerArcLengthParam::getBoundsOnInterval(const std::vector<Tfli
 CflicDirectPath::~CflicDirectPath()
 {
   //------debug
-  //cout << "flat DP destructor de x1= " << flatStartCfg.xp << " \ty1= " <<  flatStartCfg.yp  <<" \tT1= " <<  flatStartCfg.tau
-  //     <<" \tK1= " <<  flatStartCfg.kappa  << endl
-  //     << "\t\tA x2= " <<flatEndCfg.xp << " \ty2= " <<  flatEndCfg.yp<< " \tT2= "
-  //     <<  flatEndCfg.tau << " \tK2= " <<  flatEndCfg.kappa<< endl << endl ;
+  //cout << "flat DP destructor de x1= " << attFlatStartCfg.xp << " \ty1= " <<  attFlatStartCfg.yp  <<" \tT1= " <<  attFlatStartCfg.tau
+  //     <<" \tK1= " <<  attFlatStartCfg.kappa  << std::endl
+  //     << "\t\tA x2= " <<attFlatEndCfg.xp << " \ty2= " <<  attFlatEndCfg.yp<< " \tT2= "
+  //     <<  attFlatEndCfg.tau << " \tK2= " <<  attFlatEndCfg.kappa<< std::endl << std::endl ;
   //--------------------------------------
 }
 
@@ -1195,17 +1196,10 @@ CflicDirectPathShPtr CflicDirectPath::create(const CkwsConfig &inStartCfg,
 
   if (!pathShPtr)
   {
-    //cerr << " \\\\ CflicDirectPath::create failed //// " << endl ;
-    //cerr << "init : " << inStartCfg << endl;
-    //cerr << "end : "  << inEndCfg << endl ;
+    ODEBUG2(":create failed") ;
   }
   else
   {
-    // debug
-    // cout << "================= CflicDirectPath::create succeeded ===============================" << endl;
-    // cout << "init : " << inStartCfg << endl;
-    // cout << "end : "  << inEndCfg << endl ;
-    // -----------
   }
 
   return pathShPtr ;
@@ -1234,7 +1228,8 @@ CflicDirectPathShPtr CflicDirectPath::createCopy(const CflicDirectPathConstShPtr
     }
     else
     {
-      cerr << "CflicDirectPath::createCopy: attBoundManagerDefParam does not exist in the copied direct path." << endl;
+      ODEBUG1(":createCopy: attBoundManagerDefParam does not exist in the copied direct path.");
+      return CflicDirectPathShPtr();
     }
 
     if (inFlicDirectPath->attArcLengthManager)
@@ -1243,7 +1238,8 @@ CflicDirectPathShPtr CflicDirectPath::createCopy(const CflicDirectPathConstShPtr
     }
     else
     {
-      cerr << "CflicDirectPath::createCopy: attArcLengthManager does not exist in the copied direct path." << endl;
+      ODEBUG1(":createCopy: attArcLengthManager does not exist in the copied direct path.");
+      return CflicDirectPathShPtr();
     }
 
     if (inFlicDirectPath->attBoundManagerArcLengthParam)
@@ -1252,7 +1248,8 @@ CflicDirectPathShPtr CflicDirectPath::createCopy(const CflicDirectPathConstShPtr
     }
     else
     {
-      cerr << "CflicDirectPath::createCopy: attBoundManagerArcLengthParam does not exist in the copied direct path." << endl;
+      ODEBUG1(":createCopy: attBoundManagerArcLengthParam does not exist in the copied direct path.");
+      return CflicDirectPathShPtr();
     }
 
     return pathShPtr;
@@ -1283,44 +1280,31 @@ CflicDirectPath::CflicDirectPath(const CkwsConfig &inStartCfg, const CkwsConfig 
     CkwsPlusDirectPath(inStartCfg, inEndCfg, inSteeringMethod)
 {
   //configuration convertion
-  flatStartCfg.kappa = inStartCfg.dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  flatStartCfg.xp = inStartCfg.dofValue(X_COORD) ;  // x
-  flatStartCfg.yp = inStartCfg.dofValue(Y_COORD) ;  // y
-  flatStartCfg.tau = inStartCfg.dofValue(RZ_COORD) ; // theta
+  attFlatStartCfg.kappa = inStartCfg.dofValue(CURV_COORD) ; //Kappa (dof fictif)
+  attFlatStartCfg.xp = inStartCfg.dofValue(X_COORD) ;  // x
+  attFlatStartCfg.yp = inStartCfg.dofValue(Y_COORD) ;  // y
+  attFlatStartCfg.tau = inStartCfg.dofValue(RZ_COORD) ; // theta
 
-  flatEndCfg.kappa = inEndCfg.dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  flatEndCfg.xp = inEndCfg.dofValue(X_COORD) ;  // x
-  flatEndCfg.yp = inEndCfg.dofValue(Y_COORD) ;  // y
-  flatEndCfg.tau = inEndCfg.dofValue(RZ_COORD) ; // theta
+  attFlatEndCfg.kappa = inEndCfg.dofValue(CURV_COORD) ; //Kappa (dof fictif)
+  attFlatEndCfg.xp = inEndCfg.dofValue(X_COORD) ;  // x
+  attFlatEndCfg.yp = inEndCfg.dofValue(Y_COORD) ;  // y
+  attFlatEndCfg.tau = inEndCfg.dofValue(RZ_COORD) ; // theta
 
-  attFlatV2 = computeFlatV2(&flatStartCfg, &flatEndCfg);
+  attFlatV2 = computeFlatV2(&attFlatStartCfg, &attFlatEndCfg);
   attMaxCurvature = max(fabs(inStartCfg.device()->dof(CURV_COORD)->vmin()),
 			fabs(inStartCfg.device()->dof(CURV_COORD)->vmax()));
 
-  // debug
-  //cout << "Constructor by configurations" << endl;
-  // ---------------------
 }
 
-CflicDirectPath::CflicDirectPath(const CflicDirectPath &inDirectPath):CkwsPlusDirectPath(inDirectPath)
+CflicDirectPath::CflicDirectPath(const CflicDirectPath &inDirectPath) :
+  CkwsPlusDirectPath(inDirectPath), 
+  attFlatV2(inDirectPath.attFlatV2),
+  attFlatStartCfg(inDirectPath.attFlatStartCfg),
+  attFlatEndCfg(inDirectPath.attFlatEndCfg),
+  attMaxCurvature(inDirectPath.attMaxCurvature)
+
 {
-  //configuration convertion
-  flatStartCfg.kappa = privateStart().dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  flatStartCfg.xp = privateStart().dofValue(X_COORD) ;  // x
-  flatStartCfg.yp = privateStart().dofValue(Y_COORD) ;  // y
-  flatStartCfg.tau = privateStart().dofValue(RZ_COORD) ; // theta
-
-  flatEndCfg.kappa = privateEnd().dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  flatEndCfg.xp = privateEnd().dofValue(X_COORD) ;  // x
-  flatEndCfg.yp = privateEnd().dofValue(Y_COORD) ;  // y
-  flatEndCfg.tau = privateEnd().dofValue(RZ_COORD) ; // theta
-
-  attFlatV2 = inDirectPath.flatV2();
-  attMaxCurvature = inDirectPath.attMaxCurvature;
-
-  // debug
-  // cout << "Copy constructor" << endl;
-  // ------------------------
+  ODEBUG2(" copy constructor");
 }
 
 // =========================================================================================
@@ -1328,7 +1312,7 @@ CflicDirectPath::CflicDirectPath(const CflicDirectPath &inDirectPath):CkwsPlusDi
 ktStatus CflicDirectPath::init(const CflicDirectPathWkPtr &inWeakPtr)
 {
 
-  ktStatus success = CkwsDirectPath::init(inWeakPtr) ;
+  ktStatus success = CkwsPlusDirectPath::init(inWeakPtr) ;
 
   if (KD_OK == success) m_weakPtr = inWeakPtr;
 
@@ -1341,7 +1325,7 @@ ktStatus CflicDirectPath::init(const CflicDirectPathWkPtr &inWeakPtr)
 ktStatus CflicDirectPath::init(const CflicDirectPathWkPtr &inWeakPtr, bool inOriented)
 {
 
-  ktStatus success = CkwsDirectPath::init(inWeakPtr) ;
+  ktStatus success = CkwsPlusDirectPath::init(inWeakPtr) ;
 
   if (inOriented && attFlatV2 <= 0)
   {
@@ -1358,11 +1342,6 @@ ktStatus CflicDirectPath::init(const CflicDirectPathWkPtr &inWeakPtr, bool inOri
 
 double CflicDirectPath::computePrivateLength()const
 {
-
-  //debug
-  //cout << "enter in computePrivateLength " << endl ;
-  //------------------------
-  
   return attArcLengthManager->attArcLength;
 }
 
@@ -1374,9 +1353,6 @@ void CflicDirectPath::interpolateDefaultParam(double u, CkwsConfig & outCfg) con
   KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
   KWS_PRECONDITION( privateStart().size() == outCfg.size() );
 
-#if 0
-  double theta, K;
-#endif
   int deriv_order = 2 ;
   double Tab_gamma[6] ;
   TflatConfig f1, f2 ;
@@ -1434,7 +1410,7 @@ void CflicDirectPath::interpolate(double s, CkwsConfig & outCfg) const
 void CflicDirectPath::maxAbsoluteDerivDefaultParam(double inFrom, double inTo, std::vector<double> & outVectorDeriv) const
 {
   //debug
-  //cout << " - MAX ABSOLUTE DERIVATE - " << endl ;
+  //cout << " - MAX ABSOLUTE DERIVATE - " << std::endl ;
   //-----------------------------------------
 
   KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
@@ -1451,7 +1427,7 @@ void CflicDirectPath::maxAbsoluteDerivDefaultParam(double inFrom, double inTo, s
 
   //debug
   // cout << "De " <<  inFrom << " a " << inTo << " maxDerivX : " << max1 << "\t maxDerivY : " << max1
-  //<< "\t maxDerivT : " << max2/mini1 << " \tmax2 :" << max2 << " \tmini 1 :" << mini1  << endl ;
+  //<< "\t maxDerivT : " << max2/mini1 << " \tmax2 :" << max2 << " \tmini 1 :" << mini1  << std::endl ;
   //-------------------------------------------------
 
   outVectorDeriv[0] = max3/pow(mini1,2) + 3*max2/pow(mini1,3); // kappa
@@ -1460,7 +1436,7 @@ void CflicDirectPath::maxAbsoluteDerivDefaultParam(double inFrom, double inTo, s
   outVectorDeriv[3] = max2/mini1 ; // theta
 
   //debug
-  //cout << " - MAX ABSOLUTE DERIVATE - " << endl ;
+  //cout << " - MAX ABSOLUTE DERIVATE - " << std::endl ;
   //------------------------------
 
 }

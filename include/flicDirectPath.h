@@ -819,17 +819,17 @@ class CflicDirectPath : public CkwsPlusDirectPath {
   // weak pointer to itself
   CflicDirectPathWkPtr m_weakPtr ; 
   /**
-     \brief Curvilinear abscissa of projection of flatEndCfg on canonical curve relative to flatStartCfg.
+     \brief Curvilinear abscissa of projection of attFlatEndCfg on canonical curve relative to attFlatStartCfg.
   */
   double attFlatV2;
   /**
      \brief Flat configuration corresponding to startCfg
   */
-  TflatConfig flatStartCfg;
+  TflatConfig attFlatStartCfg;
   /**
      \brief Flat configuration corresponding to endCfg
   */
-  TflatConfig flatEndCfg ;
+  TflatConfig attFlatEndCfg ;
 
   /**
      \brief Maximal curvature allowed along the path.
@@ -957,13 +957,13 @@ class CflicBoundManagerDefParam {
   /**
      \brief Flat configuration corresponding to startCfg
   */
-  CflicDirectPath::TflatConfig flatStartCfg;
+  CflicDirectPath::TflatConfig attFlatStartCfg;
   /**
      \brief Flat configuration corresponding to endCfg
   */
-  CflicDirectPath::TflatConfig flatEndCfg ;
+  CflicDirectPath::TflatConfig attFlatEndCfg ;
   /**
-     \brief Curvilinear abscissa of projection of flatEndCfg on canonical curve relative to flatStartCfg.
+     \brief Curvilinear abscissa of projection of attFlatEndCfg on canonical curve relative to attFlatStartCfg.
   */
   double attFlatV2;
  

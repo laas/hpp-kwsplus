@@ -9,19 +9,23 @@ noinst_PROGRAMS = \
 	testFlicMaxDeriv 	\
 	testFlicBoundObj 	\
 	testFlicStraightLine 	\
-	testFlicApproximateDistance 
+	testFlicApproximateDistance \
+	testFlicCopyAndExtract
 
 license: clean-license 			\
 	testFlicMaxDeriv.kab 		\
 	testFlicBoundObj.kab 		\
 	testFlicStraightLine.kab	\
-	testFlicApproximateDistance.kab
+	testFlicApproximateDistance.kab \
+	testFlicCopyAndExtract.kab
 
 clean-license: 
 	rm -rf bintestFlicMaxDeriv
 	rm -rf bintestFlicBoundObj
 	rm -rf bintestFlicStraightLine
 	rm -rf bintestFlicApproximateDistance
+	rm -rf bintestFlicCopyAndExtract
+
 #
 #   Test method maxAbsoluteDerivative of CflicDirectPath
 #
@@ -67,9 +71,20 @@ testFlicApproximateDistance_SOURCES = \
 testFlicApproximateDistance_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
 testFlicApproximateDistance_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
 
+#
+#  Test copy extraction and reversion of CflicDirectPath
+#
+testFlicCopyAndExtract_SOURCES = \
+	testFlicDirectPath.cpp \
+	testFlicCopyAndExtract.cpp
 
-%.kab: 	mkdir -p bin$<
-	cp $< bin$<
-	cd bin$<; LD_LIBRARY_PATH=@KINEO_LIBDIR@  @KINEO_ADDON_BUILD@ -a ./$< 
-	rm -f $<
+testFlicCopyAndExtract_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
+testFlicCopyAndExtract_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
+
+
+%.kab:
+	mkdir -p bin$*
+	cp $* bin$*
+	cd bin$*; LD_LIBRARY_PATH=@KINEO_LIBDIR@  @KINEO_ADDON_BUILD@ -a ./$*
+	rm -f $*
 

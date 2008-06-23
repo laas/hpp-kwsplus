@@ -1,4 +1,9 @@
+2008/06/23
+	
+	42. Fixed a bug in copy constructor of CflicDirectPath.
+	
 2008/06/18
+
 	41. Fix some bugs in Local Trees.
 	40. Added node and edge classes with additionnal informations.
 	39. Added template builder and shooter that sends additionnal
