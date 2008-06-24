@@ -121,6 +121,10 @@ ktStatus ChppVisRdmBuilder::buildOneStep()
       addVisibilityNode(node);
     }
   }
+  else {
+    ODEBUG1("::buildOneStep: failed to shoot a configuration.");
+    return KD_ERROR;
+  }
   return KD_OK;
 }
 
