@@ -6,6 +6,18 @@
 
 #include "kwsPlusDirectPath.h"
 
+// Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
+#if DEBUG==2
+#define ODEBUG2(x) std::cout << "CkwsPlusDirectPath:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CkwsPlusDirectPath:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG2(x)
+#define ODEBUG1(x) std::cerr << "CkwsPlusDirectPath:" << x << std::endl
+#else
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
+
 CkwsPlusDirectPath::CkwsPlusDirectPath(const CkwsConfig& inStartConfig, 
 				       const CkwsConfig& inEndConfig,
 				       const CkwsSteeringMethodShPtr& inSteeringMethod) :
@@ -32,7 +44,10 @@ ktStatus CkwsPlusDirectPath::init(const CkwsPlusDirectPathWkPtr& inWeakPtr)
 {
   ktStatus success = CkwsDirectPath::init(inWeakPtr) ;
 
-  attUend = privateLength();
+  /* Compute uEnd only if new direct path is not a copy. */
+  if (attUend == 0) {
+    attUend = privateLength();
+  }
   return success;
 }
 
@@ -96,4 +111,33 @@ ktStatus CkwsPlusDirectPath::reverse()
   }
   attReverse = !attReverse;
   return KD_OK;
+}
+
+ktStatus CkwsPlusDirectPath::getVelocityAtDistance(double inParameter, std::vector<double>& outVelocity)
+{
+  double param;
+  if (attReverse) {
+    param = attUend - inParameter;
+    if (getVelocityAtDistanceAtConstruction(param, outVelocity) != KD_OK) {
+      return KD_ERROR;
+    }
+
+    for (unsigned int i=0; i<outVelocity.size(); i++) {
+      outVelocity[i] *= -1;
+    }
+  }
+  else {
+    param = inParameter + attUstart;
+    if (getVelocityAtDistanceAtConstruction(param, outVelocity) != KD_OK) {
+      return KD_ERROR;
+    }
+  }
+  return KD_OK;
+}
+
+ktStatus CkwsPlusDirectPath::getVelocityAtDistanceAtConstruction(double inDistance, 
+								 std::vector<double>& outVelocity)
+{
+  ODEBUG1(":getVelocityAtDistanceAtConstruction not implemented yet.");
+  return KD_ERROR;
 }

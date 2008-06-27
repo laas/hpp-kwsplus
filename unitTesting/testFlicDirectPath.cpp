@@ -448,18 +448,6 @@ ktStatus CtestFlicDirectPath::testDirectPathDeriv(unsigned int inNbRndDirectPath
     initConfig.randomize();
     goalConfig.randomize();
 
-#if 0
-    initConfig.dofValue(0, -1.4963982144819565);
-    initConfig.dofValue(1, 3.7333981663609839);
-    initConfig.dofValue(2, 9.129365058210384);
-    initConfig.dofValue(6, 0.55694238250508155);
-
-    goalConfig.dofValue(0, 1.5730403953106331);
-    goalConfig.dofValue(1, 7.1735265185933228);
-    goalConfig.dofValue(2, -1.2088016100268817);
-    goalConfig.dofValue(6, 2.6638807483490066);
-#endif
-
     // Build direct path in between.
     kwsDirectPath = KIT_DYNAMIC_PTR_CAST(CkwsPlusDirectPath, 
 					 steeringMethod()->makeDirectPath(initConfig, goalConfig));

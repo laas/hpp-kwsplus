@@ -1,3 +1,8 @@
+2008/06/27
+
+	45. Correction of a bug in copy of CkwsPlusDirectPath.
+	44. Added computation of velocity along CflicDirectPath direct path.
+	
 2008/06/24
 
 	43. In hppVisRdmBuilder::buildOneStep, if shooter fails, return KD_ERROR.

@@ -51,9 +51,6 @@ public:
      this attribute is the upper bound of the interval.
   */
   const double& uEnd() const {return attUend;};
-  /**
-     @}
-  */
 
   /**
      \brief Reimplementation from CkwsDirectPath in order to keep track of the extracted interval.
@@ -71,7 +68,27 @@ public:
   */
   virtual ktStatus reverse();
 
+  /**
+     @}
+  */
 
+  /**
+     \name Velocity 
+     @{
+  */
+  /**
+     \brief Compute derivative of configuration along direct path
+
+     \param inParameter parameter along direct path
+     \retval outVelocity derivative of each degree of freedom along direct path.
+
+     Derivative is computed with respect to length parameterization.
+  */
+  ktStatus getVelocityAtDistance(double inParameter, std::vector<double>& outVelocity);
+
+  /**
+     @}
+  */
 protected:
   /**
      \brief Constructor by end configuration and steering method.
@@ -108,6 +125,17 @@ protected:
   */
   virtual void maxAbsoluteDerivative(double inFrom, double inTo, std::vector<double> &outVectorDeriv) const = 0;
 
+  /**
+     \brief Compute the velocity before extraction and reversion
+
+     \param inDistance Distance along the path
+     \retval outVelocity Derivative of the path with respect to distance parameter.
+     \return KD_OK | KD_ERROR
+
+  */
+  virtual ktStatus getVelocityAtDistanceAtConstruction(double inDistance, std::vector<double>& outVelocity);
+
+private:
   /**
      \brief Beginning of extracted interval.
      A new path can be created by restriction to an interval. If this path comes from such a restriction,

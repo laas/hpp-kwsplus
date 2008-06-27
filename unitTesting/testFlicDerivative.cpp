@@ -21,7 +21,7 @@ int main(int argc, char** argv)
     return -1;
   }
 #else
-  if (testFlicDirectPath.testDirectPathDeriv(10, 10) != KD_OK) {
+  if (testFlicDirectPath.testDirectPathDeriv(100, 10) != KD_OK) {
     return -1;
   }
 #endif
