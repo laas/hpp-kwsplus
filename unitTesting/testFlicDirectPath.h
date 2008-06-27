@@ -81,6 +81,21 @@ public:
   */
   ktStatus testApproximateLength(unsigned int nbRndDirectPath);
 
+  /**
+     \brief Test velocities computed by CkwsPlusDirectPath::getVelocityAtDistance
+
+     \param inNbRndDirectPath number of random direct paths created
+     \param inNbSamplePoints number of sample points where velocity is tested
+
+     Generate random direct paths. For each of them:
+     \li compute velocity along the interval of definition and compare with finite-difference,
+     \li extract a sub-direct path and perform above test again,
+     \li reverse direct path and perform test again.
+  */
+
+  ktStatus testDirectPathDeriv(unsigned int inNbRndDirectPath,
+			       unsigned int inNbSamplePoints);
+
 private:
   /**
      \brief Approximate distance between config
@@ -106,6 +121,14 @@ private:
   */
   ktStatus createFlicDistance();
 
+  /**
+     \brief Compares velocity returned by getVelocityAtDistance and computed by finite-difference
+
+     \param inDirectPath direct path to test
+     \param inNbSamplePoints number of sample points where velocity is tested
+  */
+  ktStatus compareVelocityWithFiniteDif(const CkwsPlusDirectPathShPtr& inDirectPath,
+					unsigned int inNbSamplePoints);
 };
 
 

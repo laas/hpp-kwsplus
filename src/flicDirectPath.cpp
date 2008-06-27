@@ -767,6 +767,15 @@ double CflicArcLengthManager::defaultParam(double arcLength)
   return defaultParam;
 }
 
+// ==============================================================================
+
+
+double CflicArcLengthManager::defaultParamDeriv(double arcLength)
+{
+  double defaultParam = attArcLengthToDefault.valueDeriv(arcLength);
+  return defaultParam;
+}
+
 /*****************************************
  PRIVATE METHODS
 *****************************************/
@@ -1355,22 +1364,9 @@ void CflicDirectPath::interpolateDefaultParam(double u, CkwsConfig & outCfg) con
 
   int deriv_order = 2 ;
   double Tab_gamma[6] ;
-  TflatConfig f1, f2 ;
-
-  f1.kappa = privateStart().dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  f1.xp = privateStart().dofValue(X_COORD) ;  // x
-  f1.yp = privateStart().dofValue(Y_COORD) ;  // y
-  f1.tau = privateStart().dofValue(RZ_COORD) ; // theta
-
-
-  f2.kappa = privateEnd().dofValue(CURV_COORD) ; // Kappa (dof fictif)
-  f2.xp = privateEnd().dofValue(X_COORD) ; //  x
-  f2.yp = privateEnd().dofValue(Y_COORD) ; //  y
-  f2.tau = privateEnd().dofValue(RZ_COORD); // theta
-
 
   // compute the Tflatconfiguration corresponding to the i
-  CflicManager::flatCombination(&f1, &f2, u, attFlatV2, deriv_order, Tab_gamma) ;
+  CflicManager::flatCombination(&attFlatStartCfg, &attFlatEndCfg, u, attFlatV2, deriv_order, Tab_gamma) ;
 
   int forward = (attFlatV2 > 0 ? true : false);
   TflatConfig flatConfig;
@@ -1443,6 +1439,44 @@ void CflicDirectPath::maxAbsoluteDerivDefaultParam(double inFrom, double inTo, s
 
 // ==========================================================================================
 
+ktStatus CflicDirectPath::getVelocityAtDistanceAtConstruction(double inDistance, 
+							      std::vector<double>& outVelocity)
+{
+  KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
+  KWS_PRECONDITION( privateStart().size() == outVelocity.size() );
+
+  CkwsConfig config(device());
+  double u = attArcLengthManager->defaultParam(inDistance);
+  double duOverDs = attArcLengthManager->defaultParamDeriv(inDistance);
+
+  int orderDeriv = 3 ;
+  double derivArray[8] ;
+
+  // compute the Tflatconfiguration corresponding to the i
+  CflicManager::flatCombination(&attFlatStartCfg, &attFlatEndCfg, u, attFlatV2, orderDeriv, derivArray) ;
+
+  int forward = (attFlatV2 > 0 ? true : false);
+
+  double x1 = derivArray[2];
+  double y1 = derivArray[3];
+  double x2 = derivArray[4];
+  double y2 = derivArray[5];
+  double x3 = derivArray[6];
+  double y3 = derivArray[7];
+
+  outVelocity[X_COORD] = x1*duOverDs;
+  outVelocity[Y_COORD] = y1*duOverDs;
+  outVelocity[RZ_COORD] = ((x1*y2-x2*y1)/(x1*x1+y1*y1))*duOverDs;
+  int sign = forward ? 1 : -1;
+  outVelocity[CURV_COORD] = 
+    sign*((x1*y3-y1*x3)/pow(x1*x1+y1*y1, 1.5)-3*(x1*y2-y1*x2)*(x1*x2+y1*y2)/pow(x1*x1+y1*y1,2.5))*duOverDs;
+
+  return KD_OK;
+}
+
+
+// ==========================================================================================
+
 void CflicDirectPath::maxAbsoluteDerivative(double inFrom, double inTo, std::vector<double> & outVectorDeriv) const
 {
   KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
@@ -1478,24 +1512,11 @@ double CflicDirectPath::normGammaDeriv1(double u)
   double v2;
   int deriv_order = 2 ;
   double Tab_gamma[6] ;
-  TflatConfig f1, f2 ;
   double normDeriv;
-
-  f1.kappa = privateStart().dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  f1.xp = privateStart().dofValue(X_COORD) ;  // x
-  f1.yp = privateStart().dofValue(Y_COORD) ;  // y
-  f1.tau = privateStart().dofValue(RZ_COORD) ; // theta
-
-
-  f2.kappa = privateEnd().dofValue(CURV_COORD) ; // Kappa (dof fictif)
-  f2.xp = privateEnd().dofValue(X_COORD) ; //  x
-  f2.yp = privateEnd().dofValue(Y_COORD) ; //  y
-  f2.tau = privateEnd().dofValue(RZ_COORD); // theta
-
 
   // compute the Tflatconfiguration corresponding to the i
   v2 = attFlatV2;
-  CflicManager::flatCombination(&f1, &f2, u, attFlatV2, deriv_order, Tab_gamma) ;
+  CflicManager::flatCombination(&attFlatStartCfg, &attFlatEndCfg, u, attFlatV2, deriv_order, Tab_gamma) ;
 
   normDeriv = sqrt(pow(Tab_gamma[2],2.0) + pow(Tab_gamma[3],2.0));
 
@@ -1510,22 +1531,9 @@ ktStatus CflicDirectPath::gammaDeriv1and2(double u, double& xGamma_1, double& yG
 {
   int deriv_order = 2 ;
   double Tab_gamma[6] ;
-  TflatConfig f1, f2 ;
-
-  f1.kappa = privateStart().dofValue(CURV_COORD) ; //Kappa (dof fictif)
-  f1.xp = privateStart().dofValue(X_COORD) ;  // x
-  f1.yp = privateStart().dofValue(Y_COORD) ;  // y
-  f1.tau = privateStart().dofValue(RZ_COORD) ; // theta
-
-
-  f2.kappa = privateEnd().dofValue(CURV_COORD) ; // Kappa (dof fictif)
-  f2.xp = privateEnd().dofValue(X_COORD) ; //  x
-  f2.yp = privateEnd().dofValue(Y_COORD) ; //  y
-  f2.tau = privateEnd().dofValue(RZ_COORD); // theta
-
 
   // compute the Tflatconfiguration corresponding to the i
-  CflicManager::flatCombination(&f1, &f2, u, attFlatV2, deriv_order, Tab_gamma) ;
+  CflicManager::flatCombination(&attFlatStartCfg, &attFlatEndCfg, u, attFlatV2, deriv_order, Tab_gamma) ;
 
   xGamma_1 = Tab_gamma[2];
   yGamma_1 = Tab_gamma[3];

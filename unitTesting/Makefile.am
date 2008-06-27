@@ -10,14 +10,16 @@ noinst_PROGRAMS = \
 	testFlicBoundObj 	\
 	testFlicStraightLine 	\
 	testFlicApproximateDistance \
-	testFlicCopyAndExtract
+	testFlicCopyAndExtract \
+	testFlicDerivative
 
 license: clean-license 			\
 	testFlicMaxDeriv.kab 		\
 	testFlicBoundObj.kab 		\
 	testFlicStraightLine.kab	\
 	testFlicApproximateDistance.kab \
-	testFlicCopyAndExtract.kab
+	testFlicCopyAndExtract.kab \
+	testFlicDerivative.kab
 
 clean-license: 
 	rm -rf bintestFlicMaxDeriv
@@ -25,6 +27,7 @@ clean-license:
 	rm -rf bintestFlicStraightLine
 	rm -rf bintestFlicApproximateDistance
 	rm -rf bintestFlicCopyAndExtract
+	rm -rf bintestFlicDerivative
 
 #
 #   Test method maxAbsoluteDerivative of CflicDirectPath
@@ -80,6 +83,17 @@ testFlicCopyAndExtract_SOURCES = \
 
 testFlicCopyAndExtract_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
 testFlicCopyAndExtract_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
+
+#
+#  Test derivative along CflicDirectPath
+#
+
+testFlicDerivative_SOURCES = \
+	testFlicDirectPath.cpp \
+	testFlicDerivative.cpp
+
+testFlicDerivative_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
+testFlicDerivative_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
 
 
 %.kab:

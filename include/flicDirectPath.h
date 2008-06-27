@@ -127,9 +127,6 @@ CONSTANTE
 /// \brief define to compute integral
 #define NEAR_ZERO 0.00000001
 
-/// \brief Maximal order of derivation in combination function
-#define MAX_DERIV_ORDER_IN_COMBINATION   2
-
 /// \brief the Epsilon between 2 scales
 #define EPSILONINTER 0.01
 
@@ -440,10 +437,16 @@ public:
       \brief Defaut destructor
   */
   ~CflicArcLengthManager() { /* debug cout << "CflicArcLengthManager destructor" << endl; */ };
+
   /**
      \brief Return the value of the default parameter corresponding to given  \f$ \gamma \f$  arc length.
   */
   double defaultParam(double arcLength);
+
+  /**
+     \brief Return the value of the derivative of the default parameter corresponding to given  \f$ \gamma \f$  arc length.
+  */
+  double defaultParamDeriv(double arcLength);
 
   /**
      \brief Const iterator over degree 3 polynomials defining mapping from arc length to default parameters: first element.
@@ -770,6 +773,16 @@ class CflicDirectPath : public CkwsPlusDirectPath {
   void maxAbsoluteDerivDefaultParam(double inFrom, double inTo, 
 				    std::vector< double > & outVectorDeriv) const ;
 
+
+  /**
+     \brief Compute the velocity before extraction and reversion
+
+     \param inDistance Distance along the path
+     \retval outVelocity Derivative of the path with respect to distance parameter.
+     \return KD_OK | KD_ERROR
+
+  */
+  virtual ktStatus getVelocityAtDistanceAtConstruction(double inDistance, std::vector<double>& outVelocity);
 
  private:
   /**

@@ -5,10 +5,13 @@
 
 #include "flicManager.h"
 
+/// \brief Maximal order of derivation in combination function
+#define MAX_DERIV_ORDER_IN_COMBINATION   5
+
 
 // =========================================================================================
 
-void CflicManager::flatGamma(CflicDirectPath::TflatConfig *fconf, double s, double deriv_order, double *Tab_gamma)
+void CflicManager::flatGamma(const CflicDirectPath::TflatConfig *fconf, double s, double deriv_order, double *Tab_gamma)
 {
 
   double Sin, Cos, teta, kappa;
@@ -118,9 +121,9 @@ void CflicManager::flatAlpha(double u, int deriv_order, double *Tab_alpha)
 
 //=========================================================================================
 
-void CflicManager::flatCombination(CflicDirectPath::TflatConfig *fconf_initPt,
-				  CflicDirectPath::TflatConfig *finalFlatConfPt, double u,
-				  double v2, int deriv_order, double *Tab_gamma)
+void CflicManager::flatCombination(const CflicDirectPath::TflatConfig *fconf_initPt,
+				   const CflicDirectPath::TflatConfig *finalFlatConfPt, double u,
+				   double v2, int deriv_order, double *Tab_gamma)
 {
 
 

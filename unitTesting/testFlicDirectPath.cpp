@@ -22,6 +22,18 @@
 #include "KineoModel/kppFreeFlyerJointComponent.h"
 #include "KineoKCDModel/kppKCDBox.h"
 
+// Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
+#if DEBUG==2
+#define ODEBUG2(x) std::cout << "CtestFlicDirectPath:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CtestFlicDirectPath:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG2(x)
+#define ODEBUG1(x) std::cerr << "CtestFlicDirectPath:" << x << std::endl
+#else
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
+
 /*--------------------------------------------------
  *
  *                P U B L I C    M E T H O D S
@@ -78,12 +90,12 @@ ktStatus CtestFlicDirectPath::plotMappingsAndBoundingStruct(unsigned int nbRndDi
     double minNormGamma1du, minNormGamma1ds;
 
     if (flicDirectPath = boost::dynamic_pointer_cast<CflicDirectPath>(kwsDirectPath)) {
-      plotMappingDefaultToArcLengthParam("/home/florent/robots/hrp2/humPathPlanner/testHpp/plot", flicDirectPath);
-      plotMappingArcLengthToDefaultParam("/home/florent/robots/hrp2/humPathPlanner/testHpp/plot", flicDirectPath);
-      minNormGamma1du = plotBoundsDgammaOverDu("/home/florent/robots/hrp2/humPathPlanner/testHpp/plot", flicDirectPath);
-      minNormGamma1ds = plotBoundsDgammaOverDs("/home/florent/robots/hrp2/humPathPlanner/testHpp/plot", flicDirectPath);
-      plotBoundsD2gammaOverDu2("/home/florent/robots/hrp2/humPathPlanner/testHpp/plot", flicDirectPath);
-      plotBoundsD2gammaOverDs2("/home/florent/robots/hrp2/humPathPlanner/testHpp/plot", flicDirectPath);
+      plotMappingDefaultToArcLengthParam(".", flicDirectPath);
+      plotMappingArcLengthToDefaultParam(".", flicDirectPath);
+      minNormGamma1du = plotBoundsDgammaOverDu(".", flicDirectPath);
+      minNormGamma1ds = plotBoundsDgammaOverDs(".", flicDirectPath);
+      plotBoundsD2gammaOverDu2(".", flicDirectPath);
+      plotBoundsD2gammaOverDs2(".", flicDirectPath);
       
       if (minNormGamma1ds < .5) {
 	cerr << "lowerBound of dgamma/ds = " << minNormGamma1ds << endl;
@@ -415,6 +427,94 @@ ktStatus CtestFlicDirectPath::testApproximateLength(unsigned int nbRndDirectPath
   return KD_OK;
 }
 
+ktStatus CtestFlicDirectPath::testDirectPathDeriv(unsigned int inNbRndDirectPath,
+						  unsigned int inNbSamplePoints)
+{
+  if (!device() || !steeringMethod()) {
+    return KD_ERROR;
+  }
+
+  if (inNbSamplePoints == 0) {
+    return KD_OK;
+  }
+
+  CkwsConfig initConfig(device()), goalConfig(device());
+  CkwsPlusDirectPathShPtr kwsDirectPath;
+  ktStatus success = KD_OK;
+
+  // Loop over random direct paths.
+  for (unsigned int iDP=0; iDP < inNbRndDirectPath; iDP++) {
+    // Pick two random configurations.
+    initConfig.randomize();
+    goalConfig.randomize();
+
+#if 0
+    initConfig.dofValue(0, -1.4963982144819565);
+    initConfig.dofValue(1, 3.7333981663609839);
+    initConfig.dofValue(2, 9.129365058210384);
+    initConfig.dofValue(6, 0.55694238250508155);
+
+    goalConfig.dofValue(0, 1.5730403953106331);
+    goalConfig.dofValue(1, 7.1735265185933228);
+    goalConfig.dofValue(2, -1.2088016100268817);
+    goalConfig.dofValue(6, 2.6638807483490066);
+#endif
+
+    // Build direct path in between.
+    kwsDirectPath = KIT_DYNAMIC_PTR_CAST(CkwsPlusDirectPath, 
+					 steeringMethod()->makeDirectPath(initConfig, goalConfig));
+    if (kwsDirectPath) {
+
+      double pathLength = kwsDirectPath->length();
+      ODEBUG2(":testDirectPathDeriv:");
+      ODEBUG2(":testDirectPathDeriv:");
+      ODEBUG2(":testDirectPathDeriv: creation of direct path succeeded between");
+      ODEBUG2(":testDirectPathDeriv: " << initConfig << " and");
+      ODEBUG2(":testDirectPathDeriv: " << goalConfig);
+      ODEBUG2(":testDirectPathDeriv: length = " << pathLength);
+      ODEBUG2(":testDirectPathDeriv:");
+
+      if (compareVelocityWithFiniteDif(kwsDirectPath, inNbSamplePoints) == KD_ERROR) {
+	success = KD_ERROR;
+      }
+      /*
+	Extract subdirect path and test again
+      */
+
+      ODEBUG1("");
+      ODEBUG1("---------------------Extracting----------------------------------");
+      ODEBUG1("");
+
+      double lowerBound = CkwsUtility::random(0.0, pathLength);
+      double upperBound = CkwsUtility::random(lowerBound, pathLength);
+
+      CkwsAbstractPathShPtr extractPath = 
+	CkwsAbstractPath::createByExtracting(kwsDirectPath, lowerBound, upperBound);
+
+      kwsDirectPath = KIT_DYNAMIC_PTR_CAST(CkwsPlusDirectPath, extractPath);
+
+      if (compareVelocityWithFiniteDif(kwsDirectPath, inNbSamplePoints) == KD_ERROR) {
+	success = KD_ERROR;
+      }
+
+      ODEBUG1("");
+      ODEBUG1("---------------------Reversing----------------------------------");
+      ODEBUG1("");
+
+      CkwsAbstractPathShPtr reversePath =
+	CkwsAbstractPath::createReversed(kwsDirectPath);
+
+      kwsDirectPath = KIT_DYNAMIC_PTR_CAST(CkwsPlusDirectPath, reversePath);
+
+      if (compareVelocityWithFiniteDif(kwsDirectPath, inNbSamplePoints) == KD_ERROR) {
+	success = KD_ERROR;
+      }
+    }
+  }
+  return success;
+}
+
+
 /*--------------------------------------------------
  *
  *                P R I V A T E    M E T H O D S
@@ -514,3 +614,59 @@ ktStatus CtestFlicDirectPath::createFlicDistance()
   return KD_OK;
 }
 
+ktStatus CtestFlicDirectPath::compareVelocityWithFiniteDif(const CkwsPlusDirectPathShPtr& inDirectPath,
+							   unsigned int inNbSamplePoints)
+{
+  double pathLength = inDirectPath->length();
+  ktStatus success = KD_OK;
+  for (unsigned int i=0; i<inNbSamplePoints; i++) {
+    double param0 = i*pathLength/inNbSamplePoints;
+    static double dParam = 1e-6;
+    double param1 = param0 + dParam;
+    CkwsConfig config0(device());
+    CkwsConfig config1(device());
+    
+    std::vector<double> velocity(device()->countDofs());
+    
+    if (inDirectPath->getConfigAtDistance(param0, config0) == KD_ERROR) {
+      ODEBUG1(": failed to get config at distance "
+	      << param0 << ", path length = " << pathLength);
+      return KD_ERROR;
+    }
+    
+    if (inDirectPath->getConfigAtDistance(param1, config1) == KD_ERROR) {
+      ODEBUG1(": failed to get config at distance "
+	      << param1 << ", path length = " << pathLength);
+      return KD_ERROR;
+    }
+    
+    if (inDirectPath->getVelocityAtDistance(param0, velocity) == KD_ERROR) {
+      ODEBUG1(": failed to get velocity at distance "
+	      << param0 << ", path length = " << pathLength);
+      return KD_ERROR;
+    }
+    /*
+      Compare
+    */
+    
+    for (unsigned dofId=0; dofId < device()->countDofs(); dofId++) {
+      double finiteDifDeriv = (config1.dofValue(dofId) - config0.dofValue(dofId))/dParam;
+      double reference = fabs(config1.dofValue(dofId)+config0.dofValue(dofId)) + fabs(finiteDifDeriv);
+      if (fabs(finiteDifDeriv - velocity[dofId]) > 1e-3*(reference)) {
+	ODEBUG1(" wrong derivative:");
+	ODEBUG1(" parameter l = " << param0);
+	ODEBUG1(" dofId = " << dofId);
+	ODEBUG1(" finite diff deriv = " << finiteDifDeriv);
+	ODEBUG1(" velocity(l)["<< dofId << "] = " << velocity[dofId]);
+	success = KD_ERROR;
+      }
+      else {
+	ODEBUG2(" parameter l = " << param0);
+	ODEBUG2(" dofId = " << dofId);
+	ODEBUG2(" finite diff deriv = " << finiteDifDeriv);
+	ODEBUG2(" velocity(l)["<< dofId << "] = " << velocity[dofId]);
+      }
+    }
+  }
+  return success;
+}

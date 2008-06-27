@@ -22,7 +22,7 @@ public:
       \param deriv_order: desired order of derivatives.
       \retval Tab_gamma : array of derivatives of the flat output up to desired order: [x,y,x',y',x'',y'',...].
   */
-  static void flatGamma(CflicDirectPath::TflatConfig *fconf, double s, double deriv_order, double *Tab_gamma);
+  static void flatGamma(const CflicDirectPath::TflatConfig *fconf, double s, double deriv_order, double *Tab_gamma);
 	
   /** 
       \brief Interpolation function alpha and derivatives up to desired order.
@@ -44,8 +44,8 @@ public:
      \param deriv_order: desired order of derivatives
      \retval Tab_gamma: array of combination curve in the plane and derivatives up to desired order: [x,y,x',y',x'',y'',...].
   */
-  static void flatCombination(CflicDirectPath::TflatConfig *fconf_initPt, 
-			      CflicDirectPath::TflatConfig *finalFlatConfPt, double u, 
+  static void flatCombination(const CflicDirectPath::TflatConfig *fconf_initPt, 
+			      const CflicDirectPath::TflatConfig *finalFlatConfPt, double u, 
 			      double v2, int deriv_order, double *Tab_gamma) ;
 
   /**
