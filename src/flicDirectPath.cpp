@@ -1440,7 +1440,7 @@ void CflicDirectPath::maxAbsoluteDerivDefaultParam(double inFrom, double inTo, s
 // ==========================================================================================
 
 ktStatus CflicDirectPath::getVelocityAtDistanceAtConstruction(double inDistance, 
-							      std::vector<double>& outVelocity)
+							      std::vector<double>& outVelocity) const
 {
   KWS_PRECONDITION( privateStart().size() == device()->countDofs() );
   KWS_PRECONDITION( privateStart().size() == outVelocity.size() );

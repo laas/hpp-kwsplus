@@ -782,7 +782,7 @@ class CflicDirectPath : public CkwsPlusDirectPath {
      \return KD_OK | KD_ERROR
 
   */
-  virtual ktStatus getVelocityAtDistanceAtConstruction(double inDistance, std::vector<double>& outVelocity);
+  virtual ktStatus getVelocityAtDistanceAtConstruction(double inDistance, std::vector<double>& outVelocity) const;
 
  private:
   /**

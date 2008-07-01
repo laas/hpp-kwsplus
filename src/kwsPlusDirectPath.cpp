@@ -113,7 +113,7 @@ ktStatus CkwsPlusDirectPath::reverse()
   return KD_OK;
 }
 
-ktStatus CkwsPlusDirectPath::getVelocityAtDistance(double inParameter, std::vector<double>& outVelocity)
+ktStatus CkwsPlusDirectPath::getVelocityAtDistance(double inParameter, std::vector<double>& outVelocity) const
 {
   double param;
   if (attReverse) {
@@ -136,7 +136,7 @@ ktStatus CkwsPlusDirectPath::getVelocityAtDistance(double inParameter, std::vect
 }
 
 ktStatus CkwsPlusDirectPath::getVelocityAtDistanceAtConstruction(double inDistance, 
-								 std::vector<double>& outVelocity)
+								 std::vector<double>& outVelocity) const
 {
   ODEBUG1(":getVelocityAtDistanceAtConstruction not implemented yet.");
   return KD_ERROR;

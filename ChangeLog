@@ -1,3 +1,6 @@
+2008/07/01
+	46. Make access functions to velocity const
+	
 2008/06/27
 
 	45. Correction of a bug in copy of CkwsPlusDirectPath.
