@@ -16,6 +16,7 @@ INCLUDE
 #include "KineoWorks2/kwsDPLinear.h"
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDefine.h"
+#include "kwsPlusDirectPath.h"
 
 KIT_PREDEF_CLASS( CkwsConfig );
 KIT_PREDEF_CLASS( CkwsSteeringMethod );
@@ -40,7 +41,7 @@ KIT_PREDEF_CLASS( CkwsPlusDPLinear );
    \brief Derivative ration will be initialized with a vector of ratios.
 */
 
-class CkwsPlusDPLinear : public CkwsDPLinear {
+class CkwsPlusDPLinear : public CkwsPlusDirectPath {
 
  public :
 
@@ -50,7 +51,7 @@ class CkwsPlusDPLinear : public CkwsDPLinear {
      \brief  Create a new instance of a flat Interpolation cart direct path.
      \param  i_start 	: the start configuration
      \param  i_end 	: the end configuration
-      \param   i_ratio_vector : the vector of derivative ratio with respect to \\
+      \param   inRatioVector : the vector of derivative ratio with respect to \\
       the linear SM for each DoF to calculate maxAbsoluteDerivative
      \param  i_steeringMethod 	: shared pointer to the instance of the steering method that created the path
 
@@ -58,7 +59,7 @@ class CkwsPlusDPLinear : public CkwsDPLinear {
   */
   static CkwsPlusDPLinearShPtr create(const CkwsConfig &i_start,
 				      const CkwsConfig &i_end,
-				      const std::vector<double> &i_ratio_vector,
+				      const std::vector<double> &inRatioVector,
 				      const CkwsSteeringMethodShPtr &i_steeringMethod);
   
   /**
@@ -84,12 +85,12 @@ class CkwsPlusDPLinear : public CkwsDPLinear {
   /** Constructor.
    *   \param         i_start : the start configuration
    *   \param         i_end : the end configuration
-   *      \param   i_ratio_vector : the vector of derivative ratio with respect to \ \
+   *      \param   inRatioVector : the vector of derivative ratio with respect to \ \
    *    the linear SM for each DoF to calculate maxAbsoluteDerivative
    *   \param         i_steeringMethod Shared pointer to the instance of the steering method that created the path.
    */
   CkwsPlusDPLinear(const CkwsConfig& i_start, const CkwsConfig& i_end, 
-		   const std::vector<double> &i_ratio_vector, 
+		   const std::vector<double> &inRatioVector, 
 		   const CkwsSteeringMethodShPtr& i_steeringMethod);
 	
   /** Copy constructor.
@@ -101,24 +102,51 @@ class CkwsPlusDPLinear : public CkwsDPLinear {
    *   \param         i_weakPtr : weak pointer to the object itself
    *   \return        KD_OK | KD_ERROR
    */
-  ktStatus init(const CkwsPlusDPLinearWkPtr& i_weakPtr);
+  ktStatus init(const CkwsPlusDPLinearWkPtr& i_weakPtr,
+		const CkwsConfig &inStartCfg, const CkwsConfig &inEndCfg,
+		const CkwsSteeringMethodShPtr &inSteeringMethod);
 
 
-  // inherited -- for doc see parent class
+  /**
+     \brief Interpolate between initial and end config.
+
+     Interpolation does not take into account extraction and reversion.
+  */
   virtual void interpolate (double i_s, CkwsConfig &o_cfg) const;
 
-  // inherited -- for doc see parent class
+  /**
+     \brief Returns the parameter range of the direct path at the time it was built.
+  */
   virtual double computePrivateLength() const;
 
-  // inherited -- for doc see parent class
-  // for each Dof, the derivative will be multiplied by the ratio vector.
+  /**
+     \brief Returns an overestimate of the absolute value of the derivative vector of the direct path between two positions on the path.
+
+     For each Dof, the derivative will be multiplied by the ratio vector.
+  */
   virtual void	maxAbsoluteDerivative(double i_from, double i_to, std::vector< double >& o_derivative) const;
+
+  /**
+     \brief Compute the velocity before extraction and reversion
+     
+     \param inDistance Distance along the path
+     \retval outVelocity Derivative of the path with respect to distance parameter.
+     \return KD_OK | KD_ERROR
+     
+  */
+  ktStatus getVelocityAtDistanceAtConstruction(double inDistance, 
+					       std::vector<double>& outVelocity) const;
 
  private:
 
   CkwsPlusDPLinearWkPtr	m_weakPtr;		///< weak pointer to itself
 
-  std::vector<double> m_ratio_vector; /// <ratio of vector with respect to linear max absolute derivative
+  std::vector<double> attRatioVector; /// <ratio of vector with respect to linear max absolute derivative
+
+  /**
+     \brief Store linear direct path
+  */
+  CkwsDPLinearShPtr attLinearDP;
 };
 
 

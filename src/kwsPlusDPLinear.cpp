@@ -5,10 +5,6 @@
 
 */
 
-/*! \addtogroup hpp
- *@{
- */
-
 /*****************************************
 INCLUDES
 *******************************************/
@@ -19,6 +15,18 @@ INCLUDES
 #include <math.h>
 #include <fstream>
 
+// Select lecel of verbosity at configuration.
+#if DEBUG==2
+#define ODEBUG2(x) std::cout << "CkwsPlusDPLinear:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CkwsPlusDPLinear:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG2(x)
+#define ODEBUG1(x) std::cerr << "CkwsPlusDPLinear:" << x << std::endl
+#else
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
+
 CkwsPlusDPLinear::~CkwsPlusDPLinear()
 {
 }
@@ -27,11 +35,11 @@ CkwsPlusDPLinear::~CkwsPlusDPLinear()
 
 CkwsPlusDPLinearShPtr CkwsPlusDPLinear::create(const CkwsConfig &inStartCfg,
 					       const CkwsConfig &inEndCfg,
-					       const std::vector<double> &i_ratio_vector,
+					       const std::vector<double> &inRatioVector,
 					       const CkwsSteeringMethodShPtr &inSteeringMethod)
 {
 
-  CkwsPlusDPLinear* pathPtr = new CkwsPlusDPLinear(inStartCfg, inEndCfg, i_ratio_vector, 
+  CkwsPlusDPLinear* pathPtr = new CkwsPlusDPLinear(inStartCfg, inEndCfg, inRatioVector, 
 						   inSteeringMethod);
   CkwsPlusDPLinearShPtr pathShPtr(pathPtr);
   CkwsPlusDPLinearWkPtr pathWkPtr(pathShPtr) ;
@@ -39,7 +47,7 @@ CkwsPlusDPLinearShPtr CkwsPlusDPLinear::create(const CkwsConfig &inStartCfg,
   // Init should be at the end since CkwsDirectPath::init() calls computePrivateLength that is defined by
   // attArcLengthManager
   if (pathShPtr) {
-    if (pathPtr->init(pathWkPtr) != KD_OK) {
+    if (pathPtr->init(pathWkPtr, inStartCfg, inEndCfg, inSteeringMethod) != KD_OK) {
       pathShPtr.reset()	;
     }
   }
@@ -73,7 +81,9 @@ CkwsPlusDPLinearShPtr CkwsPlusDPLinear::createCopy(const CkwsPlusDPLinearConstSh
     CkwsPlusDPLinearShPtr pathShPtr(pathPtr) ;
     CkwsPlusDPLinearWkPtr pathWkPtr(pathShPtr) ;
 
-    if(pathPtr->init(pathWkPtr) != KD_OK)
+    if(pathPtr->init(pathWkPtr, i_kwsPlusDPLinear->privateStart(),
+		     i_kwsPlusDPLinear->privateEnd(),
+		     i_kwsPlusDPLinear->steeringMethod()) != KD_OK)
     {
       pathShPtr.reset() ;
       return pathShPtr;
@@ -103,28 +113,38 @@ CkwsAbstractPathShPtr CkwsPlusDPLinear::clone() const
 // =========================================================================================
 
 CkwsPlusDPLinear::CkwsPlusDPLinear(const CkwsConfig &inStartCfg, const CkwsConfig &inEndCfg,
-				   const std::vector<double> &i_ratio_vector,
+				   const std::vector<double> &inRatioVector,
 				   const CkwsSteeringMethodShPtr &inSteeringMethod) :
-  CkwsDPLinear(inStartCfg, inEndCfg, inSteeringMethod), m_ratio_vector(i_ratio_vector)
+  CkwsPlusDirectPath(inStartCfg, inEndCfg, inSteeringMethod), 
+  attRatioVector(inRatioVector),
+  attLinearDP()
 {
 
 }
 
 CkwsPlusDPLinear::CkwsPlusDPLinear(const CkwsPlusDPLinear &inDirectPath) :
- CkwsDPLinear(inDirectPath)
+  CkwsPlusDirectPath(inDirectPath)
 {
+  attLinearDP = CkwsDPLinear::createCopy(inDirectPath.attLinearDP);
 }
 
 // =========================================================================================
 
-ktStatus CkwsPlusDPLinear::init(const CkwsPlusDPLinearWkPtr &inWeakPtr)
+ktStatus CkwsPlusDPLinear::init(const CkwsPlusDPLinearWkPtr &inWeakPtr,
+				const CkwsConfig &inStartCfg, const CkwsConfig &inEndCfg,
+				const CkwsSteeringMethodShPtr &inSteeringMethod)
 {
+  attLinearDP = CkwsDPLinear::create(inStartCfg, inEndCfg, inSteeringMethod);
+  if (!attLinearDP) {
+    return KD_ERROR;
+  }
 
-  ktStatus success = CkwsDirectPath::init(inWeakPtr) ;
+  if (CkwsDirectPath::init(inWeakPtr) != KD_OK) {
+    return KD_ERROR;
+  }
 
-  if (KD_OK == success) m_weakPtr = inWeakPtr;
-
-  return success ;
+  m_weakPtr = inWeakPtr;
+  return KD_OK;
 
 }
 
@@ -133,15 +153,14 @@ ktStatus CkwsPlusDPLinear::init(const CkwsPlusDPLinearWkPtr &inWeakPtr)
 double CkwsPlusDPLinear::computePrivateLength() const
 {
   
-  return CkwsDPLinear::computePrivateLength();
+  return attLinearDP->length();
 }
 
 // =========================================================================================
 
 void CkwsPlusDPLinear::interpolate(double i_s, CkwsConfig& o_cfg) const
 {
-  
-  CkwsDPLinear::interpolate(i_s, o_cfg);
+  attLinearDP->getConfigAtParam (i_s, o_cfg);
 }
 
 // =========================================================================================
@@ -158,9 +177,16 @@ void CkwsPlusDPLinear::maxAbsoluteDerivative(double inFrom, double inTo, std::ve
 
   // get the maxAbsoluteDerive from the parent class of Linear Steering Method
   std::vector<double> linearVectorDeriv(dev->countDofs());
-  CkwsDPLinear::maxAbsoluteDerivative(inFrom, inTo, linearVectorDeriv);
 
-  std::vector<double> ratio_vector(m_ratio_vector);
+  /*
+    As CkwsDPLinear::maxAbsoluteDerivative is protected and 
+    CkwsDirectPath::maxAbsoluteDerivative is public, we need to cast attLinearDP
+    into CkwsDirectPath to call this method.
+  */
+  CkwsDirectPathShPtr kwsDirectPath = attLinearDP;
+  kwsDirectPath->maxAbsoluteDerivative(inFrom, inTo, linearVectorDeriv);
+
+  std::vector<double> ratio_vector(attRatioVector);
   if(outVectorDeriv.size() > ratio_vector.size()){
     ratio_vector.resize(outVectorDeriv.size(), 1.0);
   }
@@ -172,5 +198,28 @@ void CkwsPlusDPLinear::maxAbsoluteDerivative(double inFrom, double inTo, std::ve
   }  
 }
 
-/** @}
- */
+ktStatus 
+CkwsPlusDPLinear::getVelocityAtDistanceAtConstruction(double inDistance, 
+						      std::vector<double>& outVelocity) const
+{
+  CkwsConfig startConfig = privateStart();
+  CkwsConfig endConfig = privateEnd();
+  double l = privateLength();
+
+  if (outVelocity.size() != startConfig.device()->countDofs()) {
+    ODEBUG1(":getVelocityAtDistanceAtConstruction: vector size = "
+	    << outVelocity.size() 
+	    << " and configuration dimension = "
+	    << startConfig.device()->countDofs()
+	    << " do not fit.");
+    return KD_ERROR;
+  }
+  CkwsConfig middleConfig(startConfig);
+  attLinearDP->getConfigAtParam (.5*l, middleConfig);
+
+  for (unsigned int iDof=0; iDof < outVelocity.size(); iDof++) {
+    outVelocity[iDof] = 2*(middleConfig.dofValue(iDof)-
+			   startConfig.dofValue(iDof))/(l);
+  }
+  return KD_OK;
+}

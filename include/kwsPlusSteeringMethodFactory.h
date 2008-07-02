@@ -7,7 +7,7 @@
 #ifndef KWSPLUSSTEERINGMETHODFACTORY_H
 #define KWSPLUSSTEERINGMETHODFACTORY_H
 
-#include "KineoWorks2/kwsSMLinear.h"
+#include "kwsPlusSMLinear.h"
 #include "reedsSheppSteeringMethod.h"
 #include "flicSteeringMethod.h"
 
@@ -43,7 +43,8 @@ public:
      \brief Return a linear steering method
   */
   CkwsSteeringMethodShPtr makeSteeringMethod(bool inOriented) {
-    return CkwsSMLinear::create(inOriented);
+    std::vector<double> ratioVector;
+    return CkwsPlusSMLinear::create(ratioVector, inOriented);
   };
 };
 
