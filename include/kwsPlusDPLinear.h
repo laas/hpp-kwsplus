@@ -49,25 +49,25 @@ class CkwsPlusDPLinear : public CkwsPlusDirectPath {
 
   /**
      \brief  Create a new instance of a flat Interpolation cart direct path.
-     \param  i_start 	: the start configuration
-     \param  i_end 	: the end configuration
+     \param  inStart 	: the start configuration
+     \param  inEnd 	: the end configuration
       \param   inRatioVector : the vector of derivative ratio with respect to \\
       the linear SM for each DoF to calculate maxAbsoluteDerivative
-     \param  i_steeringMethod 	: shared pointer to the instance of the steering method that created the path
+     \param  inSteeringMethod 	: shared pointer to the instance of the steering method that created the path
 
      \return shared pointer to a newly created flicDirectPath
   */
-  static CkwsPlusDPLinearShPtr create(const CkwsConfig &i_start,
-				      const CkwsConfig &i_end,
+  static CkwsPlusDPLinearShPtr create(const CkwsConfig &inStart,
+				      const CkwsConfig &inEnd,
 				      const std::vector<double> &inRatioVector,
-				      const CkwsSteeringMethodShPtr &i_steeringMethod);
+				      const CkwsSteeringMethodShPtr &inSteeringMethod);
   
   /**
      \brief  Copy a direct path of type CkwsPlusDPLinear.
-     \param i_kwsDPLinear input direct path
+     \param inKwsDPLinear input direct path
      \return shared pointer to a newly created direct path.
   */
-  static CkwsPlusDPLinearShPtr createCopy (const CkwsPlusDPLinearConstShPtr &i_kwsDPLinear) ; 
+  static CkwsPlusDPLinearShPtr createCopy (const CkwsPlusDPLinearConstShPtr &inKwsDPLinear) ; 
 
 
   /**
@@ -82,27 +82,29 @@ class CkwsPlusDPLinear : public CkwsPlusDirectPath {
 
  protected:
 	
-  /** Constructor.
-   *   \param         i_start : the start configuration
-   *   \param         i_end : the end configuration
-   *      \param   inRatioVector : the vector of derivative ratio with respect to \ \
-   *    the linear SM for each DoF to calculate maxAbsoluteDerivative
-   *   \param         i_steeringMethod Shared pointer to the instance of the steering method that created the path.
+  /** 
+      \brief Constructor.
+      \param         inStart : the start configuration
+      \param         inEnd : the end configuration
+      \param   inRatioVector : the vector of derivative ratio with respect to \
+      the linear SM for each DoF to calculate maxAbsoluteDerivative
+      \param         inSteeringMethod Shared pointer to the instance of the steering method that created the path.
    */
-  CkwsPlusDPLinear(const CkwsConfig& i_start, const CkwsConfig& i_end, 
+  CkwsPlusDPLinear(const CkwsConfig& inStart, const CkwsConfig& inEnd, 
 		   const std::vector<double> &inRatioVector, 
-		   const CkwsSteeringMethodShPtr& i_steeringMethod);
+		   const CkwsSteeringMethodShPtr& inSteeringMethod);
 	
   /** Copy constructor.
-   *   \param         i_kwsDPLinear the linear direct path to copy
+      \param         inKwsDPLinear the linear direct path to copy
    */
-  CkwsPlusDPLinear(const CkwsPlusDPLinear& i_kwsDPLinear);
+  CkwsPlusDPLinear(const CkwsPlusDPLinear& inKwsDPLinear);
 
-  /** Initialization.
-   *   \param         i_weakPtr : weak pointer to the object itself
-   *   \return        KD_OK | KD_ERROR
+  /** 
+      \brief Initialization
+      \param         inWeakPtr : weak pointer to the object itself
+      \return        KD_OK | KD_ERROR
    */
-  ktStatus init(const CkwsPlusDPLinearWkPtr& i_weakPtr,
+  ktStatus init(const CkwsPlusDPLinearWkPtr& inWeakPtr,
 		const CkwsConfig &inStartCfg, const CkwsConfig &inEndCfg,
 		const CkwsSteeringMethodShPtr &inSteeringMethod);
 
@@ -112,7 +114,7 @@ class CkwsPlusDPLinear : public CkwsPlusDirectPath {
 
      Interpolation does not take into account extraction and reversion.
   */
-  virtual void interpolate (double i_s, CkwsConfig &o_cfg) const;
+  virtual void interpolate (double inParam, CkwsConfig &outConfig) const;
 
   /**
      \brief Returns the parameter range of the direct path at the time it was built.
@@ -124,7 +126,7 @@ class CkwsPlusDPLinear : public CkwsPlusDirectPath {
 
      For each Dof, the derivative will be multiplied by the ratio vector.
   */
-  virtual void	maxAbsoluteDerivative(double i_from, double i_to, std::vector< double >& o_derivative) const;
+  virtual void	maxAbsoluteDerivative(double inFrom, double inTo, std::vector<double>& outDerivative) const;
 
   /**
      \brief Compute the velocity before extraction and reversion
@@ -139,7 +141,7 @@ class CkwsPlusDPLinear : public CkwsPlusDirectPath {
 
  private:
 
-  CkwsPlusDPLinearWkPtr	m_weakPtr;		///< weak pointer to itself
+  CkwsPlusDPLinearWkPtr	attWeakPtr;		///< weak pointer to itself
 
   std::vector<double> attRatioVector; /// <ratio of vector with respect to linear max absolute derivative
 

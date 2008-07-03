@@ -44,27 +44,10 @@ CkwsPlusDPLinearShPtr CkwsPlusDPLinear::create(const CkwsConfig &inStartCfg,
   CkwsPlusDPLinearShPtr pathShPtr(pathPtr);
   CkwsPlusDPLinearWkPtr pathWkPtr(pathShPtr) ;
 
-  // Init should be at the end since CkwsDirectPath::init() calls computePrivateLength that is defined by
-  // attArcLengthManager
   if (pathShPtr) {
     if (pathPtr->init(pathWkPtr, inStartCfg, inEndCfg, inSteeringMethod) != KD_OK) {
       pathShPtr.reset()	;
     }
-  }
-
-  if (!pathShPtr)
-  {
-    //cerr << " \\\\ CkwsPlusDPLinear::create failed //// " << endl ;
-    //cerr << "init : " << inStartCfg << endl;
-    //cerr << "end : "  << inEndCfg << endl ;
-  }
-  else
-  {
-    // debug
-    // cout << "================= CkwsPlusDPLinear::create succeeded ===============================" << endl;
-    // cout << "init : " << inStartCfg << endl;
-    // cout << "end : "  << inEndCfg << endl ;
-    // -----------
   }
 
   return pathShPtr ;
@@ -72,18 +55,17 @@ CkwsPlusDPLinearShPtr CkwsPlusDPLinear::create(const CkwsConfig &inStartCfg,
 
 // =========================================================================================
 
-CkwsPlusDPLinearShPtr CkwsPlusDPLinear::createCopy(const CkwsPlusDPLinearConstShPtr &i_kwsPlusDPLinear)
+CkwsPlusDPLinearShPtr CkwsPlusDPLinear::createCopy(const CkwsPlusDPLinearConstShPtr &inKwsPlusDPLinear)
 {
-
-  if(i_kwsPlusDPLinear != NULL)
+  if(inKwsPlusDPLinear != NULL)
   {
-    CkwsPlusDPLinear* pathPtr = new CkwsPlusDPLinear(*i_kwsPlusDPLinear) ;
+    CkwsPlusDPLinear* pathPtr = new CkwsPlusDPLinear(*inKwsPlusDPLinear) ;
     CkwsPlusDPLinearShPtr pathShPtr(pathPtr) ;
     CkwsPlusDPLinearWkPtr pathWkPtr(pathShPtr) ;
 
-    if(pathPtr->init(pathWkPtr, i_kwsPlusDPLinear->privateStart(),
-		     i_kwsPlusDPLinear->privateEnd(),
-		     i_kwsPlusDPLinear->steeringMethod()) != KD_OK)
+    if(pathPtr->init(pathWkPtr, inKwsPlusDPLinear->privateStart(),
+		     inKwsPlusDPLinear->privateEnd(),
+		     inKwsPlusDPLinear->steeringMethod()) != KD_OK)
     {
       pathShPtr.reset() ;
       return pathShPtr;
@@ -101,7 +83,7 @@ CkwsPlusDPLinearShPtr CkwsPlusDPLinear::createCopy(const CkwsPlusDPLinearConstSh
 CkwsAbstractPathShPtr CkwsPlusDPLinear::clone() const
 {
 
-  return CkwsPlusDPLinear::createCopy(m_weakPtr.lock());
+  return CkwsPlusDPLinear::createCopy(attWeakPtr.lock());
 
 }
 
@@ -139,11 +121,11 @@ ktStatus CkwsPlusDPLinear::init(const CkwsPlusDPLinearWkPtr &inWeakPtr,
     return KD_ERROR;
   }
 
-  if (CkwsDirectPath::init(inWeakPtr) != KD_OK) {
+  if (CkwsPlusDirectPath::init(inWeakPtr) != KD_OK) {
     return KD_ERROR;
   }
 
-  m_weakPtr = inWeakPtr;
+  attWeakPtr = inWeakPtr;
   return KD_OK;
 
 }
@@ -158,9 +140,9 @@ double CkwsPlusDPLinear::computePrivateLength() const
 
 // =========================================================================================
 
-void CkwsPlusDPLinear::interpolate(double i_s, CkwsConfig& o_cfg) const
+void CkwsPlusDPLinear::interpolate(double inParam, CkwsConfig& outConfig) const
 {
-  attLinearDP->getConfigAtParam (i_s, o_cfg);
+  attLinearDP->getConfigAtDistance(inParam, outConfig);
 }
 
 // =========================================================================================
