@@ -66,26 +66,25 @@ CflicDistanceShPtr CflicDistance::createCopy(const CflicDistanceConstShPtr& inDi
 */
 double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &inConfig2) const
 {
-  CflicDirectPath* path = new CflicDirectPath(inConfig1, inConfig2, attSteeringMethod);
+  CflicDirectPath path(inConfig1, inConfig2, attSteeringMethod);
   static unsigned int halfNbSamples=20;
   static unsigned int nbSamples=2*halfNbSamples;
   double tabGamma[6];
   double velocity[201];
-  double v2 = path->attFlatV2;
-  double maxCurvature = path->attMaxCurvature;
+  double v2 = path.attFlatV2;
+  double maxCurvature = path.attMaxCurvature;
 
   /*
     If the steering method is oriented and v2<=0, then the direct path is
     invalid.
   */
   if ((attIsOriented) &&(v2 <= 0)) {
-    delete path;
     return HUGE_VAL;
   }
 
   for (unsigned int iSample=0; iSample<nbSamples+1; iSample++) {
     double u=1.0*iSample/nbSamples;
-    CflicManager::flatCombination(&(path->attFlatStartCfg), &(path->attFlatEndCfg),
+    CflicManager::flatCombination(&(path.attFlatStartCfg), &(path.attFlatEndCfg),
 				  u, v2, 2, tabGamma);
 #if DEBUG==2
     double x = tabGamma[0];
@@ -102,13 +101,11 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
 	   << x1 << ", " << y1 << ", " << x2 << ", " << y2 << ")");
     ODEBUG2("v = " << v);
     if (v == 0) {
-      delete path;
       return HUGE_VAL;
     }
     double curvature = fabs(x1*y2-x2*y1)/pow(v,3.0);
     ODEBUG2("curvature = " << curvature);
     if (curvature >= maxCurvature) {
-      delete path;
       return HUGE_VAL;
     }
   }
@@ -125,7 +122,6 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
     ODEBUG2("iSample = " << 2*iSample+1 << ", v = " << velocity[2*iSample+1]);
   }
   double length = sum/(3*nbSamples);
-  delete path;
   return length;
 }
 
