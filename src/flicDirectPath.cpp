@@ -1161,6 +1161,11 @@ CflicDirectPathShPtr CflicDirectPath::create(const CkwsConfig &inStartCfg,
   CflicDirectPathShPtr pathShPtr(pathPtr);
   CflicDirectPathWkPtr pathWkPtr(pathShPtr) ;
 
+  if (inOriented && pathPtr->attFlatV2 <= 0) {
+    return CflicDirectPathShPtr();
+  }
+
+
   // Create derivative bound manager for default parameter.
   if (pathShPtr)
   {
@@ -1335,11 +1340,6 @@ ktStatus CflicDirectPath::init(const CflicDirectPathWkPtr &inWeakPtr, bool inOri
 {
 
   ktStatus success = CkwsPlusDirectPath::init(inWeakPtr) ;
-
-  if (inOriented && attFlatV2 <= 0)
-  {
-    success = KD_ERROR;
-  }
 
   if (KD_OK == success) m_weakPtr = inWeakPtr;
 
