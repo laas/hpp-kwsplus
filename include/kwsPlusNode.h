@@ -48,21 +48,21 @@ class CkwsPlusNode : public CkwsNode
 
   /**
      \brief Creates an instance of a CkwsPlusNode
-     \param i_config Configuration of the new node
+     \param inConfig Configuration of the new node
      \return A shared pointer on the newly created node
    */
-  static CkwsPlusNodeShPtr create(const CkwsConfig& inCconfig);
+  static CkwsPlusNodeShPtr create(const CkwsConfig& inConfig);
 
   /**
      \brief Computes the weight of the node. The default implementation only sets the attribute with the given value. 
-     \param i_weight Weight of the node. Default is 1.
+     \param inWeight Weight of the node. Default is 1.
      \return KD_OK:
    */
-  virtual ktStatus computeWeight(double inWweight = 1);
+  virtual ktStatus computeWeight(double inWeight = 1);
 
   /**
      \brief Computes the collision probability of the node. The default implementation only sets the attribute with the given value. 
-     \param i_collision Collision probability of the node. Default is 1.
+     \param inCollision Collision probability of the node. Default is 1.
      \return KD_OK:
   
    */
@@ -70,7 +70,7 @@ class CkwsPlusNode : public CkwsNode
 
   /**
      \brief Computes the number of collision times of the node. The default implementation only sets the attribute with the given value. 
-     \param i_collision Collision times of the node. Default is 0.
+     \param inCollision Collision times of the node. Default is 0.
      \return KD_OK:
   
    */
@@ -78,7 +78,7 @@ class CkwsPlusNode : public CkwsNode
 
   /**
      \brief Computes the Color of the node. The default implementation only sets the attribute with the given value. 
-     \param i_color Color of the node. Default is Black.
+     \param inColor Color of the node. Default is Black.
      \return KD_OK:
   
    */
@@ -86,7 +86,7 @@ class CkwsPlusNode : public CkwsNode
 
   /**
      \brief Computes the Rank of the node. The default implementation only sets the attribute with the given value. 
-     \param i_rank Rank of the node. Default is 0.
+     \param inRank Rank of the node. Default is 0.
      \return KD_OK:
   
    */
@@ -94,7 +94,7 @@ class CkwsPlusNode : public CkwsNode
 
   /**
      \brief Computes the RetroPropagation Coefficient of the node. The default implementation only sets the attribute with the given value. 
-     \param i_retropropagation RetroPropagation Coefficient of the node. Default is 1.
+     \param inRetropropagation RetroPropagation Coefficient of the node. Default is 1.
      \return KD_OK:
   
    */
@@ -102,7 +102,7 @@ class CkwsPlusNode : public CkwsNode
 
   /**
      \brief Computes the Influence Radius of the node. The default implementation only sets the attribute with the given value. 
-     \param i_influenceradius Influence Radius of the node. Default is 1.
+     \param inInfluenceradius Influence Radius of the node. Default is 1.
      \return KD_OK:
   
    */
@@ -110,7 +110,7 @@ class CkwsPlusNode : public CkwsNode
 
   /**
      \brief Computes the Number of Extension Times of the node. The default implementation only sets the attribute with the given value. 
-     \param i_nbExtensionTimes Number of Extension Times of the node. Default is 0.
+     \param inNbExtensionTimes Number of Extension Times of the node. Default is 0.
      \return KD_OK:
   
    */
@@ -166,14 +166,14 @@ class CkwsPlusNode : public CkwsNode
 
   /**
      \brief Activate or desactivate the node, desactivating edges accordingly.
-     \param i_state State of the node. If true the node will be activated, otherwise it will be desactivated.
+     \param inState State of the node. If true the node will be activated, otherwise it will be desactivated.
      \return KD_OK
    */
   ktStatus activate(bool inState); //activate or desactivate the node, desactivating edges accordingly.
 
   /**
      \brief Desactivate the node and create edges between the parent and the sons.
-     \param i_state State of the node. If true the node will be activated, otherwise it will be desactivated.
+     \param inState State of the node. If true the node will be activated, otherwise it will be desactivated.
      \return KD_OK
    */
   ktStatus setCatch(bool inState); //desactivate the node and create edges beetween the parent and the sons.
@@ -194,13 +194,13 @@ class CkwsPlusNode : public CkwsNode
 
   /**
      \brief Constructor
-     \param i_config Configuration of the node
+     \param inConfig Configuration of the node
    */
   CkwsPlusNode(const CkwsConfig& inConfig);
   
   /**
      \brief Initializes the node.
-     \param i_weakPtr Weak pointer on the node
+     \param inWeakPtr Weak pointer on the node
      \return KD_OK | KD_ERROR
    */
   ktStatus init(const CkwsPlusNodeWkPtr &inWeakPtr);

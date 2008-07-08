@@ -51,7 +51,7 @@ class CkwsPlusTalkingBuilder : public T
      \param inRoadmap the kwsRoadmap to use for the builder
      \return A shared pointer on the newly created object.
    */
-  static KIT_SHARED_PTR(CkwsPlusTalkingBuilder<T>) create (const CkwsRoadmapShPtr &inRoadmap);
+  static KIT_SHARED_PTR(CkwsPlusTalkingBuilder<T>) create(const CkwsRoadmapShPtr & inRoadmap);
 
  protected:
 

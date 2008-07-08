@@ -38,14 +38,14 @@ class CkwsPlusEdge : public CkwsEdge
 
   /**
      \brief Creates an instance of a CkwsPlusEdge
-     \param i_directPath Direct path to create the edge from
+     \param inDirectPath Direct path to create the edge from
      \return A shared pointer to the newly created edge.
    */
   static CkwsPlusEdgeShPtr create(const CkwsDirectPathConstShPtr &inDirectPath);
 
   /**
      \brief Sets the activation flag state (FALSE or TRUE)
-     \param i_state boolean giving the future state of the edge (activated if true, desactivated if false)
+     \param inState boolean giving the future state of the edge (activated if true, desactivated if false)
      \return KD_OK
    */
   ktStatus activate(bool inState); //activate or desactivate the edge
@@ -58,7 +58,7 @@ class CkwsPlusEdge : public CkwsEdge
   
   /**
      \brief Sets the color of the edge
-     \param i_color New color
+     \param inColor New color
      \return KD_OK
    */
   void setColor(const CkppColor &inColor){attColor = inColor;}
@@ -78,8 +78,8 @@ class CkwsPlusEdge : public CkwsEdge
 
   /**
      \brief init method
-     \param i_directPath Direct path to create the edge from
-     \param i_weakPtr Weak pointer on the new CkwsPlusEdge
+     \param inDirectPath Direct path to create the edge from
+     \param inWeakPtr Weak pointer on the new CkwsPlusEdge
      \return KD_OK | KD ERROR
    */
   ktStatus init(const CkwsDirectPathConstShPtr &inDirectPath,const CkwsPlusEdgeWkPtr &inWeakPtr);

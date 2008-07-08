@@ -44,7 +44,7 @@ class CkwsPlusEdgeFactory : public CkwsEdgeFactory
 
   /**
      \brief Factory method that creates a new edge. Inherited method.
-     \param inCfg configuration of the node
+     \param inDirectPath direct path for the edge.
      \return Shared pointer to a new instance of CkwsEdge
    */
   virtual CkwsEdgeShPtr makeEdge(const CkwsDirectPathConstShPtr &inDirectPath) const;
