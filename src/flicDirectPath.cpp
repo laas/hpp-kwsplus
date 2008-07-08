@@ -1162,7 +1162,7 @@ CflicDirectPathShPtr CflicDirectPath::create(const CkwsConfig &inStartCfg,
   CflicDirectPathWkPtr pathWkPtr(pathShPtr) ;
 
   if (inOriented && pathPtr->attFlatV2 <= 0) {
-    return CflicDirectPathShPtr();
+    pathShPtr.reset();
   }
 
 
@@ -1203,7 +1203,7 @@ CflicDirectPathShPtr CflicDirectPath::create(const CkwsConfig &inStartCfg,
   // Init should be at the end since CkwsDirectPath::init() calls computePrivateLength that is defined by
   // attArcLengthManager
   if (pathShPtr) {
-    if (pathPtr->init(pathWkPtr, inOriented) != KD_OK) {
+    if (pathPtr->init(pathWkPtr) != KD_OK) {
       pathShPtr.reset()	;
     }
   }
@@ -1324,19 +1324,6 @@ CflicDirectPath::CflicDirectPath(const CflicDirectPath &inDirectPath) :
 // =========================================================================================
 
 ktStatus CflicDirectPath::init(const CflicDirectPathWkPtr &inWeakPtr)
-{
-
-  ktStatus success = CkwsPlusDirectPath::init(inWeakPtr) ;
-
-  if (KD_OK == success) m_weakPtr = inWeakPtr;
-
-  return success ;
-
-}
-
-// =========================================================================================
-
-ktStatus CflicDirectPath::init(const CflicDirectPathWkPtr &inWeakPtr, bool inOriented)
 {
 
   ktStatus success = CkwsPlusDirectPath::init(inWeakPtr) ;

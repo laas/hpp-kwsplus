@@ -713,17 +713,6 @@ class CflicDirectPath : public CkwsPlusDirectPath {
   ktStatus init(const CflicDirectPathWkPtr &i_weakPTR) ;
 
   /**
-     \brief  init : initialise the weak pointer
-     \param i_weakPTR : CkwsInterCartDPWkPtr
-     \param inOriented whether steering method is oriented.
-
-     If the steering method creating the direct path is oriented, and if coefficient v2 is negative (path going backward), then init returns KD_ERROR.
-     \return KD_OK or KD_ERROR
-  */
-  ktStatus init(const CflicDirectPathWkPtr &i_weakPTR, bool inOriented) ;
-
-
-  /**
      \brief   Returns the parameter range of the direct path at the time it was built.
      \return initial parameter range of the direct path
      \note Private length is equal to \f$ \gamma \f$ -arc-length.
