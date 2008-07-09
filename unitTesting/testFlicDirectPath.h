@@ -6,7 +6,7 @@
 #include "flicDirectPath.h"
 #include "flicDistance.h"
 
-#include "testKwsDirectPath/testKwsDirectPath.h"
+#include "testKineoWorks/testKwsDirectPath.h"
 /**
    \brief Test of direct path and steering method FLatORiENTedINtErpolation.
 */

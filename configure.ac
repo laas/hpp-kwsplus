@@ -79,24 +79,24 @@ fi
 AC_SUBST(LAPACK_CFLAGS)
 AC_SUBST(LAPACK_LIBS)
 
-dnl ---If unitTesting enables, make dependence to testKwsDirectPath
+dnl ---If unitTesting enables, make dependence to testKineoWorks
 AC_ARG_ENABLE(unitTesting, AC_HELP_STRING([--enable-unitTesting],
-	[Implement unitTesting. In this case, a dependence to testKwsDirectPath is added]),,[enable_unitTesting=no])
+	[Implement unitTesting. In this case, a dependence to testKineoWorks is added]),,[enable_unitTesting=no])
 
-AC_SUBST(TESTKWSDIRECTPATH_REQD)
-AC_SUBST(TESTKWSDIRECTPATH_CFLAGS)
-AC_SUBST(TESTKWSDIRECTPATH_LIBS)
-AC_SUBST(TESTKWSDIRECTPATH_TAGFILE, [])
-AC_SUBST(TESTKWSDIRECTPATH_PREFIX)
+AC_SUBST(TESTKINEOWORKS_REQD)
+AC_SUBST(TESTKINEOWORKS_CFLAGS)
+AC_SUBST(TESTKINEOWORKS_LIBS)
+AC_SUBST(TESTKINEOWORKS_TAGFILE, [])
+AC_SUBST(TESTKINEOWORKS_PREFIX)
 
 if test x${enable_unitTesting} = xyes; then
 	UNITTESTING_CFLAGS="UNITTESTING=1"
-	PKG_CHECK_MODULES(TESTKWSDIRECTPATH, [testKwsDirectPath >= 1.0])
-	AC_SUBST(TESTKWSDIRECTPATH_CFLAGS)
-	AC_SUBST(TESTKWSDIRECTPATH_LIBS)
-	TESTKWSDIRECTPATH_PREFIX=`$PKG_CONFIG --variable=prefix testKwsDirectPath`
-	TESTKWSDIRECTPATH_TAGFILE="$TESTKWSDIRECTPATH_PREFIX/share/doc/doxytag/testKwsDirectPath.doxytag=$TESTKWSDIRECTPATH_PREFIX/share/doc/testKwsDirectPath"
-	TESTKWSDIRECTPATH_REQD=", testKwsDirectPath >= 1.0"
+	PKG_CHECK_MODULES(TESTKINEOWORKS, [testKineoWorks >= 1.0])
+	AC_SUBST(TESTKINEOWORKS_CFLAGS)
+	AC_SUBST(TESTKINEOWORKS_LIBS)
+	TESTKINEOWORKS_PREFIX=`$PKG_CONFIG --variable=prefix testKineoWorks`
+	TESTKINEOWORKS_TAGFILE="$TESTKINEOWORKS_PREFIX/share/doc/doxytag/testKineoWorks.doxytag=$TESTKINEOWORKS_PREFIX/share/doc/testKineoWorks"
+	TESTKINEOWORKS_REQD=", testKineoWorks >= 1.0"
 	AC_MSG_NOTICE([Implement direct path unit testing])
 
 AC_CONFIG_FILES(

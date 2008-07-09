@@ -38,8 +38,8 @@ testFlicMaxDeriv_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicDirectPathMaxAbsDeriv.cpp
 
-testFlicMaxDeriv_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
-testFlicMaxDeriv_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
+testFlicMaxDeriv_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicMaxDeriv_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 
 #
@@ -50,8 +50,8 @@ testFlicBoundObj_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicDirectPathBoundingObjects.cpp
 
-testFlicBoundObj_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
-testFlicBoundObj_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
+testFlicBoundObj_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicBoundObj_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 
 #
@@ -61,8 +61,8 @@ testFlicStraightLine_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicStraightLine.cpp
 
-testFlicStraightLine_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
-testFlicStraightLine_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
+testFlicStraightLine_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicStraightLine_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 #
 #  Test approximation of distance related to  flic steering method
@@ -71,8 +71,8 @@ testFlicApproximateDistance_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicApproximateDistance.cpp
 
-testFlicApproximateDistance_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
-testFlicApproximateDistance_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
+testFlicApproximateDistance_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicApproximateDistance_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 #
 #  Test copy extraction and reversion of CflicDirectPath
@@ -81,8 +81,8 @@ testFlicCopyAndExtract_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicCopyAndExtract.cpp
 
-testFlicCopyAndExtract_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
-testFlicCopyAndExtract_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
+testFlicCopyAndExtract_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicCopyAndExtract_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 #
 #  Test derivative along CflicDirectPath
@@ -92,8 +92,8 @@ testFlicDerivative_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicDerivative.cpp
 
-testFlicDerivative_CPPFLAGS = -I$(srcdir)/../include $(TESTKWSDIRECTPATH_CFLAGS) 
-testFlicDerivative_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKWSDIRECTPATH_LIBS) 
+testFlicDerivative_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicDerivative_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 
 %.kab:
