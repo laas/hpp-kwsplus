@@ -104,9 +104,7 @@ class CkwsPlusDPLinear : public CkwsPlusDirectPath {
       \param         inWeakPtr : weak pointer to the object itself
       \return        KD_OK | KD_ERROR
    */
-  ktStatus init(const CkwsPlusDPLinearWkPtr& inWeakPtr,
-		const CkwsConfig &inStartCfg, const CkwsConfig &inEndCfg,
-		const CkwsSteeringMethodShPtr &inSteeringMethod);
+  ktStatus init(const CkwsPlusDPLinearWkPtr& inWeakPtr);
 
 
   /**

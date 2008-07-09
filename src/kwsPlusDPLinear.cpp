@@ -45,7 +45,7 @@ CkwsPlusDPLinearShPtr CkwsPlusDPLinear::create(const CkwsConfig &inStartCfg,
   CkwsPlusDPLinearWkPtr pathWkPtr(pathShPtr) ;
 
   if (pathShPtr) {
-    if (pathPtr->init(pathWkPtr, inStartCfg, inEndCfg, inSteeringMethod) != KD_OK) {
+    if (pathPtr->init(pathWkPtr) != KD_OK) {
       pathShPtr.reset()	;
     }
   }
@@ -57,18 +57,13 @@ CkwsPlusDPLinearShPtr CkwsPlusDPLinear::create(const CkwsConfig &inStartCfg,
 
 CkwsPlusDPLinearShPtr CkwsPlusDPLinear::createCopy(const CkwsPlusDPLinearConstShPtr &inKwsPlusDPLinear)
 {
-  if(inKwsPlusDPLinear != NULL)
-  {
+  if(inKwsPlusDPLinear) {
     CkwsPlusDPLinear* pathPtr = new CkwsPlusDPLinear(*inKwsPlusDPLinear) ;
     CkwsPlusDPLinearShPtr pathShPtr(pathPtr) ;
     CkwsPlusDPLinearWkPtr pathWkPtr(pathShPtr) ;
 
-    if(pathPtr->init(pathWkPtr, inKwsPlusDPLinear->privateStart(),
-		     inKwsPlusDPLinear->privateEnd(),
-		     inKwsPlusDPLinear->steeringMethod()) != KD_OK)
-    {
+    if(pathPtr->init(pathWkPtr) != KD_OK) {
       pathShPtr.reset() ;
-      return pathShPtr;
     }
 
     return pathShPtr;
@@ -98,25 +93,22 @@ CkwsPlusDPLinear::CkwsPlusDPLinear(const CkwsConfig &inStartCfg, const CkwsConfi
 				   const std::vector<double> &inRatioVector,
 				   const CkwsSteeringMethodShPtr &inSteeringMethod) :
   CkwsPlusDirectPath(inStartCfg, inEndCfg, inSteeringMethod), 
-  attRatioVector(inRatioVector),
-  attLinearDP()
+  attRatioVector(inRatioVector)
 {
-
+  attLinearDP = CkwsDPLinear::create(inStartCfg, inEndCfg, inSteeringMethod);
 }
 
 CkwsPlusDPLinear::CkwsPlusDPLinear(const CkwsPlusDPLinear &inDirectPath) :
-  CkwsPlusDirectPath(inDirectPath)
+  CkwsPlusDirectPath(inDirectPath),
+  attRatioVector(inDirectPath.attRatioVector)
 {
   attLinearDP = CkwsDPLinear::createCopy(inDirectPath.attLinearDP);
 }
 
 // =========================================================================================
 
-ktStatus CkwsPlusDPLinear::init(const CkwsPlusDPLinearWkPtr &inWeakPtr,
-				const CkwsConfig &inStartCfg, const CkwsConfig &inEndCfg,
-				const CkwsSteeringMethodShPtr &inSteeringMethod)
+ktStatus CkwsPlusDPLinear::init(const CkwsPlusDPLinearWkPtr &inWeakPtr)
 {
-  attLinearDP = CkwsDPLinear::create(inStartCfg, inEndCfg, inSteeringMethod);
   if (!attLinearDP) {
     return KD_ERROR;
   }
