@@ -191,7 +191,7 @@ public:
 		   double valueDerivU1, double valueDerivU2);
     
   CflicPolynomial3(): attU1(0),attU2(0),attValueU1(0),attValueU2(0),
-    attValueDerivU1(0),attValueDerivU2(0),flagDerivativeBounds(false){};
+    attValueDerivU1(0),attValueDerivU2(0),attFlagDerivativeBounds(false){};
     
   /** 
       \brief value of polynomial for input parameter.
@@ -257,7 +257,7 @@ private:
     \brief Flag indicating whether bounds on derivatives have been computed.
     Set to false at construction.
   */
-  bool flagDerivativeBounds;
+  bool attFlagDerivativeBounds;
   /**
      \brief Maximal absolute value of first derivative over interval of definition.
   */

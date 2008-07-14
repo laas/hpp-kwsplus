@@ -33,7 +33,9 @@ INCLUDES
 CflicPolynomial3::CflicPolynomial3(double u1, double u2, double valueU1, double valueU2,
                                    double valueDerivU1, double valueDerivU2):
     attU1(u1),attU2(u2),attValueU1(valueU1),attValueU2(valueU2),
-    attValueDerivU1(valueDerivU1),attValueDerivU2(valueDerivU2)
+    attValueDerivU1(valueDerivU1),attValueDerivU2(valueDerivU2),
+    attFlagDerivativeBounds(false), attMaxAbsDeriv1(0), attMaxAbsDeriv2(0),
+    attMaxAbsDeriv3(0)
 {
   computeDerivativeBounds();
 }
@@ -65,8 +67,11 @@ double CflicPolynomial3::value(double u) const
 
 double CflicPolynomial3::valueDeriv(double u) const
 {
-  double derivative = -3*(2*attValueU2-2*attValueU1-(attU2-attU1)*(attValueDerivU1+attValueDerivU2))*pow((u-attU1),2.0)*pow((attU2-attU1),-3.0)
-                      -2*(-3*(attValueU2-attValueU1)*(attU2-attU1)+attValueDerivU2*pow((attU2-attU1),2.0)+2*attValueDerivU1*pow((attU2-attU1),2.0))*(u-attU1)*pow((attU2-attU1),-3.0)+attValueDerivU1;
+  double derivative = -3.0*(2.0*attValueU2-2.0*attValueU1-(attU2-attU1)*(attValueDerivU1+attValueDerivU2))
+    *((u-attU1)*(u-attU1))/((attU2-attU1)*(attU2-attU1)*(attU2-attU1))
+    -2.0*(-3.0*(attValueU2-attValueU1)*(attU2-attU1)+attValueDerivU2*((attU2-attU1)*(attU2-attU1))
+	  +2.0*attValueDerivU1*((attU2-attU1)*(attU2-attU1))*(u-attU1)/((attU2-attU1)*(attU2-attU1)*(attU2-attU1)))
+    +attValueDerivU1;
 
   return derivative;
 }
@@ -85,7 +90,7 @@ double CflicPolynomial3::valueDeriv2(double u) const
 
 double CflicPolynomial3::maxAbsDeriv1() const
 {
-  if (!flagDerivativeBounds)
+  if (!attFlagDerivativeBounds)
   {
     return -1;
   }
@@ -96,7 +101,7 @@ double CflicPolynomial3::maxAbsDeriv1() const
 
 double CflicPolynomial3::maxAbsDeriv2() const
 {
-  if (!flagDerivativeBounds)
+  if (!attFlagDerivativeBounds)
   {
     return -1;
   }
@@ -107,7 +112,7 @@ double CflicPolynomial3::maxAbsDeriv2() const
 
 double CflicPolynomial3::maxAbsDeriv3() const
 {
-  if (!flagDerivativeBounds)
+  if (!attFlagDerivativeBounds)
   {
     return -1;
   }
@@ -192,7 +197,7 @@ void CflicPolynomial3::computeDerivativeBounds()
   // Third derivative is constant.
   attMaxAbsDeriv3 = 2*a;
 
-  flagDerivativeBounds = true;
+  attFlagDerivativeBounds = true;
 }
 
 
@@ -293,15 +298,27 @@ double CflicPiecewisePolynomial3::valueDeriv(double u) const
     polyId = attNbIntervals-1;
   }
   const CflicPolynomial3& poly3 = attVectorPoly[polyId];
+  
 
+#if DEBUG > 1
   if ((u < poly3.attU1) || (u > poly3.attU2))
   {
-    ODEBUG1(":CflicPiecewisePolynomial3::valueDeriv: u out of range"
-	    << ", poly3.attU1 = " << poly3.attU1
-	    << ", poly3.attU2 = " << poly3.attU2
-	    << ", polyId = " << polyId
-	    << ", attNbIntervals = " << attNbIntervals);
+    double epsilon = 1e-7*(poly3.attU2 - poly3.attU1);
+    if ((u < poly3.attU1) && (u > poly3.attU1 - epsilon)) {
+      u = poly3.attU1;
+    }
+    else if ((u > poly3.attU2) || (u < poly3.attU2 + epsilon)) {
+      u = poly3.attU2;
+    } else {
+      ODEBUG1(":CflicPiecewisePolynomial3::valueDeriv: u out of range"
+	      << ", u = " << u
+	      << ", poly3.attU1 = " << poly3.attU1
+	      << ", poly3.attU2 = " << poly3.attU2
+	      << ", polyId = " << polyId
+	      << ", attNbIntervals = " << attNbIntervals);
+    }
   }
+#endif
   double valueDeriv = poly3.valueDeriv(u);
   return valueDeriv;
 }
