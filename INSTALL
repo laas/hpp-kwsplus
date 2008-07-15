@@ -6,7 +6,15 @@ untar the package
 cd kwsPlus
 mkdir build
 cd build
-../configure (--with-boost(=$PATH_TO_BOOST))  --with-lapack(=$PATH_TO_LAPACK)
+../configure (--with-boost(=$PATH_TO_BOOST))  --with-lapack(=$PATH_TO_LAPACK) (--enable-unitTesting)
+
+  --enable-unitTesting    Implement unitTesting. In this case, a dependence to
+                          testKineoWorks is added
+
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --with-boost            boost installation prefix
+  --with-lapack           prefix of lapack installation
+
 
 Compilation
 -----------
