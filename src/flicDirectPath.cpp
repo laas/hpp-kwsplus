@@ -80,8 +80,10 @@ double CflicPolynomial3::valueDeriv(double u) const
 
 double CflicPolynomial3::valueDeriv2(double u) const
 {
-  double derivative = -6*(2*attValueU2-2*attValueU1-(attU2-attU1)*(attValueDerivU1+attValueDerivU2))*pow((attU2-attU1),-3.0)*(u-attU1)
-                      -2*(-3*(attValueU2-attValueU1)*(attU2-attU1)+attValueDerivU2*pow((attU2-attU1),2.0)+2*attValueDerivU1*pow((attU2-attU1),2.0))*pow((attU2-attU1),-3.0);
+  
+  double derivative = -6*(2*attValueU2-2*attValueU1-(attU2-attU1)*(attValueDerivU1+attValueDerivU2))
+    *(1/((attU2-attU1)*(attU2-attU1)*(attU2-attU1)))*(u-attU1)
+    -2*(-3*(attValueU2-attValueU1)*(attU2-attU1)+attValueDerivU2*((attU2-attU1)*(attU2-attU1))+2*attValueDerivU1*((attU2-attU1)*(attU2-attU1)))*(1/((attU2-attU1)*(attU2-attU1)*(attU2-attU1)));
 
   return derivative;
 }
@@ -131,13 +133,13 @@ double CflicPolynomial3::maxAbsDeriv3() const
 void CflicPolynomial3::computeCoefficients(double coef[4]) const
 {
   // Coefficient of u^3.
-  coef[3] = (-2 * attValueU1 + attU1 * attValueDerivU2 + attU1 * attValueDerivU1 - attU2 * attValueDerivU2 - attU2 * attValueDerivU1 + 2 * attValueU2) / ( pow((double) attU1, (double) 3) - 3 * attU2 * attU1 * attU1 -  pow((double) attU2, (double) 3) + 3 * attU1 * attU2 * attU2);
+  coef[3] = (-2 * attValueU1 + attU1 * attValueDerivU2 + attU1 * attValueDerivU1 - attU2 * attValueDerivU2 - attU2 * attValueDerivU1 + 2 * attValueU2) / ((attU1*attU1*attU1) - 3 * attU2 * attU1 * attU1 -  (attU2*attU2*attU2) + 3 * attU1 * attU2 * attU2);
   // Coefficient of u^2.
-  coef[2] = -(2 * attU1 * attU1 * attValueDerivU2 + attU1 * attU1 * attValueDerivU1 - 3 * attU1 * attValueU1 - attU1 * attU2 * attValueDerivU2 + 3 * attU1 * attValueU2 + attU1 * attU2 * attValueDerivU1 - 2 * attU2 * attU2 * attValueDerivU1 - 3 * attU2 * attValueU1 - attU2 * attU2 * attValueDerivU2 + 3 * attU2 * attValueU2) / ( pow((double) attU1, (double) 3) - 3 * attU2 * attU1 * attU1 -  pow((double) attU2, (double) 3) + 3 * attU1 * attU2 * attU2);
+  coef[2] = -(2 * attU1 * attU1 * attValueDerivU2 + attU1 * attU1 * attValueDerivU1 - 3 * attU1 * attValueU1 - attU1 * attU2 * attValueDerivU2 + 3 * attU1 * attValueU2 + attU1 * attU2 * attValueDerivU1 - 2 * attU2 * attU2 * attValueDerivU1 - 3 * attU2 * attValueU1 - attU2 * attU2 * attValueDerivU2 + 3 * attU2 * attValueU2) / ( (attU1*attU1*attU1) - 3 * attU2 * attU1 * attU1 -  (attU2*attU2*attU2) + 3 * attU1 * attU2 * attU2);
   // Coefficient of u.
-  coef[1] = (pow(attU1, 0.3e1) * attValueDerivU2 + attU1 * attU1 * attU2 * attValueDerivU2 + 0.2e1 * attU1 * attU1 * attU2 * attValueDerivU1 - attU2 * attU2 * attU1 * attValueDerivU1 - 0.6e1 * attU1 * attU2 * attValueU1 - 0.2e1 * attU2 * attU2 * attU1 * attValueDerivU2 + 0.6e1 * attU1 * attU2 * attValueU2 - pow(attU2, 0.3e1) * attValueDerivU1) / (pow(attU1, 0.3e1) - 0.3e1 * attU2 * attU1 * attU1 - pow(attU2, 0.3e1) + 0.3e1 * attU1 * attU2 * attU2);
+  coef[1] = ((attU1*attU1*attU1) * attValueDerivU2 + attU1 * attU1 * attU2 * attValueDerivU2 + 0.2e1 * attU1 * attU1 * attU2 * attValueDerivU1 - attU2 * attU2 * attU1 * attValueDerivU1 - 0.6e1 * attU1 * attU2 * attValueU1 - 0.2e1 * attU2 * attU2 * attU1 * attValueDerivU2 + 0.6e1 * attU1 * attU2 * attValueU2 - (attU2*attU2*attU2) * attValueDerivU1) / ((attU1*attU1*attU1) - 3 * attU2 * attU1 * attU1 - (attU2*attU2*attU2) + 3 * attU1 * attU2 * attU2);
   // Constant coefficient.
-  coef[0] = -(attValueU1 * pow(attU2, 0.3e1) - 0.3e1 * attValueU1 * attU1 * attU2 * attU2 + pow(attU1, 0.3e1) * attU2 * attValueDerivU2 - pow(attU1, 0.3e1) * attValueU2 + attU1 * attU1 * attU2 * attU2 * attValueDerivU1 - attU1 * attU1 * attU2 * attU2 * attValueDerivU2 + 0.3e1 * attU1 * attU1 * attU2 * attValueU2 - attU1 * attValueDerivU1 * pow(attU2, 0.3e1)) / (pow(attU1, 0.3e1) - 0.3e1 * attU2 * attU1 * attU1 - pow(attU2, 0.3e1) + 0.3e1 * attU1 * attU2 * attU2);
+  coef[0] = -(attValueU1 * (attU2*attU2*attU2) - 3 * attValueU1 * attU1 * attU2 * attU2 + (attU1*attU1*attU1) * attU2 * attValueDerivU2 - (attU1*attU1*attU1) * attValueU2 + attU1 * attU1 * attU2 * attU2 * attValueDerivU1 - attU1 * attU1 * attU2 * attU2 * attValueDerivU2 + 3 * attU1 * attU1 * attU2 * attValueU2 - attU1 * attValueDerivU1 * (attU2*attU2*attU2)) / ((attU1*attU1*attU1) - 3 * attU2 * attU1 * attU1 - (attU2*attU2*attU2) + 3 * attU1 * attU2 * attU2);
 
 }
 
@@ -176,8 +178,8 @@ void CflicPolynomial3::computeDerivativeBounds()
   {
     // Polynomial is of degree 3, first derivative is of degree 2.
     // Interval bounds are potential parameter values for maximum absolute derivative.
-    attMaxAbsDeriv1 = max(fabs(a*pow(attU1,2.0) + b*attU1 + c),
-                          fabs(a*pow(attU2,2.0) + b*attU2 + c));
+    attMaxAbsDeriv1 = max(fabs(a*(attU1*attU1) + b*attU1 + c),
+                          fabs(a*(attU2*attU2) + b*attU2 + c));
     // Potential maximal absolute value of first derivative can be reached at u = -b/(2a)
     // if this value is inside definition interval.
     double minusBover2a = -b/(2*a);
@@ -186,7 +188,7 @@ void CflicPolynomial3::computeDerivativeBounds()
     {
       // -b/(2a) is inside definition interval. Maximum absolute value
       // of first derivative might be reached for this parameter value.
-      attMaxAbsDeriv1 = max(attMaxAbsDeriv1, fabs(a*pow(minusBover2a,2.0) + b*minusBover2a + c));
+      attMaxAbsDeriv1 = max(attMaxAbsDeriv1, fabs(a*(minusBover2a*minusBover2a) + b*minusBover2a + c));
     }
     // Second derivative
     // P''(u) = 2a u + b
@@ -566,8 +568,8 @@ ktStatus CflicBoundManagerDefParam::recursiveBuildBoundLists(unsigned int maxNbI
   // Commpute bounds on curvature
   // The following is not exactly a lower bound of curvature.
   // As a consequence, some local paths might be rejected although they satisfy curvature bounds.
-  double lowerBoundCurvature = gamma1Min*gamma2Min/pow(gamma1Max, 3.0);
-  double upperBoundCurvature = gamma1Max*gamma2Max/pow(gamma1Min, 3.0);
+  double lowerBoundCurvature = gamma1Min*gamma2Min/(gamma1Max*gamma1Max*gamma1Max);
+  double upperBoundCurvature = gamma1Max*gamma2Max/(gamma1Min*gamma1Min*gamma1Min);
   if (lowerBoundCurvature > attMaxCurvature) {
     ODEBUG2(":CflicarBoundManagerDefParam::recursiveBuildBoundLists: curvature overflow");
     ODEBUG2("lowerBoundCurvature = " << lowerBoundCurvature << " attMaxCurvature = " << attMaxCurvature);
@@ -647,7 +649,8 @@ ktStatus CflicBoundManagerDefParam::buildBoundLists()
   TflicBoundInterval boundIntervalGamma1, boundIntervalGamma2, boundIntervalCurvature;
 
 
-  maxDistBetweenLowerAndUpperBound = sqrt(pow(attFlatEndCfg.xp-attFlatStartCfg.xp, 2.0) + pow(attFlatEndCfg.yp-attFlatStartCfg.yp, 2.0))/20;
+  maxDistBetweenLowerAndUpperBound = sqrt(((attFlatEndCfg.xp-attFlatStartCfg.xp)*(attFlatEndCfg.xp-attFlatStartCfg.xp)) + 
+					  ((attFlatEndCfg.yp-attFlatStartCfg.yp)*(attFlatEndCfg.yp-attFlatStartCfg.yp)))/20;
   minNormGamma1 = 2*maxDistBetweenLowerAndUpperBound;
 
   if (maxDistBetweenLowerAndUpperBound < 10e-8)
@@ -697,17 +700,18 @@ double CflicBoundManagerDefParam::computeUpperBoundGamma3()
   // ||Gamma2(0)-Gamma1(0)||
   double tabDeriv[6] ;
   CflicManager::flatGamma(&attFlatEndCfg, -attFlatV2, 2, tabDeriv ) ;
-  double normeGamma0 = sqrt(pow(tabDeriv[0]-attFlatStartCfg.xp, 2.0)+pow(tabDeriv[1]-attFlatStartCfg.yp,2.0)) ;
+  double normeGamma0 = sqrt(((tabDeriv[0]-attFlatStartCfg.xp)*(tabDeriv[0]-attFlatStartCfg.xp))+
+			    ((tabDeriv[1]-attFlatStartCfg.yp)*(tabDeriv[1]-attFlatStartCfg.yp)));
 
   // debug
   //cout << "tau1 : " << tau1 << " tau2 : " << tau2 <<" kap1 : " << kap1 <<" kap2 : " << kap2 <<" tauB2 : " << tauB2 << " normeGamma0 : " << normeGamma0 << std::endl ;
   //-----------------------------
 
-  maxGamma3 =	fabs(pow(kap1,2)*pow(attFlatV2,3)) +
-              fabs(pow(kap2,2)*pow(attFlatV2,3)) +
-              3*45/8*pow(attFlatV2, 2) * ( fabs(kap2) * (fabs( tau1 - tauB2 ) + fabs (kap1-kap2) *fabs(attFlatV2) ) + fabs( kap2 - kap1) ) +
-              3*17.319*fabs(attFlatV2) * (fabs( tauB2 - tau1 ) + fabs(kap2-kap1) * fabs(attFlatV2) ) +
-              60 * ( normeGamma0  + fabs(attFlatV2)*fabs(tauB2-tau1) + fabs(kap2-kap1) * pow(attFlatV2,2)/2)  ;
+  maxGamma3 =	fabs((kap1*kap1)*(attFlatV2*attFlatV2*attFlatV2)) + fabs((kap2*kap2)*(attFlatV2*attFlatV2*attFlatV2)) 
+    +3*45/8*(attFlatV2*attFlatV2)*(fabs(kap2)*(fabs(tau1 - tauB2) + fabs(kap1-kap2)*fabs(attFlatV2)) 
+				   + fabs(kap2 - kap1))+3*17.319*fabs(attFlatV2)*
+    (fabs(tauB2 - tau1)+fabs(kap2-kap1)*fabs(attFlatV2))+60*(normeGamma0+fabs(attFlatV2)*fabs(tauB2-tau1)+
+							     fabs(kap2-kap1)*(attFlatV2*attFlatV2)/2);
 
   return maxGamma3;
 }
@@ -721,7 +725,7 @@ double CflicBoundManagerDefParam::computeValueGamma2(double u)
 
   CflicManager::flatCombination(&attFlatStartCfg, &attFlatEndCfg, u, attFlatV2, 2, tabDeriv) ;
 
-  return sqrt(pow(tabDeriv[4], 2)  + pow(tabDeriv[5], 2))  ;
+  return sqrt((tabDeriv[4]*tabDeriv[4])  + (tabDeriv[5]*tabDeriv[5]));
 
 }
 
@@ -734,7 +738,7 @@ double CflicBoundManagerDefParam::computeValueGamma1(double u)
 
   CflicManager::flatCombination(&attFlatStartCfg, &attFlatEndCfg, u, attFlatV2, 2, tabDeriv) ;
 
-  return sqrt(pow(tabDeriv[2], 2)  + pow(tabDeriv[3], 2))  ;
+  return sqrt((tabDeriv[2]*tabDeriv[2]) + (tabDeriv[3]*tabDeriv[3]));
 
 }
 
@@ -1008,7 +1012,7 @@ ktStatus CflicBoundManagerArcLengthParam::buildBoundVectors(CflicDirectPathShPtr
     double maxAbsD3uOverDs3 = arcLengthToDefaultMappingIter->maxAbsDeriv3();
 
     attMaxD3gammaOverDs3 =
-      maxGamma3*pow(maxAbsDuOverDs, 2.0) +
+      maxGamma3*(maxAbsDuOverDs*maxAbsDuOverDs) +
       3*maxGamma2*maxAbsD2uOverDs2*maxAbsDuOverDs +
       maxGamma1*maxAbsD3uOverDs3;
 
@@ -1033,14 +1037,14 @@ ktStatus CflicBoundManagerArcLengthParam::buildBoundVectors(CflicDirectPathShPtr
     double yDgammaOverDs = yDgammaOverDu*duOverDs;
 
     // Norm of vector dgamma/ds at Smin
-    double normDgammaOverDsSmin = sqrt(pow(xDgammaOverDs ,2.0) + pow(yDgammaOverDs ,2.0));
+    double normDgammaOverDsSmin = sqrt((xDgammaOverDs*xDgammaOverDs) + (yDgammaOverDs*yDgammaOverDs));
 
     // Vector d^2gamma/ds^2 at Smin
-    double xD2gammaOverDs2 = pow(duOverDs, 2.0)*xD2gammaOverDu2 + d2uOverDs2*xDgammaOverDu;
-    double yD2gammaOverDs2 = pow(duOverDs, 2.0)*yD2gammaOverDu2 + d2uOverDs2*yDgammaOverDu;
+    double xD2gammaOverDs2 = (duOverDs*duOverDs)*xD2gammaOverDu2 + d2uOverDs2*xDgammaOverDu;
+    double yD2gammaOverDs2 = (duOverDs*duOverDs)*yD2gammaOverDu2 + d2uOverDs2*yDgammaOverDu;
 
     // Norm of vector d^2gamma/ds^2 at Smin
-    double normD2gammaOverDs2Smin = sqrt(pow(xD2gammaOverDs2, 2.0) + pow(yD2gammaOverDs2, 2.0));
+    double normD2gammaOverDs2Smin = sqrt((xD2gammaOverDs2*xD2gammaOverDs2) + (yD2gammaOverDs2*yD2gammaOverDs2));
 
     //
     // Computation of of dgamma/ds and d^2gamma/ds^2 norms at sMax
@@ -1062,13 +1066,13 @@ ktStatus CflicBoundManagerArcLengthParam::buildBoundVectors(CflicDirectPathShPtr
     yDgammaOverDs = yDgammaOverDu*duOverDs;
 
     // Norm of vector dgamma/ds at Smax
-    double normDgammaOverDsSmax = sqrt(pow(xDgammaOverDs ,2.0) + pow(yDgammaOverDs ,2.0));
+    double normDgammaOverDsSmax = sqrt((xDgammaOverDs*xDgammaOverDs) + (yDgammaOverDs*yDgammaOverDs));
 
-    xD2gammaOverDs2 = pow(duOverDs, 2.0)*xD2gammaOverDu2 + d2uOverDs2*xDgammaOverDu;
-    yD2gammaOverDs2 = pow(duOverDs, 2.0)*yD2gammaOverDu2 + d2uOverDs2*yDgammaOverDu;
+    xD2gammaOverDs2 = (duOverDs*duOverDs)*xD2gammaOverDu2 + d2uOverDs2*xDgammaOverDu;
+    yD2gammaOverDs2 = (duOverDs*duOverDs)*yD2gammaOverDu2 + d2uOverDs2*yDgammaOverDu;
 
     // Norm of vector d^2gamma/ds^2 at Smax
-    double normD2gammaOverDs2Smax = sqrt(pow(xD2gammaOverDs2, 2.0) + pow(yD2gammaOverDs2, 2.0));
+    double normD2gammaOverDs2Smax = sqrt((xD2gammaOverDs2*xD2gammaOverDs2) + (yD2gammaOverDs2*yD2gammaOverDs2));
 
     //
     // Lower and upper bounds of second derivative.
@@ -1430,7 +1434,7 @@ void CflicDirectPath::maxAbsoluteDerivDefaultParam(double inFrom, double inTo, s
   //<< "\t maxDerivT : " << max2/mini1 << " \tmax2 :" << max2 << " \tmini 1 :" << mini1  << std::endl ;
   //-------------------------------------------------
 
-  outVectorDeriv[0] = max3/pow(mini1,2) + 3*max2/pow(mini1,3); // kappa
+  outVectorDeriv[0] = max3/(mini1*mini1) + 3*max2/(mini1*mini1*mini1); // kappa
   outVectorDeriv[1] = max1  ; // x
   outVectorDeriv[2] = max1  ; // y
   outVectorDeriv[3] = max2/mini1 ; // theta
@@ -1498,7 +1502,7 @@ void CflicDirectPath::maxAbsoluteDerivative(double inFrom, double inTo, std::vec
   // Device is now a freeflyer. 
   // Set non planar dof values to very small value (0 could lead to troubles).
 
-  outVectorDeriv[0] = max3/pow(min1,2) + 3*max2/pow(min1,3); // kappa
+  outVectorDeriv[0] = max3/(min1*min1) + 3*max2/(min1*min1*min1); // kappa
   outVectorDeriv[1] = max1  ;     // x
   outVectorDeriv[2] = max1  ;     // y
   outVectorDeriv[3] = 1e-10;        // z
@@ -1522,7 +1526,7 @@ double CflicDirectPath::normGammaDeriv1(double u)
   v2 = attFlatV2;
   CflicManager::flatCombination(&attFlatStartCfg, &attFlatEndCfg, u, attFlatV2, deriv_order, Tab_gamma) ;
 
-  normDeriv = sqrt(pow(Tab_gamma[2],2.0) + pow(Tab_gamma[3],2.0));
+  normDeriv = sqrt((Tab_gamma[2]*Tab_gamma[2]) + (Tab_gamma[3]*Tab_gamma[3]));
 
   return normDeriv;
 }
