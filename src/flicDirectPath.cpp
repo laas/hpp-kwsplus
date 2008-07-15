@@ -67,12 +67,12 @@ double CflicPolynomial3::value(double u) const
 
 double CflicPolynomial3::valueDeriv(double u) const
 {
-  double derivative = -3.0*(2.0*attValueU2-2.0*attValueU1-(attU2-attU1)*(attValueDerivU1+attValueDerivU2))
-    *((u-attU1)*(u-attU1))/((attU2-attU1)*(attU2-attU1)*(attU2-attU1))
-    -2.0*(-3.0*(attValueU2-attValueU1)*(attU2-attU1)+attValueDerivU2*((attU2-attU1)*(attU2-attU1))
-	  +2.0*attValueDerivU1*((attU2-attU1)*(attU2-attU1))*(u-attU1)/((attU2-attU1)*(attU2-attU1)*(attU2-attU1)))
+  double derivative = -3.0*(2.0*attValueU2-2*attValueU1-(attU2-attU1)*(attValueDerivU1+attValueDerivU2))
+    *((u-attU1)*(u-attU1))*(1/((attU2-attU1)*(attU2-attU1)*(attU2-attU1)))
+    -2.0*(-3.0*(attValueU2-attValueU1)*(attU2-attU1)+attValueDerivU2*((attU2-attU1)*(attU2-attU1))+2
+	  *attValueDerivU1*((attU2-attU1)*(attU2-attU1)))*(u-attU1)*(1/((attU2-attU1)*(attU2-attU1)*(attU2-attU1)))
     +attValueDerivU1;
-
+  
   return derivative;
 }
 
