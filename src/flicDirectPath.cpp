@@ -221,7 +221,7 @@ void CflicPolynomial3::computeDerivativeBounds()
 
 
 CflicPiecewisePolynomial3::CflicPiecewisePolynomial3(unsigned int inNbIntervals, double inUmin, double inUmax):
-    attUmin(inUmin),attUmax(inUmax),attNbIntervals(inNbIntervals),attVectorPoly(inNbIntervals)
+    attUmin(inUmin),attUmax(inUmax),attVectorPoly(inNbIntervals)
 {
   double sampleStep = (inUmax - inUmin)/inNbIntervals;
   // Fill definition interval for each polynomial.
@@ -273,10 +273,16 @@ double CflicPiecewisePolynomial3::value(double u) const
     return 0;
   }
 
-  unsigned int polyId = (unsigned int)floor((u-attUmin)/(attUmax-attUmin)*attNbIntervals);
-  if (u == attUmax)
-  {
-    polyId = attNbIntervals-1;
+  unsigned int polyId = (unsigned int)floor((u-attUmin)/(attUmax-attUmin)*attVectorPoly.size());
+  if (u >= attUmax) {
+    polyId = attVectorPoly.size()-1;
+  }
+  if (polyId >= attVectorPoly.size()) {
+    ODEBUG1(":CflicPiecewisePolynomial3::value: invalid index of vector.");
+    ODEBUG1(":CflicPiecewisePolynomial3::value: polyId = " << polyId);
+    ODEBUG1(":CflicPiecewisePolynomial3::value: vector size = " << attVectorPoly.size());
+    ODEBUG1(":CflicPiecewisePolynomial3::value: u = " << u);
+    ODEBUG1(":CflicPiecewisePolynomial3::value: attUmax = " << attUmax);
   }
   const CflicPolynomial3& poly3 = attVectorPoly[polyId];
 
@@ -294,11 +300,20 @@ double CflicPiecewisePolynomial3::valueDeriv(double u) const
     return 0;
   }
 
-  unsigned int polyId = (unsigned int)floor((u-attUmin)/(attUmax-attUmin)*attNbIntervals);
-  if (u == attUmax)
+  unsigned int polyId = (unsigned int)floor((u-attUmin)/(attUmax-attUmin)*attVectorPoly.size());
+  if (u >= attUmax)
   {
-    polyId = attNbIntervals-1;
+    polyId = attVectorPoly.size()-1;
   }
+
+  if (polyId >= attVectorPoly.size()) {
+    ODEBUG1(":CflicPiecewisePolynomial3::valueDeriv: invalid index of vector.");
+    ODEBUG1(":CflicPiecewisePolynomial3::valueDeriv: polyId = " << polyId);
+    ODEBUG1(":CflicPiecewisePolynomial3::valueDeriv: vector size = " << attVectorPoly.size());
+    ODEBUG1(":CflicPiecewisePolynomial3::valueDeriv: u = " << u);
+    ODEBUG1(":CflicPiecewisePolynomial3::valueDeriv: attUmax = " << attUmax);
+  }
+
   const CflicPolynomial3& poly3 = attVectorPoly[polyId];
   
 
@@ -317,7 +332,7 @@ double CflicPiecewisePolynomial3::valueDeriv(double u) const
 	      << ", poly3.attU1 = " << poly3.attU1
 	      << ", poly3.attU2 = " << poly3.attU2
 	      << ", polyId = " << polyId
-	      << ", attNbIntervals = " << attNbIntervals);
+	      << ", attVectorPoly.size() = " << attVectorPoly.size());
     }
   }
 #endif

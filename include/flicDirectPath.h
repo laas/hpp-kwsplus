@@ -296,7 +296,7 @@ public:
      \brief Set vector size to inNbIntervals.
   */
   CflicPiecewisePolynomial3(unsigned int inNbIntervals):
-    attNbIntervals(inNbIntervals),attVectorPoly(inNbIntervals){};
+    attVectorPoly(inNbIntervals){};
 
   /**
      \brief Compute bounds on the absolute value of first and second derivatives for each sub-interval.
@@ -402,10 +402,6 @@ private:
      \brief Upper bound of the definition interval.
   */
   double attUmax;
-  /**
-     \brief Number of sub-intervals in definition interval.
-  */
-  unsigned int attNbIntervals;
   /**
    * \brief Vector of degree 3 polynomials.
    */
