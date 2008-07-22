@@ -35,4 +35,5 @@ kwsPlus_HEADERS = \
 	kwsPlusNode.h \
 	kwsPlusNodeFactory.h \
 	kwsPlusEdge.h \
-	kwsPlusEdgeFactory.h
+	kwsPlusEdgeFactory.h \
+	kwsIPPRdmBuilder2.h

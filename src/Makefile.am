@@ -27,7 +27,8 @@ libkwsPlus_la_SOURCES = \
 	kwsPlusEdgeFactory.cpp \
 	flicDistance.cpp \
 	flicManager.cpp \
-	kwsPlusStopRdmBuilderDelegate.cpp
+	kwsPlusStopRdmBuilderDelegate.cpp \
+	kwsIPPRdmBuilder2.cpp
 
 
 libkwsPlus_la_CPPFLAGS = -I$(srcdir)/../include $(KWSIO_CFLAGS)  $(LAPACK_CFLAGS)
