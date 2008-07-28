@@ -8,13 +8,20 @@
 #include "flicManager.h"
 
 // Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
-#if DEBUG==2
+#if DEBUG==3
+#define ODEBUG3(x) std::cout << "flicDistance:" << x << std::endl
+#define ODEBUG2(x) std::cout << "flicDistance:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "flicDistance:" << x << std::endl
+#elif DEBUG==2
+#define ODEBUG3(x) 
 #define ODEBUG2(x) std::cout << "flicDistance:" << x << std::endl
 #define ODEBUG1(x) std::cerr << "flicDistance:" << x << std::endl
 #elif DEBUG==1
+#define ODEBUG3(x) 
 #define ODEBUG2(x)
 #define ODEBUG1(x) std::cerr << "flicDistance:" << x << std::endl
 #else
+#define ODEBUG3(x) 
 #define ODEBUG2(x)
 #define ODEBUG1(x)
 #endif
@@ -79,14 +86,15 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
     invalid.
   */
   if ((attIsOriented) &&(v2 <= 0)) {
-    return HUGE_VAL;
+    ODEBUG2(":distance: oriented and v2 = " << v2);
+    return 1e6;
   }
 
   for (unsigned int iSample=0; iSample<nbSamples+1; iSample++) {
     double u=1.0*iSample/nbSamples;
     CflicManager::flatCombination(&(path.attFlatStartCfg), &(path.attFlatEndCfg),
 				  u, v2, 2, tabGamma);
-#if DEBUG==2
+#if DEBUG==3
     double x = tabGamma[0];
     double y = tabGamma[1];
 #endif
@@ -97,16 +105,18 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
     double v = sqrt(x1*x1+y1*y1);
 
     velocity[iSample] = v;
-    ODEBUG2("(x, y, x',y', x'',y'') = (" << x << ", " << y << ", " 
+    ODEBUG3("(x, y, x',y', x'',y'') = (" << x << ", " << y << ", " 
 	   << x1 << ", " << y1 << ", " << x2 << ", " << y2 << ")");
-    ODEBUG2("v = " << v);
+    ODEBUG3("v = " << v);
     if (v == 0) {
-      return HUGE_VAL;
+      ODEBUG2(":distance: v = 0");
+      return 1e6;
     }
     double curvature = fabs(x1*y2-x2*y1)/pow(v,3.0);
     ODEBUG2("curvature = " << curvature);
     if (curvature >= maxCurvature) {
-      return HUGE_VAL;
+      ODEBUG2(":distance: curvature = " << curvature << ", max curvature = " << maxCurvature);
+      return 1e6;
     }
   }
 

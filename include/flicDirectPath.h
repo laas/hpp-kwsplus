@@ -604,7 +604,9 @@ private:
 /**
    \brief Direct path for flat interpolation for Cart.
 
-   These direct paths are paramterized by arc-length of the curve \f$\gamma \f$ followed by the flat output.
+   Direct path of this class have the following properties:
+   \li they are parameterized by arc-length of the curve \f$\gamma \f$ followed by the flat output,
+   \li the maximal curvature along the path is checked but not strictly enforced.
    
 */
 class CflicDirectPath : public CkwsPlusDirectPath {

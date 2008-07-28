@@ -1,3 +1,6 @@
+	51. CflicDistance::distance() now returns 1e6 instead of HUGE_VAL when 
+	    direct path does not exist.
+	
 2008/07/09
 	50. Change dependency in unitTesting (testKwsDirectPath -> testKineoWorks).
 2008/07/03

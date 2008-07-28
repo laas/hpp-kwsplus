@@ -414,7 +414,7 @@ ktStatus CtestFlicDirectPath::testApproximateLength(unsigned int nbRndDirectPath
       pathLength = kwsDirectPath->length();
     }
     else {
-      pathLength = 1e10;
+      pathLength = HUGE_VAL;
     }
     double approximateLength = attFlicDistance->distance(initConfig, goalConfig);
     

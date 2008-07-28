@@ -18,13 +18,20 @@ INCLUDES
 #include "kwsioInterface.h"
 #include "flicManager.h"
 
-#if DEBUG==2
+#if DEBUG==3
+#define ODEBUG3(x) std::cout << "CflicDirectPath:" << x << std::endl
+#define ODEBUG2(x) std::cout << "CflicDirectPath:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CflicDirectPath:" << x << std::endl
+#elif DEBUG==2
+#define ODEBUG3(x)
 #define ODEBUG2(x) std::cout << "CflicDirectPath:" << x << std::endl
 #define ODEBUG1(x) std::cerr << "CflicDirectPath:" << x << std::endl
 #elif DEBUG==1
+#define ODEBUG3(x)
 #define ODEBUG2(x) 
 #define ODEBUG1(x) std::cerr << "CflicDirectPath:" << x << std::endl
 #else
+#define ODEBUG3(x)
 #define ODEBUG2(x)
 #define ODEBUG1(x)
 #endif
@@ -1198,6 +1205,7 @@ CflicDirectPathShPtr CflicDirectPath::create(const CkwsConfig &inStartCfg,
   CflicDirectPathWkPtr pathWkPtr(pathShPtr) ;
 
   if (inOriented && pathPtr->attFlatV2 <= 0) {
+    ODEBUG2(":create: oriented and v2 = " << pathPtr->attFlatV2);
     pathShPtr.reset();
   }
 
@@ -1232,6 +1240,7 @@ CflicDirectPathShPtr CflicDirectPath::create(const CkwsConfig &inStartCfg,
     pathShPtr->attBoundManagerArcLengthParam = boundManagerAL;
     if ((pathShPtr->attBoundManagerArcLengthParam->buildBoundVectors(pathShPtr)) == KD_ERROR)
     {
+      ODEBUG2(":create: arc length computation failed.");
       pathShPtr.reset();
     }
   }
@@ -1246,7 +1255,7 @@ CflicDirectPathShPtr CflicDirectPath::create(const CkwsConfig &inStartCfg,
 
   if (!pathShPtr)
   {
-    ODEBUG2(":create failed") ;
+    ODEBUG3(":create failed") ;
   }
   else
   {
