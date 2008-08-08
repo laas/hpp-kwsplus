@@ -64,7 +64,7 @@ ChppVisRdmBuilderShPtr ChppVisRdmBuilder::create(const CkwsRoadmapShPtr &inRoadm
 // ==========================================================================
 
 ChppVisRdmBuilder::ChppVisRdmBuilder(const CkwsRoadmapShPtr& inRoadmap)
-  : CkwsRoadmapBuilder(inRoadmap)
+  : CkwsRoadmapBuilder(inRoadmap), att_max_iterations(2000)
 {}
 
 // ==========================================================================
@@ -192,7 +192,7 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
 bool ChppVisRdmBuilder::plannerShouldStopPlanning (const CkwsPathPlannerConstShPtr &i_planner) const
 {
   ODEBUG1(" iteration "<<att_n_iterations);
-  if (att_n_iterations>2000){
+  if (att_n_iterations>att_max_iterations){
     ODEBUG1(" max number of iterations reached");
     return true;
   }

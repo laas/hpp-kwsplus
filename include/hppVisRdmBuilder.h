@@ -49,6 +49,18 @@ public:
  */
   virtual ~ChppVisRdmBuilder() {};
 
+  /** 
+      \brief set max iteration
+      \param i_max_iteration: maximum iteration number.
+  */
+  void maxIteration(unsigned int i_max_iterations) 
+                     { att_max_iterations = i_max_iterations; } ;
+
+  /** 
+      \brief get max iteration
+      \return maximum iteration number.
+  */
+  unsigned int maxIteration() const { return att_max_iterations; } ;
 
 protected:
 
@@ -103,6 +115,11 @@ private:
     \brief Attributed used to count the number of iterations done in order to stop the construction of the roadmap.
   */
   unsigned int att_n_iterations;
+
+  /**
+    \brief The number of maximum iteration.
+  */
+  unsigned int att_max_iterations;
 
 
 };
