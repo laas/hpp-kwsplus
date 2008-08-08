@@ -138,6 +138,8 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
   {
     if(this->roadmap()->addNode(node)!=KD_ERROR)
     {
+      // delegate
+      didAddNode(node);
       this->link(CkwsRoadmapBuilder::BIDIRECTIONAL,node);
     }
   }
@@ -177,7 +179,7 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
       ODEBUG2(" node Link two cc " << ncc);
       if(this->roadmap()->addNode(node)!=KD_ERROR)
       {
-
+	didAddNode(node);
         this->link(CkwsRoadmapBuilder::BIDIRECTIONAL,node);
 
       }
@@ -187,8 +189,9 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
 
 // ==========================================================================
 
-bool ChppVisRdmBuilder::shouldStopBuilding ( ) const
+bool ChppVisRdmBuilder::plannerShouldStopPlanning (const CkwsPathPlannerConstShPtr &i_planner) const
 {
+  ODEBUG1(" iteration "<<att_n_iterations);
   if (att_n_iterations>2000){
     ODEBUG1(" max number of iterations reached");
     return true;

@@ -72,20 +72,19 @@ protected:
     \brief This function is inherited and is modified here in order to give the visibility property to the roadmapbuilder.
     \return ktStatus KD_OK or KD_ERROR
   */
-  ktStatus buildOneStep();
-
+  virtual ktStatus buildOneStep();
 
   /**
     \brief This function is inherited and is modified here to determine when stop building the roadmap to decide that there's not solution.
     \return true if the roadmapbuilder should stop building the roadmap. False otherwise.
   */
-  bool shouldStopBuilding() const;
+  virtual bool plannerShouldStopPlanning(const CkwsPathPlannerConstShPtr &i_planner) const;
 
   /**
     \brief This function is inherited.
     \return 0.
   */
-  double difficulty() const;
+  virtual double difficulty() const;
 
 private:
 
