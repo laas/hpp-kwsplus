@@ -62,6 +62,30 @@ public:
   */
   unsigned int maxIteration() const { return att_max_iterations; } ;
 
+  /** 
+      \brief set current iteration
+      \param i_crnt_iteration: current iteration number.
+  */
+  void crntIteration(unsigned int i_crnt_iterations) 
+                     { att_n_iterations = i_crnt_iterations; } ;
+
+  /** 
+      \brief get current iteration
+      \return current iteration number.
+  */
+  unsigned int crntIteration() const { return att_n_iterations; } ;
+
+  /** 
+      \brief increment current iteration
+      \return incremented current iteration number.
+  */
+  unsigned int incrementCrntIteration() { return ++att_n_iterations; } ;
+
+  /** \brief getshooter
+      \return shooter shared pointer
+   */
+  ChppShooterActiveDofShPtr shooter() { return att_shooter; } ;
+
 protected:
 
   /**
@@ -98,13 +122,13 @@ protected:
   */
   virtual double difficulty() const;
 
-private:
-
   /**
      \brief This function is used to add a node to the roadmap. After generate a node it's called to decide if the node has to be added or not to the roadmap. If it has to be added it will be.
      \param node: The node to add to the roadmap.
  */
   void addVisibilityNode(CkwsNodeShPtr node);
+
+private:
 
   /**
     \brief The shooter to generate the configurations.

@@ -169,6 +169,8 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
       ODEBUG2(" isolated node");
       if(this->roadmap()->addNode(node)!=KD_ERROR)
       {
+	// delegate
+	didAddNode(node);
         this->link(CkwsRoadmapBuilder::NODE_TO_ROADMAP,node);
         this->link(CkwsRoadmapBuilder::ROADMAP_TO_NODE,node);
       }
@@ -179,6 +181,7 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
       ODEBUG2(" node Link two cc " << ncc);
       if(this->roadmap()->addNode(node)!=KD_ERROR)
       {
+	// delegate
 	didAddNode(node);
         this->link(CkwsRoadmapBuilder::BIDIRECTIONAL,node);
 
