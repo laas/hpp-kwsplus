@@ -133,14 +133,12 @@ ktStatus ChppVisRdmBuilder::buildOneStep()
 
 void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
 {
-  this->nbNearestNodes(10);
-  if(this->roadmap()->countNodes()<2)
+  nbNearestNodes(10);
+  if(roadmap()->countNodes()<2)
   {
-    if(this->roadmap()->addNode(node)!=KD_ERROR)
+    if(addNode(node)!=KD_ERROR)
     {
-      // delegate
-      didAddNode(node);
-      this->link(CkwsRoadmapBuilder::BIDIRECTIONAL,node);
+      link(CkwsRoadmapBuilder::BIDIRECTIONAL,node);
     }
   }
   else
@@ -149,16 +147,16 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
 
     CkwsNodeShPtr o_node = CkwsNode::create(node->config());
     CkwsDirectPathShPtr o_dp;
-    ODEBUG2(" nbr cc " << this->roadmap()->countConnectedComponents());
+    ODEBUG2(" nbr cc " << roadmap()->countConnectedComponents());
 
-    for(unsigned int i=0; i<this->roadmap()->countConnectedComponents(); i++)
+    for(unsigned int i=0; i<roadmap()->countConnectedComponents(); i++)
     {
-      if(this->canLinkNodeWithComponent(CkwsRoadmapBuilder::NODE_TO_ROADMAP,
-                                       node,this->roadmap()->connectedComponent(i),
+      if(canLinkNodeWithComponent(CkwsRoadmapBuilder::NODE_TO_ROADMAP,
+                                       node,roadmap()->connectedComponent(i),
                                        o_node,o_dp)
          ||
-         this->canLinkNodeWithComponent(CkwsRoadmapBuilder::ROADMAP_TO_NODE,
-                                       node,this->roadmap()->connectedComponent(i),
+         canLinkNodeWithComponent(CkwsRoadmapBuilder::ROADMAP_TO_NODE,
+                                       node,roadmap()->connectedComponent(i),
                                        o_node,o_dp))
        {
          ncc++;
@@ -167,24 +165,19 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
     if(ncc==0)
     {
       ODEBUG2(" isolated node");
-      if(this->roadmap()->addNode(node)!=KD_ERROR)
+      if(addNode(node)!=KD_ERROR)
       {
-	// delegate
-	didAddNode(node);
-        this->link(CkwsRoadmapBuilder::NODE_TO_ROADMAP,node);
-        this->link(CkwsRoadmapBuilder::ROADMAP_TO_NODE,node);
+        link(CkwsRoadmapBuilder::NODE_TO_ROADMAP,node);
+        link(CkwsRoadmapBuilder::ROADMAP_TO_NODE,node);
       }
       att_n_iterations=0;
     }
     else if(ncc>=2)
     {
       ODEBUG2(" node Link two cc " << ncc);
-      if(this->roadmap()->addNode(node)!=KD_ERROR)
+      if(addNode(node)!=KD_ERROR)
       {
-	// delegate
-	didAddNode(node);
-        this->link(CkwsRoadmapBuilder::BIDIRECTIONAL,node);
-
+        link(CkwsRoadmapBuilder::BIDIRECTIONAL,node);
       }
     }
   }
