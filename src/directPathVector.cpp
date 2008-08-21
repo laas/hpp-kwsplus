@@ -164,9 +164,11 @@ void CdirectPathVector::interpolate(double inLength, CkwsConfig& outConfig) cons
   CkwsDirectPathConstShPtr directPath = attDirectPathVector[rank];
   directPath->getConfigAtDistance(localLength, outConfig);
 
+#if  DEBUG==2
   CkwsConfig startCfg(outConfig.device()), endCfg(outConfig.device());
   directPath->getConfigAtStart(startCfg);
   directPath->getConfigAtEnd(endCfg);
+#endif
   ODEBUG2(std::endl<<"at "<<inLength<<", rank "<<rank<<", localLength "<<localLength
 	  <<" of "<<directPath->length() <<" total len "<<length()
 	  <<std::endl<<" -- cfg"<<outConfig);
