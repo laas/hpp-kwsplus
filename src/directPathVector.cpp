@@ -4,6 +4,19 @@
 
 #include <iostream>
 #include "directPathVector.h"
+#include "kwsioInterface.h"
+
+// #define DEBUG 2
+#if DEBUG==2
+#define ODEBUG2(x) std::cout << "CdirectPathVector:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CdirectPathVector:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG2(x)
+#define ODEBUG1(x) std::cerr << "CdirectPathVector:" << x << std::endl
+#else
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
 
 void CdirectPathVector::computeMaxOfTwoVectors(std::vector<double>& inOutVector1, 
 					       const std::vector<double>& inVector2) const
@@ -31,6 +44,27 @@ CdirectPathVectorShPtr CdirectPathVector::create(const CkwsConfig& inStartCfg,
 
 CkwsAbstractPathShPtr CdirectPathVector::clone() const
 {
+  ODEBUG2("CdirectPathVector called.");
+
+  /*
+  CdirectPathVectorShPtr dp; 
+  std::vector<CkwsDirectPathConstShPtr> dpVector;
+
+  for(unsigned int i = attRankStart; i <= attRankEnd; i++){
+    dpVector.push_back(attDirectPathVector[i]);
+  }
+  CkwsConfig cfg_start(device()), cfg_end(device());
+  dpVector[0]->getConfigAtStart(cfg_start);
+  dpVector[dpVector.size()-1]->getConfigAtEnd(cfg_end);
+  dp = CdirectPathVector::create(cfg_start, cfg_end, steeringMethod(), dpVector);
+  dp->extractFrom(attStartLocal);
+  dp->extractTo(length()-attEndLocal);
+  if(isReversed())
+    dp->reverse();
+    
+  return dp;
+  */
+
   return CdirectPathVector::createCopy(attWeakPtr.lock());
 }
 
@@ -57,22 +91,38 @@ CdirectPathVector::CdirectPathVector(const CkwsConfig& inStartConfig,
 				     std::vector<CkwsDirectPathConstShPtr> inDirectPathVector) :
   CkwsPlusDirectPath(inStartConfig, inEndConfig, inSteeringMethod), 
   attDirectPathVector(inDirectPathVector)
+
 {
-  attLength = 0;
+  attLength = 0.;
   //Compute length
   for (unsigned int iDP=0; iDP < inDirectPathVector.size(); iDP++) {
     if (inDirectPathVector[iDP]) {
       attLength += inDirectPathVector[iDP]->length();
     }
   }
+  attRankStart = 0;
+  attRankEnd = inDirectPathVector.size()-1;
+
+  attStartLocal = 0.;
+  attEndLocal = attDirectPathVector[attRankEnd]->length();
 }
 
 
 CdirectPathVector::CdirectPathVector(const CdirectPathVector& inDirectPathVector) :
   CkwsPlusDirectPath(inDirectPathVector), 
   attDirectPathVector(inDirectPathVector.attDirectPathVector),
-  attLength(inDirectPathVector.attLength)
+  attLength(inDirectPathVector.attLength),
+  attRankStart(inDirectPathVector.attRankStart),
+  attRankEnd(inDirectPathVector.attRankEnd),
+  attStartLocal(inDirectPathVector.attStartLocal),
+  attEndLocal(inDirectPathVector.attEndLocal)
 {
+  /*
+  attDirectPathVector.clear();
+  for(unsigned int i=0; i<inDirectPathVector.attDirectPathVector.size(); i++){
+    attDirectPathVector.push_back(CkwsDirectPath::createCopy(inDirectPathVector.attDirectPathVector[i]));
+  }
+  */
 }
 
 ktStatus CdirectPathVector::init(const CdirectPathVectorWkPtr& inWeakPtr)
@@ -107,28 +157,21 @@ ktStatus CdirectPathVector::init(const CdirectPathVectorWkPtr& inWeakPtr)
 void CdirectPathVector::interpolate(double inLength, CkwsConfig& outConfig) const
 {
   // Find direct path in vector corresponding to parameter.
-  unsigned int iDP=0;
-  bool finished = false;
+  unsigned int rank;
+  double localLength;
+  getRankAtLength(inLength, rank, localLength);
 
-  while ((iDP < attDirectPathVector.size()-1) && !finished) {
-    if (inLength > attDirectPathVector[iDP]->length()) {
-      inLength -= attDirectPathVector[iDP]->length();
-      iDP++;
-    }
-    else {
-      finished = true;
-    }
-  }
-  // 
-  if (inLength > attDirectPathVector[iDP]->length()) {
-    if (iDP != attDirectPathVector.size()-1) {
-      std::cerr << "CdirectPathVector::interpolate: this should not happen" << std::endl;
-      return;
-    }
-    inLength = attDirectPathVector[iDP]->length();
-  }
-  CkwsDirectPathConstShPtr directPath = attDirectPathVector[iDP];
-  directPath->getConfigAtDistance(inLength, outConfig);
+  CkwsDirectPathConstShPtr directPath = attDirectPathVector[rank];
+  directPath->getConfigAtDistance(localLength, outConfig);
+
+  CkwsConfig startCfg(outConfig.device()), endCfg(outConfig.device());
+  directPath->getConfigAtStart(startCfg);
+  directPath->getConfigAtEnd(endCfg);
+  ODEBUG2(std::endl<<"at "<<inLength<<", rank "<<rank<<", localLength "<<localLength
+	  <<" of "<<directPath->length() <<" total len "<<length()
+	  <<std::endl<<" -- cfg"<<outConfig);
+  ODEBUG2(" startCfg"<<startCfg<<std::endl<<"endCfg"<<endCfg<<std::endl);
+
 }
 
 void CdirectPathVector::maxAbsoluteDerivative(double inFrom, double inTo, 
@@ -200,3 +243,92 @@ void CdirectPathVector::maxAbsoluteDerivative(double inFrom, double inTo,
   
 }
 
+ktStatus CdirectPathVector::extractFrom(double inParam)
+{
+  ODEBUG2(" in extractFrom(): old length "<<length());
+  if (CkwsPlusDirectPath::extractFrom(inParam) != KD_OK) {
+    ODEBUG1("ERROR : CkwsPlusDirectPath::extractFrom DID NOT WORK ");
+    return KD_ERROR;
+  }
+  ODEBUG2(" new length "<<length());
+
+  // uStart, uEnd, reversed of kwsPlusDirectPath should have been updated. 
+  ktStatus status = KD_OK;
+  double len;
+  if(isReversed()){
+    len = uEnd() < 0.  ? 0. : uEnd();
+    status = getRankAtLength(len, attRankEnd, attEndLocal);
+  }
+  else{
+    // get the rank and local length
+    len = uStart() > privateLength() ? privateLength() : uStart();
+    status = getRankAtLength(len, attRankStart, attStartLocal);
+  }
+  if(status)
+    ODEBUG1(" ERROR : in extractFrom():getRankAtLength did not work ");
+
+  return status;
+}
+
+ktStatus CdirectPathVector::extractTo(double inParam)
+{
+  ODEBUG2(" in extractTo(): old length "<<length());
+  if (CkwsPlusDirectPath::extractTo(inParam) != KD_OK) {
+    ODEBUG1("ERROR : CkwsPlusDirectPath::extractFrom DID NOT WORK ");
+    return KD_ERROR;
+  }
+  ODEBUG2(" new length "<<length());
+
+  ktStatus status = KD_OK;
+  double len;
+  if(isReversed()){
+    len = uStart() < 0.  ? 0. : uStart();
+    status = getRankAtLength(len, attRankStart, attStartLocal);
+  }
+  else{
+    // get the rank and local length
+    len = uEnd() > privateLength() ? privateLength() : uEnd();
+    status = getRankAtLength(len, attRankEnd, attEndLocal);
+  }
+  if(status)
+    ODEBUG1(" ERROR : in extractEnd(): getRankAtLength did not work ");
+
+  return status;
+}
+
+
+ktStatus CdirectPathVector::reverse()
+{
+  if (CkwsPlusDirectPath::reverse() != KD_OK) {
+    ODEBUG1("ERROR - : CkwsDirectPath::reverse DID NOT WORK");
+    return KD_ERROR;
+  }
+  return KD_OK;
+}
+
+ktStatus CdirectPathVector::getRankAtLength(double inLength, unsigned int &oRank, 
+					    double &localLength) const
+{
+  oRank = 0;
+  localLength = inLength;
+  bool finished = false;
+
+  while ((oRank < attDirectPathVector.size()-1) && !finished) {
+    if (localLength > attDirectPathVector[oRank]->length()) {
+      localLength -= attDirectPathVector[oRank]->length();
+      oRank++;
+    }
+    else {
+      finished = true;
+    }
+  }
+  // 
+  if (localLength > attDirectPathVector[oRank]->length()) {
+    if (oRank != attDirectPathVector.size()-1) {
+      std::cerr << "CdirectPathVector::getRankAtLength: this should not happen" << std::endl;
+      return KD_ERROR;
+    }
+    localLength = attDirectPathVector[oRank]->length();
+  }
+  return KD_OK;
+}

@@ -123,6 +123,30 @@ protected:
   */
   void maxAbsoluteDerivative(double inFrom, double inTo, std::vector<double>& outDerivatives) const;
 
+  /**
+     \brief Reimplementation from CkwsDirectPath in order to keep track of the extracted interval.
+  */
+  virtual ktStatus extractFrom(double inParam);
+
+  /**
+     \brief Reimplementation from CkwsDirectPath in order to keep track of the extracted interval.
+  */
+  virtual ktStatus extractTo(double inParam);
+
+ 
+  /**
+     \brief Reimplementation from CkwsDirectPath in order to keep track of the extracted interval.
+  */
+  virtual ktStatus reverse();
+
+  /** 
+      \brief get the rank of the direct path in the vector at the length.
+      \param inLength: the total length
+      \param oRank: the lank of direct path in vector at the length
+      \param localLength: the length in the direct path
+  */
+  ktStatus getRankAtLength(double inLength, unsigned int &oRank, double &localLength) const;
+
 private:
   /*
 
@@ -164,6 +188,17 @@ private:
   */
   double attLength;
 
+  /**
+     \brief
+     starting and ending rank of the vector for extraction.
+  */
+  unsigned int attRankStart, attRankEnd;
+
+  /**
+     \brief 
+     start and end point for extraction.
+  */
+  double attStartLocal, attEndLocal;
 };
 
 /**
