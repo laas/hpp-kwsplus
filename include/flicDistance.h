@@ -11,6 +11,8 @@
 
 KIT_PREDEF_CLASS(CflicDistance);
 
+#define FLIC_HUGE_VAL 1e10
+
 /**
    \addtogroup flic
    @{

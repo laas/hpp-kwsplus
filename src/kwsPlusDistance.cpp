@@ -74,7 +74,7 @@ double CkwsPlusDistance::distance ( const CkwsConfig &i_cfg1, const CkwsConfig &
 	CkwsDirectPathShPtr  flicDirectPath = attSteeringMethod->makeDirectPath ( i_cfg1 ,i_cfg2 );
 	if ( !flicDirectPath )
 	{
-		return 1000000;
+		return HUGE_VAL;
 	}
 	return flicDirectPath->length();
 }
