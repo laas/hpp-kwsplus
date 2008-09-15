@@ -20,6 +20,7 @@ kwsPlus_HEADERS = \
 	hppShooterActiveDof.h \
 	hppVisRdmBuilder.h \
 	kwsPlusPCARdmBuilder.h \
+	kwsPlusKPCARdmBuilder.h \
 	kwsPlusLTRdmBuilder.h \
 	kwsPlusDPLinear.h \
 	kwsPlusSMLinear.h \
