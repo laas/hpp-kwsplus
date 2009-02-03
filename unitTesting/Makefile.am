@@ -2,6 +2,7 @@
 #  Copyright CNRS-LAAS Florent Lamiraux
 # 
 
+if UNITTESTING
 TESTS = \
 	testFlicMaxDeriv 
 
@@ -102,3 +103,4 @@ testFlicDerivative_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS)
 	cd bin$*; LD_LIBRARY_PATH=@KINEO_LIBDIR@  @KINEO_ADDON_BUILD@ -a ./$*
 	rm -f $*
 
+endif

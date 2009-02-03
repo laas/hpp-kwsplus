@@ -98,11 +98,6 @@ if test x${enable_unitTesting} = xyes; then
 	TESTKINEOWORKS_TAGFILE="$TESTKINEOWORKS_PREFIX/share/doc/doxytag/testKineoWorks.doxytag=$TESTKINEOWORKS_PREFIX/share/doc/testKineoWorks"
 	TESTKINEOWORKS_REQD=", testKineoWorks >= 1.0"
 	AC_MSG_NOTICE([Implement direct path unit testing])
-
-AC_CONFIG_FILES(
-	unitTesting/Makefile
-)
-
 else
 	UNITTESTING_CFLAGS="UNITTESTING=0"
 	AC_MSG_NOTICE([Direct path unit testing not implemented])
@@ -114,6 +109,7 @@ AC_OUTPUT(Makefile
 	src/Makefile
 	include/Makefile
 	doc/Makefile
+	unitTesting/Makefile
 	doc/kwsPlus.dox
 	kwsPlus.pc
 )
