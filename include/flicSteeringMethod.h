@@ -26,8 +26,6 @@ INCLUDE
 
 
 
-using namespace std ;
-
 /**
 
 \addtogroup flic

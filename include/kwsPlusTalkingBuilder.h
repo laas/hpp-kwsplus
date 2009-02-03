@@ -17,7 +17,6 @@
 
 template<class T = CkwsDiffusingRdmBuilder > class CkwsPlusTalkingBuilder; 
 
-using namespace std;
 /**
    \brief This shooter template class is provided to have more control over the shooting process. It can notify every shoots and allow users to save into a text file a sequence of shoot
    and to load one from a text file. It inherits from any shooter class. 

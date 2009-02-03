@@ -176,7 +176,7 @@ void CflicPolynomial3::computeDerivativeBounds()
     {
       // Polynomial is of degree 2, first derivative is of degree 1.
       // Maximum of first derivative absolute value is reached at one of the bounds of the definition interval.
-      attMaxAbsDeriv1 = max(fabs(b*attU1 + c), fabs(b*attU2 + c));
+      attMaxAbsDeriv1 = std::max(fabs(b*attU1 + c), fabs(b*attU2 + c));
       // Second derivative is constant.
       attMaxAbsDeriv2 = fabs(b);
     }
@@ -185,8 +185,8 @@ void CflicPolynomial3::computeDerivativeBounds()
   {
     // Polynomial is of degree 3, first derivative is of degree 2.
     // Interval bounds are potential parameter values for maximum absolute derivative.
-    attMaxAbsDeriv1 = max(fabs(a*(attU1*attU1) + b*attU1 + c),
-                          fabs(a*(attU2*attU2) + b*attU2 + c));
+    attMaxAbsDeriv1 = std::max(fabs(a*(attU1*attU1) + b*attU1 + c),
+			       fabs(a*(attU2*attU2) + b*attU2 + c));
     // Potential maximal absolute value of first derivative can be reached at u = -b/(2a)
     // if this value is inside definition interval.
     double minusBover2a = -b/(2*a);
@@ -195,13 +195,13 @@ void CflicPolynomial3::computeDerivativeBounds()
     {
       // -b/(2a) is inside definition interval. Maximum absolute value
       // of first derivative might be reached for this parameter value.
-      attMaxAbsDeriv1 = max(attMaxAbsDeriv1, fabs(a*(minusBover2a*minusBover2a) + b*minusBover2a + c));
+      attMaxAbsDeriv1 = std::max(attMaxAbsDeriv1, fabs(a*(minusBover2a*minusBover2a) + b*minusBover2a + c));
     }
     // Second derivative
     // P''(u) = 2a u + b
     // is of degree 1. Maximum absolute value reached at one bound of
     // definition interval.
-    attMaxAbsDeriv2 = max (fabs(2*a*attU1+b), fabs(2*a*attU2+b));
+    attMaxAbsDeriv2 = std::max (fabs(2*a*attU1+b), fabs(2*a*attU2+b));
   }
   // Third derivative is constant.
   attMaxAbsDeriv3 = 2*a;
@@ -1350,8 +1350,8 @@ CflicDirectPath::CflicDirectPath(const CkwsConfig &inStartCfg, const CkwsConfig 
   attFlatEndCfg.tau = inEndCfg.dofValue(RZ_COORD) ; // theta
 
   attFlatV2 = computeFlatV2(&attFlatStartCfg, &attFlatEndCfg);
-  attMaxCurvature = max(fabs(inStartCfg.device()->dof(CURV_COORD)->vmin()),
-			fabs(inStartCfg.device()->dof(CURV_COORD)->vmax()));
+  attMaxCurvature = std::max(fabs(inStartCfg.device()->dof(CURV_COORD)->vmin()),
+			     fabs(inStartCfg.device()->dof(CURV_COORD)->vmax()));
 
 }
 

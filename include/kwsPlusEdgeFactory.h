@@ -12,8 +12,6 @@
 #include "kwsPlusEdge.h"
 
 KIT_PREDEF_CLASS(CkwsPlusEdgeFactory);
-using namespace std ;
-
 
 /**
    \addtogroup kwsPlusEnhancedRoadmapManagement

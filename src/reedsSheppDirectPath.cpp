@@ -34,6 +34,23 @@
 #include "KineoWorks2/kwsJoint.h"
 #include "KineoWorks2/kwsDevice.h" // without this causes error when calling functions of kwsDevice
 
+#if DEBUG==3
+#define ODEBUG3(x) std::cout << "CreedsSheppDirectPath:" << x << std::endl
+#define ODEBUG2(x) std::cout << "CreedsSheppDirectPath:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CreedsSheppDirectPath:" << x << std::endl
+#elif DEBUG==2
+#define ODEBUG3(x)
+#define ODEBUG2(x) std::cout << "CreedsSheppDirectPath:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CreedsSheppDirectPath:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG3(x)
+#define ODEBUG2(x) 
+#define ODEBUG1(x) std::cerr << "CreedsSheppDirectPath:" << x << std::endl
+#else
+#define ODEBUG3(x)
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
 
 
 
@@ -64,7 +81,7 @@ CreedsSheppDirectPathShPtr CreedsSheppDirectPath::create(const CkwsConfig &inSta
        
   // test the root joint of the Device //
   if ( ((inStartCfg.device()->rootJoint()->countDofs() != 3) && (inStartCfg.device()->rootJoint()->countDofs() != 6)) || (inStartCfg.device()->countExtraDofs() != 0 ) ) {
-    cerr << " ERROR - CreedsSheppDirectPath::create failed : Reeds&Shepp implemented only for PLAN or FREEFLYER root joint without ExtraDof" << endl ;
+    ODEBUG1(" ERROR - CreedsSheppDirectPath::create failed : Reeds&Shepp implemented only for PLAN or FREEFLYER root joint without ExtraDof") ;
     pathShPtr.reset() ;
     return pathShPtr ;
   }
@@ -78,7 +95,7 @@ CreedsSheppDirectPathShPtr CreedsSheppDirectPath::create(const CkwsConfig &inSta
   }
 
   if (pathPtr->computeRSCurve( inStartCfg , inEndCfg , inRadius) != KD_OK) {
-    cerr << " ERROR - CreedsSheppDirectPath::create failed !!! " << endl ;
+    ODEBUG1(" ERROR - CreedsSheppDirectPath::create failed !!! ") ;
     pathShPtr.reset()	;
     return pathShPtr ;
   }
@@ -353,7 +370,7 @@ ktStatus CreedsSheppDirectPath::computeRSCurve(CkwsConfig  inStartCfg , CkwsConf
     //longueur_rs = reed_shepp_with_cusp(inStartCfg,inEndCfg, inRadius , numero, t, u, v);
     //break;
   default:
-    cerr << " ERROR - CreedsSheppDirectPath::computeRSCurve : TypeCurve UNKNOWN" << endl ;
+    ODEBUG1(" ERROR - CreedsSheppDirectPath::computeRSCurve : TypeCurve UNKNOWN") ;
     break;
   }
 
@@ -478,7 +495,7 @@ double CreedsSheppDirectPath::reed_shepp(CkwsConfig &c1 , CkwsConfig &c2, double
     v_r = v;
     numero = num;
     if(longueur == infini) {
-      cerr << "ERROR - CreedsSheppDirectPath::reed_shepp : infini" << endl;
+      ODEBUG1("ERROR - CreedsSheppDirectPath::reed_shepp : infini");
     }
     return(longueur);
   }
@@ -1282,7 +1299,7 @@ ktStatus  CreedsSheppDirectPath::computeRsCurveVector(int num , double t, double
     addRsCurveToVector(r,gauche , av , v , conf );
     break;
   default:
-    cerr << "ERROR - CreedsSheppDirectPath::computeRsCurveVector : type " << num << " UNKNOWN" << endl;
+    ODEBUG1("ERROR - CreedsSheppDirectPath::computeRsCurveVector : type " << num << " UNKNOWN");
   }
 
   return KD_OK ;
@@ -1489,7 +1506,7 @@ void CreedsSheppDirectPath::kwsConfigAtLengthParam(double u, CkwsConfig &outCfg)
     curConfig.dofValue(dofRotz, (1-(paramLength/lengthPartition))*theta_init+ (paramLength/lengthPartition)*theta_end);
     break;
   default:
-    cerr << " ERROR -  CreedsSheppDirectPath::interpolate : Rs type curve UNKNOWN" << endl;
+    ODEBUG1(" ERROR -  CreedsSheppDirectPath::interpolate : Rs type curve UNKNOWN");
     return;
   }
 
@@ -1850,15 +1867,15 @@ void CreedsSheppDirectPath::printTrsCurve( const TrsCurve inCurve)
   else
     dofRotz = 5 ;
 
-  cout << " curve.type :" << inCurve.type << endl ;
-  cout << " curve.cd :" << inCurve.cd->dofValue(0) << "\t" << inCurve.cd->dofValue(1) << "\t"<< inCurve.cd->dofValue(dofRotz) << endl ;
-  cout << " curve.cf :" << inCurve.cf->dofValue(0) << "\t" <<  inCurve.cf->dofValue(1) << "\t"<< inCurve.cf->dofValue(dofRotz) << endl ;
-  cout << " curve.centre_x :" << inCurve.centre_x << endl ;
-  cout << " curve.centre_y :" << inCurve.centre_y << endl ;
-  cout << " curve.r :" << inCurve.r << endl ;
-  cout << " curve.sens :" << inCurve.sens << endl ;
-  cout << " curve.val :" << inCurve.val << endl ;
-  cout << " curve.valid :" << inCurve.valid << endl ;
+  ODEBUG2( " curve.type :" << inCurve.type);
+  ODEBUG2( " curve.cd :" << inCurve.cd->dofValue(0) << "\t" << inCurve.cd->dofValue(1) << "\t"<< inCurve.cd->dofValue(dofRotz));
+  ODEBUG2( " curve.cf :" << inCurve.cf->dofValue(0) << "\t" <<  inCurve.cf->dofValue(1) << "\t"<< inCurve.cf->dofValue(dofRotz));
+  ODEBUG2( " curve.centre_x :" << inCurve.centre_x);
+  ODEBUG2( " curve.centre_y :" << inCurve.centre_y);
+  ODEBUG2( " curve.r :" << inCurve.r);
+  ODEBUG2( " curve.sens :" << inCurve.sens);
+  ODEBUG2( " curve.val :" << inCurve.val );
+  ODEBUG2( " curve.valid :" << inCurve.valid );
 }
 
 // ==============================================================================
@@ -1868,7 +1885,7 @@ void CreedsSheppDirectPath::printDebug(std::vector<TrsCurve> RSvector)
 {
 
   for (unsigned int count=0 ; count < RSvector.size() ; count++) {
-    cout << " // ---------- " << count << " ----------- // " << endl ;
+    ODEBUG2( " // ---------- " << count << " ----------- // ");
     printTrsCurve(RSvector[count]) ;
   }
 

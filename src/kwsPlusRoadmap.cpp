@@ -46,6 +46,25 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <iostream>
 #include "kwsPlusRoadmap.h"
 
+#if DEBUG==3
+#define ODEBUG3(x) std::cout << "CkwsPlusRoadmap:" << x << std::endl
+#define ODEBUG2(x) std::cout << "CkwsPlusRoadmap:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CkwsPlusRoadmap:" << x << std::endl
+#elif DEBUG==2
+#define ODEBUG3(x)
+#define ODEBUG2(x) std::cout << "CkwsPlusRoadmap:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CkwsPlusRoadmap:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG3(x)
+#define ODEBUG2(x) 
+#define ODEBUG1(x) std::cerr << "CkwsPlusRoadmap:" << x << std::endl
+#else
+#define ODEBUG3(x)
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
+
+
 KIT_PREDEF_CLASS ( CkppComponent );
 
 
@@ -129,7 +148,7 @@ ktStatus CkwsPlusRoadmap::removeNodeEdge ( std::set<CkwsNodeShPtr> inNodeList , 
 
 				CkwsNodeShPtr endNodeOutEdge= outEdge->endNode();
 				if ( !endNodeOutEdge )
-					cout << "Error : endNodeOutEdge"<<endl;
+				  ODEBUG2( "Error : endNodeOutEdge");
 
 				if ( inNodeList.find ( endNodeOutEdge ) == inNodeList.end() )
 				{
@@ -137,12 +156,12 @@ ktStatus CkwsPlusRoadmap::removeNodeEdge ( std::set<CkwsNodeShPtr> inNodeList , 
 
 					CkwsDirectPathConstShPtr directPathOld=outEdge->directPath();
 					if ( !directPathOld )
-						cout << "Error : directPathOld"<<endl;
+					  ODEBUG2( "Error : directPathOld");
 
 					
 					CkwsEdgeShPtr newEdge=CkwsEdge::create ( directPathOld );
 					if ( !newEdge )
-						cout << "Error : newEdge"<<endl;
+					  ODEBUG2( "Error : newEdge");
 
 					roadmapB->addEdge ( mapOld2New[outEdge->startNode() ],mapOld2New[outEdge->endNode() ],newEdge );
 					temp++;

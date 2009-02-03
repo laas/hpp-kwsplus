@@ -13,7 +13,6 @@
 #include "KineoModel/kppColor.h"
 
 KIT_PREDEF_CLASS(CkwsPlusEdge);
-using namespace std ;
 
 /**
    \addtogroup kwsPlusEnhancedRoadmapManagement

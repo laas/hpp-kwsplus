@@ -19,7 +19,6 @@
 #include "reedsSheppDirectPath.h"
 
 
-using namespace std ;
 
 /**
    \addtogroup RS

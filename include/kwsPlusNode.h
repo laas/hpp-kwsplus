@@ -13,7 +13,7 @@
 
 
 KIT_PREDEF_CLASS(CkwsPlusNode);
-using namespace std ;
+
 /**
    \addtogroup kwsPlusEnhancedRoadmapManagement
    @{

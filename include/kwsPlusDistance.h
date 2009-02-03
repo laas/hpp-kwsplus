@@ -22,8 +22,6 @@ INCLUDE
 
 
 
-using namespace std ;
-
 /**
    \addtogroup kwsPlus_DP
    @{

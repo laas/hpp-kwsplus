@@ -45,7 +45,6 @@ INCLUDE
 #include "boost/numeric/bindings/traits/ublas_vector.hpp"
 
 
-using namespace std;
 
 KIT_PREDEF_CLASS( CkwsRoadmap );
 

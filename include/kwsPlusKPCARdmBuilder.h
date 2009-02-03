@@ -49,7 +49,6 @@ INCLUDE
 
 #define SIZE_DATA 3
 
-using namespace std;
 namespace ublas = boost::numeric::ublas ;
 namespace lapack = boost::numeric::bindings::lapack ;
   

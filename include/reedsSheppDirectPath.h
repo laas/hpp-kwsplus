@@ -22,7 +22,6 @@
 #include <KineoWorks2/kwsConfig.h>
 
 
-using namespace std ;
 
 /**
    \addtogroup RS

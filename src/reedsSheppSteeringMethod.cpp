@@ -5,10 +5,6 @@
  
 */
 
-/*! \addtogroup hpp
- *@{
- */
-
 /*****************************************
             INCLUDES
 *******************************************/
@@ -16,6 +12,23 @@
 #include "reedsSheppSteeringMethod.h"
 #include "reedsSheppDirectPath.h"
 
+#if DEBUG==3
+#define ODEBUG3(x) std::cout << "CreedsSheppSteeringMethod:" << x << std::endl
+#define ODEBUG2(x) std::cout << "CreedsSheppSteeringMethod:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CreedsSheppSteeringMethod:" << x << std::endl
+#elif DEBUG==2
+#define ODEBUG3(x)
+#define ODEBUG2(x) std::cout << "CreedsSheppSteeringMethod:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CreedsSheppSteeringMethod:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG3(x)
+#define ODEBUG2(x) 
+#define ODEBUG1(x) std::cerr << "CreedsSheppSteeringMethod:" << x << std::endl
+#else
+#define ODEBUG3(x)
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
 
 /*****************************************
             PUBLIC METHODS
@@ -57,7 +70,7 @@ CreedsSheppSteeringMethodShPtr CreedsSheppSteeringMethod::create( double inRadiu
         CreedsSheppSteeringMethodShPtr RSShPtr(RSPtr);
         CreedsSheppSteeringMethodWkPtr RSWkPtr(RSShPtr);
 
-        cout << "steering method create" << endl;
+        ODEBUG2( "steering method create" );
 
         if(RSPtr->init(RSWkPtr) != KD_OK)
                 RSShPtr.reset();
@@ -83,7 +96,3 @@ bool CreedsSheppSteeringMethod::isOriented() const
 {
         return m_oriented ;
 }
-
-
-/** @}
- */

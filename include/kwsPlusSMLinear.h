@@ -19,7 +19,6 @@ INCLUDE
 #include "KineoUtility/kitInterface.h"
 #include "KineoWorks2/kwsDefine.h"
 
-using namespace std ;
 
 /**
 

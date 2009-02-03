@@ -12,7 +12,6 @@
 #include "kwsPlusNode.h"
 
 KIT_PREDEF_CLASS(CkwsPlusNodeFactory);
-using namespace std ;
 
 
 /**

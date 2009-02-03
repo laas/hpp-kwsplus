@@ -34,7 +34,6 @@ INCLUDE
 
 #include <vector>
 
-using namespace std;
 
 KIT_PREDEF_CLASS( CkwsRoadmap );
 

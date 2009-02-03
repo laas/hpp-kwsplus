@@ -9,14 +9,31 @@
 
 #include <iostream>
 
+#if DEBUG==3
+#define ODEBUG3(x) std::cout << "CkwsPlusNodeFactory:" << x << std::endl
+#define ODEBUG2(x) std::cout << "CkwsPlusNodeFactory:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CkwsPlusNodeFactory:" << x << std::endl
+#elif DEBUG==2
+#define ODEBUG3(x)
+#define ODEBUG2(x) std::cout << "CkwsPlusNodeFactory:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CkwsPlusNodeFactory:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG3(x)
+#define ODEBUG2(x) 
+#define ODEBUG1(x) std::cerr << "CkwsPlusNodeFactory:" << x << std::endl
+#else
+#define ODEBUG3(x)
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
 
 CkwsPlusNodeFactory::CkwsPlusNodeFactory(){
 }
 CkwsPlusNodeFactory::~CkwsPlusNodeFactory(){
-  cout<<"KWSPLUS NODE FACTORY  - Deleting Object"<<endl;
+  ODEBUG2("KWSPLUS NODE FACTORY  - Deleting Object");
 }
 CkwsPlusNodeFactoryShPtr CkwsPlusNodeFactory::create(){
-  cout<<"KWSPLUS NODE FACTORY  - CREATING Object"<<endl;
+  ODEBUG2("KWSPLUS NODE FACTORY  - CREATING Object");
 
   CkwsPlusNodeFactory * ptr = new CkwsPlusNodeFactory();
   CkwsPlusNodeFactoryShPtr shPtr(ptr);

@@ -4,8 +4,6 @@
 #include "KineoWorks2/kwsDirectPath.h"
 #include <iostream>
 
-using namespace std ;
-
 KIT_PREDEF_CLASS(CkwsPlusDirectPath);
 
 /**

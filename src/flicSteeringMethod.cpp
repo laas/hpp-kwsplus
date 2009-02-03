@@ -17,6 +17,23 @@ INCLUDES
 #include "flicSteeringMethod.h"
 #include "flicDirectPath.h"
 
+#if DEBUG==3
+#define ODEBUG3(x) std::cout << "CflicSteeringMethod:" << x << std::endl
+#define ODEBUG2(x) std::cout << "CflicSteeringMethod:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CflicSteeringMethod:" << x << std::endl
+#elif DEBUG==2
+#define ODEBUG3(x)
+#define ODEBUG2(x) std::cout << "CflicSteeringMethod:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CflicSteeringMethod:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG3(x)
+#define ODEBUG2(x) 
+#define ODEBUG1(x) std::cerr << "CflicSteeringMethod:" << x << std::endl
+#else
+#define ODEBUG3(x)
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
 
 /*****************************************
 PUBLIC METHODS
@@ -53,7 +70,7 @@ CflicSteeringMethodShPtr CflicSteeringMethod::create(bool i_oriented)
 	CflicSteeringMethodShPtr flatShPtr(flatPtr);
 	CflicSteeringMethodWkPtr flatWkPtr(flatShPtr);
 
-	cout << "steering method create" << endl;
+	ODEBUG2("steering method create.");
 
 	if(flatPtr->init(flatWkPtr) != KD_OK) flatShPtr.reset();
 

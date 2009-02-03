@@ -21,8 +21,6 @@ INCLUDE
 
 #include "kwsPlusDirectPath.h"
 
-using namespace std ;
-
 KIT_PREDEF_CLASS( CflicDirectPath );
 KIT_PREDEF_CLASS( CflicBoundManagerDefParam );
 KIT_PREDEF_CLASS( CflicArcLengthManager );

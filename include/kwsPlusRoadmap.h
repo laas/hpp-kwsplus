@@ -65,7 +65,7 @@ INCLUDE
 //#define RDEBUG(x) std::cerr << "kwsPlusRoadmap :" << x << std::endl
 
 using std::set;
-using namespace::std;
+
 KIT_PREDEF_CLASS ( CkwsPlusRoadmap );
 
 

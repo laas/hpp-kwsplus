@@ -6,10 +6,6 @@
 
 */
 
-/*! \addtogroup hpp
- *@{
- */
-
 /*****************************************
 INCLUDES
 *******************************************/
@@ -18,6 +14,23 @@ INCLUDES
 #include "flicDirectPath.h"
 #include "kwsPlusDistance.h"
 
+#if DEBUG==3
+#define ODEBUG3(x) std::cout << "CkwsPlusDistance:" << x << std::endl
+#define ODEBUG2(x) std::cout << "CkwsPlusDistance:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CkwsPlusDistance:" << x << std::endl
+#elif DEBUG==2
+#define ODEBUG3(x)
+#define ODEBUG2(x) std::cout << "CkwsPlusDistance:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CkwsPlusDistance:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG3(x)
+#define ODEBUG2(x) 
+#define ODEBUG1(x) std::cerr << "CkwsPlusDistance:" << x << std::endl
+#else
+#define ODEBUG3(x)
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
 
 /*****************************************
 PUBLIC METHODS
@@ -60,7 +73,7 @@ CkwsPlusDistanceShPtr CkwsPlusDistance:: create ( CkwsSteeringMethodShPtr inStre
 	CkwsPlusDistanceShPtr flatShPtr ( flatPtr );
 	CkwsPlusDistanceWkPtr flatWkPtr ( flatShPtr );
 
-	cout << "CkwsPlusDistance create" << endl;
+	ODEBUG2( "CkwsPlusDistance create" );
 
 	if ( flatPtr->init ( flatWkPtr ) != KD_OK ) flatShPtr.reset();
 
@@ -78,7 +91,3 @@ double CkwsPlusDistance::distance ( const CkwsConfig &i_cfg1, const CkwsConfig &
 	}
 	return flicDirectPath->length();
 }
-
-
-/** @}
- */
