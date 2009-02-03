@@ -54,15 +54,6 @@ template<class T = CkwsDiffusingRdmBuilder > class CkwsPlusPCARdmBuilder;
 class CkwsDiffusingRdmBuilder;
 class CkwsIPPRdmBuilder;
 
-
-#if 0
-typedef  CkwsPlusPCARdmBuilder<CkwsDiffusingRdmBuilder> CkwsPlusPCADiffusingRdmBuilder;
-typedef  CkwsPlusPCARdmBuilder<CkwsIPPRdmBuilder> CkwsPlusPCAIPPRdmBuilder;
-
-KIT_POINTER_DEFS(  CkwsPlusPCADiffusingRdmBuilder );
-KIT_POINTER_DEFS(  CkwsPlusPCAIPPRdmBuilder );
-#endif
-
 /**
    \addtogroup PCA
    @{
@@ -211,7 +202,6 @@ KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>)
 				   const CkwsDiffusionShooterShPtr &i_shooter
 				   )
 {
-  cout << "CkwsPlusPCARdmBuilder::create" << endl;
   CkwsPlusPCARdmBuilder<T> * pcaRdmBuilderPtr = new CkwsPlusPCARdmBuilder<T>(i_roadmap);
   KIT_SHARED_PTR(CkwsPlusPCARdmBuilder<T>) pcaRdmBuilderShPtr(pcaRdmBuilderPtr);
   KIT_WEAK_PTR(CkwsPlusPCARdmBuilder<T>) pcaRdmBuilderWkPtr(pcaRdmBuilderShPtr);
@@ -328,13 +318,13 @@ void CkwsPlusPCARdmBuilder<T>::doPCA(const CkwsNodeShPtr fatherNode,
 
 
   int n = T::roadmap()->device()->countDofs();
-  vector<double> * tab = new vector<double>[n];       
+  std::vector<double> * tab = new std::vector<double>[n];       
 
  /* Breadth-first search to find the neighbours  used in the PCA*/
 
-  map<CkwsNodeShPtr , int> color;
-  map<CkwsNodeShPtr , int> distance;
-  queue<CkwsNodeShPtr> F;
+  std::map<CkwsNodeShPtr , int> color;
+  std::map<CkwsNodeShPtr , int> distance;
+  std::queue<CkwsNodeShPtr> F;
 
   int neighbours = 0;
   int d_max = INT_MAX;

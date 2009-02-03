@@ -1,5 +1,6 @@
 2009/02/03	kwsPlus release 1.6
-
+	
+	55. Generate unitTesting/Makefile.in even without --enable-unitTesting
 	54. Removed using namespace commands in headers.
 	
 2008/09/08	kwsPlus release 1.5
