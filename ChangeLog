@@ -1,3 +1,7 @@
+2009/02/03	kwsPlus release 1.6
+
+	54. Removed using namespace commands in headers.
+	
 2008/09/08	kwsPlus release 1.5
 
 	53. Define macro FLIC_HUGE_VAL.
