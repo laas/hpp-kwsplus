@@ -5,7 +5,7 @@
 # Author: Florent Lamiraux
 #
 
-kwsPlusdir = $(datadir)/doc/kwsPlus
+kwsPlusdir = $(datadir)/doc/kwsPlus/html
 
 EXTRA_DIST = \
 	footer.html \
@@ -34,8 +34,7 @@ install: html-doc
 	$(INSTALL_DATA) html/* $(kwsPlusdir)
 	mkdir -p $(kwsPlusdir)/papers
 	$(INSTALL_DATA) $(srcdir)/papers/* $(kwsPlusdir)/papers
-	mkdir -p $(datadir)/doc/doxytag
-	$(INSTALL_DATA) kwsPlus.doxytag $(datadir)/doc/doxytag
+	$(INSTALL_DATA) kwsPlus.doxytag $(kwsPlusdir)
 
 html-doc: kwsPlus.dox
 	doxygen $<

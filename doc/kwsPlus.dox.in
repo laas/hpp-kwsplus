@@ -157,7 +157,7 @@ SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
 # Configuration::additions related to external references   
 #---------------------------------------------------------------------------
-TAGFILES               = @KWSIO_PREFIX@/share/doc/doxytag/kwsIO.doxytag=@KWSIO_PREFIX@/share/doc/kwsIO
+TAGFILES               = 
 GENERATE_TAGFILE       = kwsPlus.doxytag
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
