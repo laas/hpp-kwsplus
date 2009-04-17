@@ -5,10 +5,12 @@
 #ifndef DIRECT_PATH_VECTOR_H
 #define DIRECT_PATH_VECTOR_H
 
+#warning "deprecated header file. Please include kwsPlus/directPath/directPathVector.h instead."
+
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "kwsPlusDirectPath.h"
+#include "kwsPlus/directPath/kwsPlusDirectPath.h"
 
 KIT_PREDEF_CLASS(CdirectPathVector);
 

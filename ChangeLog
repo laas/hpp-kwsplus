@@ -1,3 +1,7 @@
+
+	57. Distribute headers in subdirectories.
+	56. Install doxytag file in ${datadir}/doc/kwsPlus/html directory.
+	
 2009/02/03	kwsPlus release 1.6
 	
 	55. Generate unitTesting/Makefile.in even without --enable-unitTesting

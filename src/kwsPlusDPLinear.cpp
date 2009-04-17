@@ -9,7 +9,7 @@
 INCLUDES
 *******************************************/
 
-#include "kwsPlusDPLinear.h"
+#include "kwsPlus/directPath/kwsPlusDPLinear.h"
 #include "KineoWorks2/kwsDevice.h" // without this causes error when calling functions of kwsDevice
 // #include "kwsioInterface.h"
 #include <math.h>

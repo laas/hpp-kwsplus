@@ -206,8 +206,11 @@ SHOW_DIRECTORIES       = NO
 #---------------------------------------------------------------------------
 FILE_PATTERNS          = *.h *.idl
 EXCLUDE_PATTERNS       = 
-INPUT                  = @top_srcdir@/include \
-                         @srcdir@/additionalDoc
+INPUT                  = \
+			@top_srcdir@/include/kwsPlus/directPath \
+			@top_srcdir@/include/kwsPlus/roadmap \
+			@top_srcdir@/include/kwsPlus/util \
+                        @srcdir@/additionalDoc
 
 #---------------------------------------------------------------------------
 # configuration options related to inserting images

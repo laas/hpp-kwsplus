@@ -9,8 +9,8 @@
             INCLUDES
 *******************************************/
 
-#include "reedsSheppSteeringMethod.h"
-#include "reedsSheppDirectPath.h"
+#include "kwsPlus/directPath/reedsSheppSteeringMethod.h"
+#include "kwsPlus/directPath/reedsSheppDirectPath.h"
 
 #if DEBUG==3
 #define ODEBUG3(x) std::cout << "CreedsSheppSteeringMethod:" << x << std::endl

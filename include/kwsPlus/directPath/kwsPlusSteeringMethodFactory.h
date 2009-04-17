@@ -7,9 +7,9 @@
 #ifndef KWSPLUSSTEERINGMETHODFACTORY_H
 #define KWSPLUSSTEERINGMETHODFACTORY_H
 
-#include "kwsPlusSMLinear.h"
-#include "reedsSheppSteeringMethod.h"
-#include "flicSteeringMethod.h"
+#include "kwsPlus/directPath/kwsPlusSMLinear.h"
+#include "kwsPlus/directPath/reedsSheppSteeringMethod.h"
+#include "kwsPlus/directPath/flicSteeringMethod.h"
 
 /**
 

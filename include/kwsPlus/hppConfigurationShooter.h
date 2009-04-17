@@ -7,6 +7,8 @@
 #ifndef HPP_CONFIGURATIONSHOOTER_H
 #define HPP_CONFIGURATIONSHOOTER_H
 
+#warning "deprecated header file. Please include kwsPlus/roadmap/hppConfigurationShooter.h instead."
+
 /*************************************
 INCLUDE
 **************************************/
@@ -14,8 +16,8 @@ INCLUDE
 #include <list>
 #include "KineoWorks2/kwsNode.h"
 
-#include "hppConfigurationShooter.h"
-#include "hppActiveDofSetter.h"
+#include "kwsPlus/roadmap/hppConfigurationShooter.h"
+#include "kwsPlus/roadmap/hppActiveDofSetter.h"
 
 KIT_PREDEF_CLASS(ChppConfigurationShooter);
 

@@ -16,7 +16,7 @@
 #include "KineoWorks2/kwsSteeringMethod.h"
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDefine.h"
-#include "reedsSheppDirectPath.h"
+#include "kwsPlus/directPath/reedsSheppDirectPath.h"
 
 
 

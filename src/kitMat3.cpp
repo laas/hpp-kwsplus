@@ -5,7 +5,7 @@
  
 */
 
-#include "kitMat3.h"
+#include "kwsPlus/util/kitMat3.h"
 
 #define SIGN(a) (((a)>0)?(1):(-1))
 

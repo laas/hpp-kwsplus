@@ -5,7 +5,7 @@
 
 */
 
-#include "kwsPlusNodeFactory.h"
+#include "kwsPlus/roadmap/kwsPlusNodeFactory.h"
 
 #include <iostream>
 

@@ -7,10 +7,12 @@
 #ifndef KWSPLUSDISTANCEFACTORY_H
 #define KWSPLUSDISTANCEFACTORY_H
 
+#warning "deprecated header file. Please include kwsPlus/directPath/kwsPlusDistanceFactory.h instead."
+
 #include "KineoWorks2/kwsSMLinear.h"
-#include "reedsSheppSteeringMethod.h"
-#include "flicDistance.h"
-#include "kwsPlusDistance.h"
+#include "kwsPlus/directPath/reedsSheppSteeringMethod.h"
+#include "kwsPlus/directPath/flicDistance.h"
+#include "kwsPlus/directPath/kwsPlusDistance.h"
 
 /**
 

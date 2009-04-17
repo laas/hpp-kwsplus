@@ -19,7 +19,7 @@ INCLUDE
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDefine.h"
 
-#include "kwsPlusDirectPath.h"
+#include "kwsPlus/directPath/kwsPlusDirectPath.h"
 
 KIT_PREDEF_CLASS( CflicDirectPath );
 KIT_PREDEF_CLASS( CflicBoundManagerDefParam );

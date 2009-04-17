@@ -17,8 +17,8 @@
 #include "KineoWorks2/kwsValidatorDPCollision.h"
 #include "KineoWorks2/kwsValidatorPathCollision.h"
 
-#include "hppVisRdmBuilder.h"
-#include "hppShooterActiveDof.h"
+#include "kwsPlus/roadmap/hppVisRdmBuilder.h"
+#include "kwsPlus/roadmap/hppShooterActiveDof.h"
 
 // Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
 #if DEBUG==2

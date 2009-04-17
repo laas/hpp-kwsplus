@@ -44,7 +44,7 @@ POSSIBILITY OF SUCH DAMAGE.
 *******************************************/
 
 #include <iostream>
-#include "kwsPlusRoadmap.h"
+#include "kwsPlus/roadmap/kwsPlusRoadmap.h"
 
 #if DEBUG==3
 #define ODEBUG3(x) std::cout << "CkwsPlusRoadmap:" << x << std::endl

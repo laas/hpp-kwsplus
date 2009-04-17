@@ -4,7 +4,7 @@
 */
 
 
-#include "kwsPlusDirectPath.h"
+#include "kwsPlus/directPath/kwsPlusDirectPath.h"
 
 // Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
 #if DEBUG==2

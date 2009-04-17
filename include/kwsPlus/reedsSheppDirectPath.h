@@ -8,12 +8,14 @@
 #ifndef  __REEDS_SHEPP_DP_H
 #define __REEDS_SHEPP_DP_H
 
+#warning "deprecated header file. Please include kwsPlus/directPath/reedsSheppDirectPath.h instead."
+
 /*************************************
             INCLUDE
 **************************************/
 
 
-#include "kwsPlusDirectPath.h"
+#include "kwsPlus/directPath/kwsPlusDirectPath.h"
 
 #include <iostream>
 //#include <KineoWorks2/kwsDirectPath.h>

@@ -3,8 +3,8 @@
   Authors: Florent Lamiraux
 */
 
-#include "flicDirectPath.h"
-#include "flicDistance.h"
+#include "kwsPlus/directPath/flicDirectPath.h"
+#include "kwsPlus/directPath/flicDistance.h"
 #include "flicManager.h"
 
 // Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"

@@ -5,8 +5,8 @@
 
 */
 
-#include "kwsPlusNode.h"
-#include "kwsPlusEdge.h"
+#include "kwsPlus/roadmap/kwsPlusNode.h"
+#include "kwsPlus/roadmap/kwsPlusEdge.h"
 
 #include "KineoWorks2/kwsRoadmap.h"
 #include "KineoWorks2/kwsDevice.h"
@@ -107,7 +107,7 @@ ktStatus CkwsPlusNode::computeRank(int inRank){
     attCatch = true;
     if(countInEdges() != 0){
       
-      for(int i =0; i<countInEdges(); i++){
+      for(unsigned int i =0; i<countInEdges(); i++){
 	
 	CkwsPlusNodeShPtr parent = KIT_DYNAMIC_PTR_CAST(CkwsPlusNode,inEdge(i)->startNode());
 	if(!parent) return KD_ERROR;
@@ -183,7 +183,7 @@ ktStatus CkwsPlusNode::activate(bool inState){
 	else inEdge->startNode()->addOutEdge(inPlusEdge); //activation
       }
 
-      for(int i=0; i<countOutEdges(); i++){
+      for(unsigned int i=0; i<countOutEdges(); i++){
 
 	CkwsEdgeShPtr outEdge = CkwsNode::outEdge(i);
 	CkwsConfig endConfig(outEdge->endNode()->config());

@@ -1,1 +1,9 @@
-No news is good news.
+To be published in the next release:
+
+  1. header files have been redistributed into sub-directories of
+     ${includedir}/kwsPlus:
+       ${includedir}/kwsPlus/roadmap
+       ${includedir}/kwsPlus/directPath
+       ${includedir}/kwsPlus/util
+     for backward compatibility, copies of the headers have also been installed
+     in ${includedir}/kwsPlus, but a warning message suggests to include the new version.

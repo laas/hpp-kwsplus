@@ -29,7 +29,7 @@
             INCLUDES
 *******************************************/
 
-#include "reedsSheppDirectPath.h"
+#include "kwsPlus/directPath/reedsSheppDirectPath.h"
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsJoint.h"
 #include "KineoWorks2/kwsDevice.h" // without this causes error when calling functions of kwsDevice

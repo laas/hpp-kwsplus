@@ -14,8 +14,8 @@
 INCLUDES
 *******************************************/
 
-#include "flicSteeringMethod.h"
-#include "flicDirectPath.h"
+#include "kwsPlus/directPath/flicSteeringMethod.h"
+#include "kwsPlus/directPath/flicDirectPath.h"
 
 #if DEBUG==3
 #define ODEBUG3(x) std::cout << "CflicSteeringMethod:" << x << std::endl

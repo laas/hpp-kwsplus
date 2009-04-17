@@ -13,8 +13,8 @@
 INCLUDES
 *******************************************/
 
-#include "kwsPlusSMLinear.h"
-#include "kwsPlusDPLinear.h"
+#include "kwsPlus/directPath/kwsPlusSMLinear.h"
+#include "kwsPlus/directPath/kwsPlusDPLinear.h"
 
 #if DEBUG==3
 #define ODEBUG3(x) std::cout << "CkwsPlusSMLinear:" << x << std::endl

@@ -11,7 +11,7 @@
 INCLUDE
 **************************************/
 #include "KineoWorks2/kwsRoadmapBuilder.h"
-#include "hppShooterActiveDof.h"
+#include "kwsPlus/roadmap/hppShooterActiveDof.h"
 
 
 KIT_PREDEF_CLASS(ChppVisRdmBuilder);
@@ -51,7 +51,7 @@ public:
 
   /** 
       \brief set max iteration
-      \param i_max_iteration: maximum iteration number.
+      \param i_max_iterations: maximum iteration number.
   */
   void maxIteration(unsigned int i_max_iterations) 
                      { att_max_iterations = i_max_iterations; } ;
@@ -64,7 +64,7 @@ public:
 
   /** 
       \brief set current iteration
-      \param i_crnt_iteration: current iteration number.
+      \param i_crnt_iterations: current iteration number.
   */
   void crntIteration(unsigned int i_crnt_iterations) 
                      { att_n_iterations = i_crnt_iterations; } ;

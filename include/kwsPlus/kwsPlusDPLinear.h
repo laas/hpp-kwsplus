@@ -8,6 +8,8 @@
 #ifndef KWSPLUS_DPLINEAR_H
 #define KWSPLUS_DPLINEAR_H
 
+#warning "deprecated header file. Please include kwsPlus/directPath/kwsPlusDPLinear.h instead."
+
 /*************************************
 INCLUDE
 **************************************/
@@ -16,7 +18,7 @@ INCLUDE
 #include "KineoWorks2/kwsDPLinear.h"
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDefine.h"
-#include "kwsPlusDirectPath.h"
+#include "kwsPlus/directPath/kwsPlusDirectPath.h"
 
 KIT_PREDEF_CLASS( CkwsConfig );
 KIT_PREDEF_CLASS( CkwsSteeringMethod );
