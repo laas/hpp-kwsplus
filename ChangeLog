@@ -1,4 +1,5 @@
-
+2009/04/17	kwsPlus release 1.7
+	
 	58. Create nodes with node factory in ChppVisRdmBuilder.
 	57. Distribute headers in subdirectories.
 	56. Install doxytag file in ${datadir}/doc/kwsPlus/html directory.

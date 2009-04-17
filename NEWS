@@ -1,4 +1,6 @@
-To be published in the next release:
+2009/04/17 Release 1.7
+
+  Main changes since 1.6
 
   1. header files have been redistributed into sub-directories of
      ${includedir}/kwsPlus:
@@ -7,3 +9,7 @@ To be published in the next release:
        ${includedir}/kwsPlus/util
      for backward compatibility, copies of the headers have also been installed
      in ${includedir}/kwsPlus, but a warning message suggests to include the new version.
+ 
+  2. ChppVisRdmbuilder uses the node factory of the roadmap builder instead of 
+     creating nodes by itself. Thus, if the user set a node factory to build 
+     customized nodes, this node factory is taken into account.
