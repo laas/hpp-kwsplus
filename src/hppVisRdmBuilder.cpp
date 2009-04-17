@@ -16,6 +16,7 @@
 #include "KineoWorks2/kwsValidatorCfgCollision.h"
 #include "KineoWorks2/kwsValidatorDPCollision.h"
 #include "KineoWorks2/kwsValidatorPathCollision.h"
+#include "KineoWorks2/kwsNodeFactory.h"
 
 #include "kwsPlus/roadmap/hppVisRdmBuilder.h"
 #include "kwsPlus/roadmap/hppShooterActiveDof.h"
@@ -93,7 +94,7 @@ ktStatus ChppVisRdmBuilder::buildOneStep()
   CkwsConfig currentConf(this->roadmap()->device());
   CkwsConfig config(this->roadmap()->device());
   this->roadmap()->device()->getCurrentConfig(currentConf);
-  CkwsNodeShPtr currentNode = CkwsNode::create(currentConf);
+  CkwsNodeShPtr currentNode = nodeFactory()->makeNode(currentConf);
 
 
   std::vector<double> dofs;
@@ -108,7 +109,7 @@ ktStatus ChppVisRdmBuilder::buildOneStep()
     constraints->apply(config);
     bool val=true;
     CkwsValidatorCfgCollisionShPtr cfv = CkwsValidatorCfgCollision::create (this->roadmap()->device());
-    CkwsNodeShPtr node = CkwsNode::create(config);
+    CkwsNodeShPtr node = nodeFactory()->makeNode(config);
     unsigned int i=0;
     while( i<constraints->count() && val)
     {
@@ -145,7 +146,7 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
   {
     int ncc=0;
 
-    CkwsNodeShPtr o_node = CkwsNode::create(node->config());
+    CkwsNodeShPtr o_node = nodeFactory()->makeNode(node->config());
     CkwsDirectPathShPtr o_dp;
     ODEBUG2(" nbr cc " << roadmap()->countConnectedComponents());
 
