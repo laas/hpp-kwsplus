@@ -1,3 +1,9 @@
+2009-04-30  Florent Lamiraux  <florent@laas.fr>
+
+	Homogeneize style in headers and complete doc.
+	* include/kwsPlus/kwsPlusDPLinear.h: Remove obsolete headers
+	* include/kwsPlus/kwsPlusSMLinear.h: Remove obsolete headers
+
 2009/04/30 Florent Lamiraux <florent@laas.fr>
 	
 	Better handle dependency to boost at configuration
