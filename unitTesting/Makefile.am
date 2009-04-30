@@ -2,6 +2,8 @@
 #  Copyright CNRS-LAAS Florent Lamiraux
 # 
 
+include $(top_srcdir)/build-aux/init.mk
+
 if UNITTESTING
 TESTS = \
 	testFlicMaxDeriv 
@@ -39,7 +41,7 @@ testFlicMaxDeriv_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicDirectPathMaxAbsDeriv.cpp
 
-testFlicMaxDeriv_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicMaxDeriv_CPPFLAGS = $(AM_CPPFLAGS) $(TESTKINEOWORKS_CFLAGS) 
 testFlicMaxDeriv_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 
@@ -51,7 +53,7 @@ testFlicBoundObj_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicDirectPathBoundingObjects.cpp
 
-testFlicBoundObj_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicBoundObj_CPPFLAGS = $(AM_CPPFLAGS) $(TESTKINEOWORKS_CFLAGS) 
 testFlicBoundObj_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 
@@ -62,7 +64,7 @@ testFlicStraightLine_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicStraightLine.cpp
 
-testFlicStraightLine_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicStraightLine_CPPFLAGS = $(AM_CPPFLAGS)  $(TESTKINEOWORKS_CFLAGS) 
 testFlicStraightLine_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 #
@@ -72,7 +74,7 @@ testFlicApproximateDistance_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicApproximateDistance.cpp
 
-testFlicApproximateDistance_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicApproximateDistance_CPPFLAGS = $(AM_CPPFLAGS)  $(TESTKINEOWORKS_CFLAGS) 
 testFlicApproximateDistance_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 #
@@ -82,7 +84,7 @@ testFlicCopyAndExtract_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicCopyAndExtract.cpp
 
-testFlicCopyAndExtract_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicCopyAndExtract_CPPFLAGS = $(AM_CPPFLAGS)  $(TESTKINEOWORKS_CFLAGS) 
 testFlicCopyAndExtract_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 #
@@ -93,7 +95,7 @@ testFlicDerivative_SOURCES = \
 	testFlicDirectPath.cpp \
 	testFlicDerivative.cpp
 
-testFlicDerivative_CPPFLAGS = -I$(srcdir)/../include $(TESTKINEOWORKS_CFLAGS) 
+testFlicDerivative_CPPFLAGS = $(AM_CPPFLAGS)  $(TESTKINEOWORKS_CFLAGS) 
 testFlicDerivative_LDFLAGS = ../src/.libs/libkwsPlus.a $(TESTKINEOWORKS_LIBS) 
 
 

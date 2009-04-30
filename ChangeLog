@@ -1,3 +1,8 @@
+2009/04/30 Florent Lamiraux <florent@laas.fr>
+	
+	Better handle dependency to boost at configuration
+	  * implement boost.m4 macro to check that boost is actually installed.
+	
 2009/04/17	kwsPlus release 1.7
 	
 	58. Create nodes with node factory in ChppVisRdmBuilder.

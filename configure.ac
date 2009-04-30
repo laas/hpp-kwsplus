@@ -8,6 +8,9 @@ dnl
 AC_INIT([kwsPlus],[1.7.99],[hpp@laas.fr])
 AC_PREREQ(2.59)
 
+# Auxiliary files.
+AC_CONFIG_AUX_DIR([build-aux])
+
 if test "$CFLAGS$CXXFLAGS" = ""; then
   setdefaultflags=yes
 else
@@ -51,14 +54,13 @@ AC_SUBST(KINEOCONTROLLER_PREFIX)
 AC_SUBST(KINEO_LIBDIR,[${KINEOCONTROLLER_PREFIX}/lib])
 AC_SUBST(KINEO_ADDON_BUILD,[${KINEOCONTROLLER_PREFIX}/bin/KineoAddonBuilder])
 
-dnl --- Boost --------------
-AC_ARG_WITH(boost,
-	AS_HELP_STRING([--with-boost], [boost installation prefix]),
-	BOOST_CFLAGS="-I${withval}/include"
-	CXXFLAGS="${CXXFLAGS} ${BOOST_CFLAGS}",
-	)
+dnl --- Search for Libtool -
+AC_CONFIG_MACRO_DIR([build-aux])
+AC_PROG_LIBTOOL
 
-AC_SUBST(BOOST_CFLAGS)
+dnl --- Boost --------------
+
+BOOST_UBLAS
 
 
 dnl lapack path
