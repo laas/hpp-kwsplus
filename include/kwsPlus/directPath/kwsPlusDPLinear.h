@@ -37,8 +37,8 @@ KIT_PREDEF_CLASS( CkwsPlusDPLinear );
 
 
 /**
-   \brief Linear direct path with derivative ratio greater than 1.
-   \brief Derivative ration will be initialized with a vector of ratios.
+   \brief Extension of KineoWorks linear direct path.
+
 */
 
 class CkwsPlusDPLinear : public CkwsPlusDirectPath {
@@ -51,8 +51,9 @@ class CkwsPlusDPLinear : public CkwsPlusDirectPath {
      \brief  Create a new instance of a flat Interpolation cart direct path.
      \param  inStart 	: the start configuration
      \param  inEnd 	: the end configuration
-      \param   inRatioVector : the vector of derivative ratio with respect to \\
-      the linear SM for each DoF to calculate maxAbsoluteDerivative
+      \param inRatioVector The vector of ratios used to overestimate 
+      variations of degree-of freedom over intervals 
+      (see maxAbsoluteDerivative()).
      \param  inSteeringMethod 	: shared pointer to the instance of the steering method that created the path
 
      \return shared pointer to a newly created flicDirectPath
@@ -84,11 +85,13 @@ class CkwsPlusDPLinear : public CkwsPlusDirectPath {
 	
   /** 
       \brief Constructor.
-      \param         inStart : the start configuration
-      \param         inEnd : the end configuration
-      \param   inRatioVector : the vector of derivative ratio with respect to \
-      the linear SM for each DoF to calculate maxAbsoluteDerivative
-      \param         inSteeringMethod Shared pointer to the instance of the steering method that created the path.
+      \param         inStart  The start configuration
+      \param         inEnd  The end configuration
+      \param inRatioVector The vector of ratios used to overestimate 
+      variations of degree-of freedom over intervals 
+      (see maxAbsoluteDerivative()).
+      \param         inSteeringMethod Shared pointer to the instance 
+      of the steering method that created the path.
    */
   CkwsPlusDPLinear(const CkwsConfig& inStart, const CkwsConfig& inEnd, 
 		   const std::vector<double> &inRatioVector, 
@@ -120,9 +123,14 @@ class CkwsPlusDPLinear : public CkwsPlusDirectPath {
   virtual double computePrivateLength() const;
 
   /**
-     \brief Returns an overestimate of the absolute value of the derivative vector of the direct path between two positions on the path.
+     \brief Return an overestimate of the absolute value of the derivative 
+     vector of the direct path between two positions on the path.
 
-     For each Dof, the derivative will be multiplied by the ratio vector.
+     CkwsDPLinear parent implementation is called. Each value of outDerivative is
+     then multiplied by value of same rank in ratio vector passed at construction.
+
+     \note if size of ratio vector is smaller than size of device, missing values
+     are replaced by 1.
   */
   virtual void	maxAbsoluteDerivative(double inFrom, double inTo, std::vector<double>& outDerivative) const;
 

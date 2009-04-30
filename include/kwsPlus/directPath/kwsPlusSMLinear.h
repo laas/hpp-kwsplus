@@ -37,6 +37,11 @@ KIT_PREDEF_CLASS( CkwsPlusSMLinear );
 CLASS
 **************************************/
 
+/**
+   \brief Steering method producing CkwsPlusDPLinear direct paths
+
+*/
+
 class CkwsPlusSMLinear : public CkwsSteeringMethod {
 
  public :
@@ -45,17 +50,18 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
   */
   virtual ~CkwsPlusSMLinear() ;
 
-  /** Static function that creates an instance of the CkwsSMLinear class.
-   *   \param         i_oriented : if true, the steering method will produce oriented paths
-   *   \param         i_ratio_vector : the vector of derivative ratio with respect to \\
-   *                  the linear SM for each DoF to calculate maxAbsoluteDerivative
-   *   \return        Shared pointer to the newly created steering method
+  /** Create an instance of the CkwsSMLinear class.
+      \param         inOriented : if true, the steering method will produce oriented paths
+      \param         inRatioVector The vector of ratios used to overestimate 
+      variations of degree-of freedom over intervals 
+      (see CkwsPlusDPLinear::maxAbsoluteDerivative()).
+      \return        Shared pointer to the newly created steering method
    */
-  static CkwsPlusSMLinearShPtr create(const std::vector<double> &i_ratio_vector,
-				      bool i_oriented = false);
+  static CkwsPlusSMLinearShPtr create(const std::vector<double> &inRatioVector,
+				      bool inOriented = false);
 
   // inherited -- for doc see parent class
-  virtual CkwsDirectPathShPtr makeDirectPath(const CkwsConfig& i_startCfg, const CkwsConfig& i_endCfg);
+  virtual CkwsDirectPathShPtr makeDirectPath(const CkwsConfig& inStartConfig, const CkwsConfig& inEndConfig);
 
   // inherited -- for doc see parent class
   virtual bool isOriented() const;
@@ -63,23 +69,36 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
  protected:
 
   /** Constructor.
-   *   \param         i_oriented : if true, the steering method will produce oriented paths
-   *   \param         i_ratio_vector : the vector of derivative ratio with respect to \\
-   *                  the linear SM for each DoF to calculate maxAbsoluteDerivative
+      \param         inOriented : if true, the steering method will produce oriented paths
+      \param         inRatioVector The vector of ratios used to overestimate 
+      variations of degree-of freedom over intervals 
+      (see CkwsPlusDPLinear::maxAbsoluteDerivative()).
    */
-  CkwsPlusSMLinear(const std::vector<double> &i_ratio_vector, bool i_oriented);
+  CkwsPlusSMLinear(const std::vector<double> &inRatioVector, bool inOriented);
 
   /** Initialization of the CkwsPlusSMLinear object.
-   *   \param         i_smWkPtr : weak pointer to the object itself
+   *   \param         inSmWkPtr : weak pointer to the object itself
    *   \return        KD_OK | KD_ERROR
    */
-  ktStatus init(const CkwsSteeringMethodWkPtr& i_smWkPtr);
+  ktStatus init(const CkwsSteeringMethodWkPtr& inSmWkPtr);
 
  private:
 
-  CkwsSteeringMethodWkPtr m_weakPtr;	 ///< weak pointer to the object itself
-  bool m_oriented;		///< does the steering method produce oriented paths?
-  std::vector<double> m_ratio_vector; ///<ratio of vector with respect to linear max absolute derivative
+  /**
+     \brief Weak pointer to itself
+  */
+  CkwsSteeringMethodWkPtr attWeakPtr;	 
+
+  /**
+     \brief whether steering method produces oriented paths
+  */
+  bool attOriented;		
+
+  /**
+     \brief Vector of security ratios that are multiplied to result of 
+     CkwsLinear::maxAbsoluteDerivative.
+  */
+  std::vector<double> attRatioVector; 
 
 };
 

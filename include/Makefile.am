@@ -69,11 +69,9 @@ kwsPlus_HEADERS = \
 	kwsPlus/flicDirectPath.h \
 	kwsPlus/flicDistance.h \
 	kwsPlus/flicSteeringMethod.h \
-	kwsPlus/kwsPlusDPLinear.h \
 	kwsPlus/kwsPlusDirectPath.h \
 	kwsPlus/kwsPlusDistance.h \
 	kwsPlus/kwsPlusDistanceFactory.h \
-	kwsPlus/kwsPlusSMLinear.h \
 	kwsPlus/kwsPlusSteeringMethodFactory.h \
 	kwsPlus/reedsSheppDirectPath.h \
 	kwsPlus/reedsSheppSteeringMethod.h

@@ -160,6 +160,9 @@ void CkwsPlusDPLinear::maxAbsoluteDerivative(double inFrom, double inTo, std::ve
   CkwsDirectPathShPtr kwsDirectPath = attLinearDP;
   kwsDirectPath->maxAbsoluteDerivative(inFrom, inTo, linearVectorDeriv);
 
+  /*
+    If ratio vector size is smaller than configuration size, complete with 1 
+  */
   std::vector<double> ratio_vector(attRatioVector);
   if(outVectorDeriv.size() > ratio_vector.size()){
     ratio_vector.resize(outVectorDeriv.size(), 1.0);

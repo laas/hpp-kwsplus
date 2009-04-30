@@ -16,6 +16,27 @@ Go to <a href="./modules.html">Modules</a> to see the organization of this packa
 
   \defgroup kwsplusdplinear Extension of linear steering method
 
+   These classes implement an extension of KineoWorks linear direct
+   path and steering method. The main extensions are described
+   below.
+
+   \li CkwsPlusDPLinear derives from CkwsPlusDirectPath and thus 
+   inherits from all fonctionalities of this class.
+   \li Direct paths of class CkwsPlusDPLinear enable users to overestimate 
+   the variations of the degrees of freedom of a robot along intervals of 
+   parameter. 
+
+   In some applications, for instance when constraints impose relations 
+   between some degrees of freedom, computing upper-bounds on the above 
+   variations as requested by CkwsDirectPath::maxAbsoluteDerivative()
+   is not an easy task. 
+
+   To overcome this difficulty, classes of this group propose to over-estimate
+   the variation of degrees-of-freedom by multiplying the result without 
+   constraints as computed by CkwsDPLinear::maxAbsoluteDerivative() by ratios 
+   stored in a vector passed at construction of steering method 
+   CkwsPlusSMLinear.
+
   \defgroup smfactory Steering method factory
 
   \defgroup distanceFactory Distance function factory
