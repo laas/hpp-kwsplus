@@ -1,3 +1,9 @@
+2009-05-01  Florent Lamiraux  <florent@laas.fr>
+
+	Add default argument in kwsPlusSMLinear::create().
+	* include/kwsPlus/directPath/kwsPlusSMLinear.h: default
+	vector of coefficients is empty vector.
+
 2009-04-30  Florent Lamiraux  <florent@laas.fr>
 
 	Add missing file in commit cde2059b3cb.

@@ -57,7 +57,7 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
       (see CkwsPlusDPLinear::maxAbsoluteDerivative()).
       \return        Shared pointer to the newly created steering method
    */
-  static CkwsPlusSMLinearShPtr create(const std::vector<double> &inRatioVector,
+  static CkwsPlusSMLinearShPtr create(const std::vector<double> &inRatioVector=std::vector<double>(0),
 				      bool inOriented = false);
 
   // inherited -- for doc see parent class
