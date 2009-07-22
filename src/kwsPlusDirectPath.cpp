@@ -113,6 +113,21 @@ ktStatus CkwsPlusDirectPath::reverse()
   return KD_OK;
 }
 
+const CkwsConfig & CkwsPlusDirectPath::getPrivateStart () const
+{
+  return privateStart();
+}
+
+const CkwsConfig & CkwsPlusDirectPath::getPrivateEnd () const
+{
+  return privateEnd();
+} 
+
+const double CkwsPlusDirectPath::getPrivateLength () const
+{
+  return privateLength();
+} 
+
 ktStatus CkwsPlusDirectPath::getVelocityAtDistance(double inParameter, std::vector<double>& outVelocity) const
 {
   double param;
