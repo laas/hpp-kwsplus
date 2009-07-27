@@ -5,7 +5,7 @@ dnl
 dnl   Author: Florent Lamiraux LAAS-CNRS
 dnl
 
-AC_INIT([kwsPlus],[1.8],[hpp@laas.fr])
+AC_INIT([kwsPlus],[1.8.99],[hpp@laas.fr])
 AC_PREREQ(2.59)
 
 # Auxiliary files.
