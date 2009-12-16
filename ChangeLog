@@ -1,5 +1,10 @@
 2009-12-16  Thomas Moulard  <thomas.moulard@gmail.com>
 
+	Ignore more files in Git.
+	* .gitignore: Here.
+
+2009-12-16  Thomas Moulard  <thomas.moulard@gmail.com>
+
 	Resurrect Dubins curve from previous commits.
 	* include/kwsPlus/directPath/reedsSheppDirectPath.h,
 	* src/reedsSheppDirectPath.cpp: Re-insert previously
