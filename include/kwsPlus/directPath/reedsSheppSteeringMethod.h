@@ -52,7 +52,9 @@ public :
                   \param inRadius : the radius for R&S method
                   \return a shared pointer on the Steering Method
          */
-  static CreedsSheppSteeringMethodShPtr create(double inRadius, bool is_oriented = true) ;
+	static CreedsSheppSteeringMethodShPtr create(double inRadius,
+						     bool is_oriented = true,
+						     ERsCurveType type = RS_ALL) ;
 
         /**
                   \brief  Factory method that creates a new direct path between two configurations.
@@ -84,7 +86,9 @@ protected:
                   \param i_oriented : if true, the steering method will produce oriented paths
                   \param inRadius : the radius for R&S method
          */
-        CreedsSheppSteeringMethod(bool i_oriented, double inRadius);
+        CreedsSheppSteeringMethod(bool i_oriented,
+				  double inRadius,
+				  ERsCurveType type = RS_ALL);
 
         /**
                   \brief Initialization of the CkwsSMLinear object.

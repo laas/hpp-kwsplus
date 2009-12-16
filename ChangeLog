@@ -1,5 +1,12 @@
 2009-12-16  Thomas Moulard  <thomas.moulard@gmail.com>
 
+	Add curve type in reedsSheppSteeringMethod constructor/create method.
+	* include/kwsPlus/directPath/reedsSheppSteeringMethod.h,
+	* src/reedsSheppSteeringMethod.cpp: Allow the user to choose between
+	reedShepp and Dubins direct paths when constructing the steering method.
+
+2009-12-16  Thomas Moulard  <thomas.moulard@gmail.com>
+
 	Ignore more files in Git.
 	* .gitignore: Here.
 
