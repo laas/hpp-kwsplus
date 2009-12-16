@@ -1,8 +1,10 @@
 /*
-  Research carried out within the scope of the Associated International Laboratory: Joint Japanese-French Robotics Laboratory (JRL)
- 
+  Research carried out within the scope of the Associated
+  International Laboratory: Joint Japanese-French Robotics Laboratory
+  (JRL)
+
   Developed by Mathieu Poirier (LAAS-CNRS)
- 
+
 */
 
 /*****************************************
@@ -44,7 +46,7 @@
 #define ODEBUG1(x) std::cerr << "CreedsSheppDirectPath:" << x << std::endl
 #elif DEBUG==1
 #define ODEBUG3(x)
-#define ODEBUG2(x) 
+#define ODEBUG2(x)
 #define ODEBUG1(x) std::cerr << "CreedsSheppDirectPath:" << x << std::endl
 #else
 #define ODEBUG3(x)
@@ -78,7 +80,7 @@ CreedsSheppDirectPathShPtr CreedsSheppDirectPath::create(const CkwsConfig &inSta
   CreedsSheppDirectPathShPtr pathShPtr(pathPtr);
   CreedsSheppDirectPathWkPtr pathWkPtr(pathShPtr) ;
 
-       
+
   // test the root joint of the Device //
   if ( ((inStartCfg.device()->rootJoint()->countDofs() != 3) && (inStartCfg.device()->rootJoint()->countDofs() != 6)) || (inStartCfg.device()->countExtraDofs() != 0 ) ) {
     ODEBUG1(" ERROR - CreedsSheppDirectPath::create failed : Reeds&Shepp implemented only for PLAN or FREEFLYER root joint without ExtraDof") ;
@@ -105,7 +107,7 @@ CreedsSheppDirectPathShPtr CreedsSheppDirectPath::create(const CkwsConfig &inSta
     return pathShPtr ;
   }
 
- 
+
 
   return pathShPtr ;
 
@@ -143,14 +145,14 @@ double CreedsSheppDirectPath::angleBetween2Vector( CkitVect3 startVect , CkitVec
   double prodNorm ;
 
   prodNorm = startVect.norm() * endVect.norm() ;
-  
- 
+
+
   double sinA, cosA ;
 
   cosA = startVect.scalarProduct(endVect) / prodNorm ;
 
   sinA = ((startVect[0] * endVect[1]) - (startVect[1] * endVect[0])) / prodNorm ;
-  
+
   return atan2(sinA, cosA) ;
 }
 
@@ -171,10 +173,10 @@ void CreedsSheppDirectPath::computeNewVal(TrsCurve &curCurve)
   }
   else {
     CkitPoint3 center ;
-    
+
     center[0] = curCurve.centre_x ;
     center[1] = curCurve.centre_y ;
-    
+
     CkitVect3 center_Start, center_End ;
 
     center_Start = Start - center ;
@@ -183,7 +185,7 @@ void CreedsSheppDirectPath::computeNewVal(TrsCurve &curCurve)
     double angle = angleBetween2Vector(center_Start, center_End) ;
 
     curCurve.val = fabs(angle * curCurve.r) ;
-    
+
   }
 }
 
@@ -192,23 +194,23 @@ void CreedsSheppDirectPath::computeNewVal(TrsCurve &curCurve)
 std::vector< TrsCurve >CreedsSheppDirectPath::getInfoRsCurveVector()  {
 
   std::vector<TrsCurve> vectorCopy  ;
-  
+
   double ustart = uStart() ;
   double uend = uEnd() ;
 
   unsigned int iStart = findRsCurveNumInVector(ustart) ;
   unsigned int iEnd = findRsCurveNumInVector(uend) ;
-  
+
   for ( unsigned int i = iStart ; i <= iEnd ; i ++) {
     vectorCopy.push_back(attRsCurveVector[i]) ;
   }
-  
+
   vectorCopy[0].cd = configAtStart() ;
   vectorCopy[vectorCopy.size()-1].cf = configAtEnd() ;
-    
+
   computeNewVal(vectorCopy[0]) ;
   computeNewVal(vectorCopy[vectorCopy.size()-1]) ;
-  
+
   //DEBUG
   //cout << " ustart : " << ustart << " uend : " << uend << endl ;
   //cout << " iStart : " << iStart << " iEnd : " << iEnd << endl ;
@@ -309,7 +311,7 @@ void CreedsSheppDirectPath::maxAbsoluteDerivative(double inFrom, double inTo,
   outVectorDeriv.push_back(1) ;
   // Y
   outVectorDeriv.push_back(1) ;
-  
+
   if ( attTypeConfig == PLAN ) {
     // RZ
     outVectorDeriv.push_back(maxDerivative) ;
@@ -322,7 +324,7 @@ void CreedsSheppDirectPath::maxAbsoluteDerivative(double inFrom, double inTo,
     // RY
     outVectorDeriv.push_back(0) ;
     // RZ
-    outVectorDeriv.push_back(maxDerivative) ; 
+    outVectorDeriv.push_back(maxDerivative) ;
   }
 
 }
@@ -360,9 +362,10 @@ ktStatus CreedsSheppDirectPath::computeRSCurve(CkwsConfig  inStartCfg , CkwsConf
   case RS_ALL:
     longueur_rs = reed_shepp(inStartCfg , inEndCfg , inRadius, numero , t , u , v);
     break;
-    //case RS_DUBINS:
-    //longueur_rs = dubins(inStartCfg , inEndCfg , inRadius, numero , t , u , v);
-    //break;
+  case RS_DUBINS:
+    longueur_rs = dubins(inStartCfg , inEndCfg , inRadius, numero , t , u , v);
+    break;
+
     //case RS_NO_CUSP:
     //longueur_rs = reed_shepp_no_cusp(inStartCfg,inEndCfg, inRadius, numero, t, u, v);
     //break;
@@ -384,6 +387,131 @@ ktStatus CreedsSheppDirectPath::computeRSCurve(CkwsConfig  inStartCfg , CkwsConf
   } else {
     return KD_ERROR;
   }
+}
+
+
+double CreedsSheppDirectPath::dubins(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r)
+{
+  double x , y , phi;
+  double t , u , v , t1 , u1 , v1;
+  int num;
+  double var , var_d, theta , alpha , dx , dy , r, longueur;
+
+  int dofRotz ;
+  if ( attTypeConfig == PLAN )
+    dofRotz = 2 ;
+  else
+    dofRotz = 5 ;
+
+  /* Changement de repere,les courbes sont toujours calculees
+     de (0 0 0)--> (x , y , phi) */
+  dx       = (c2.dofValue(0) - c1.dofValue(0));
+  dy       = (c2.dofValue(1) - c1.dofValue(1));
+  var      = (c2.dofValue(dofRotz) - c1.dofValue(dofRotz));
+
+
+  r        = radius;
+
+  theta    = atan2(dy , dx);
+  alpha    = theta - (c1.dofValue(dofRotz));
+  var_d    = sqrt(dx*dx + dy*dy);
+  x        = cos(alpha)*var_d;
+  y        = sin(alpha)*var_d;
+
+
+  t1 = u1 = v1 = 0.0;
+
+  if (fabs(var) <= M_PI)
+    phi = var;
+  else {
+    if (c2.dofValue(dofRotz) >= c1.dofValue(dofRotz))
+      phi = var - M_2PI;
+    else
+      phi = mod2pi(var);
+  }
+
+  if(FEQ(r,0.0,EPS4)) {
+
+    longueur = csca(x , y , phi , r , t1 , u1 , v1); /* l+ s+ l+ */
+    var = t1+v1;
+    num = 9;
+    t = t1;
+    u = u1;
+    v = v1;
+
+    csca(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ r+ */
+    if((t1+v1) < (t+v)) {
+      num = 10;
+      t = t1;
+      u = u1;
+      v = v1;
+    }
+    cscb(x , y , phi , r , t1 , u1 , v1); /* l+ s+ r+ */
+    if((t1+v1) < (t+v)) {
+      num = 13;
+      t = t1;
+      u = u1;
+      v = v1;
+    }
+    cscb(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ l+ */
+    if((t1+v1) < (t+v)) {
+      num = 14;
+      t = t1;
+      u = u1;
+      v = v1;
+    }
+
+    t_r = t;
+    u_r = u;
+    v_r = v;
+    numero = num;
+    if(longueur == infini)
+      std::cerr << "ERROR - CreedsSheppDirectPath::dubins : infini" << std::endl;
+    return(longueur);
+  }
+
+  /****  C S C ****/
+
+  longueur = csca(x , y , phi , r , t1 , u1 , v1); /* l+ s+ l+ */
+  num = 9;
+  t = t1;
+  u = u1;
+  v = v1;
+
+  var = csca(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ r+ */
+  if (var < longueur) {
+    longueur = var;
+    num = 10;
+    t = t1;
+    u = u1;
+    v = v1;
+  }
+
+  var = cscb(x , y , phi , r , t1 , u1 , v1); /* l+ s+ r+ */
+  if (var < longueur) {
+    longueur = var;
+    num = 13;
+    t = t1;
+    u = u1;
+    v = v1;
+  }
+
+  var = cscb(x ,-y , -phi , r , t1 , u1 , v1); /* r+ s+ l+ */
+  if (var < longueur) {
+    longueur = var;
+    num = 14;
+    t = t1;
+    u = u1;
+    v = v1;
+  }
+
+
+  t_r = t;
+  u_r = u;
+  v_r = v;
+  numero = num;
+
+  return(longueur);
 }
 
 // ==============================================================================
@@ -1310,7 +1438,7 @@ ktStatus  CreedsSheppDirectPath::computeRsCurveVector(int num , double t, double
 void CreedsSheppDirectPath::addRsCurveToVector(double r, int ty , int se , double val , CkwsConfig &curConfig )
 {
   TrsCurve  curCurve;
- 
+
   curCurve.cd = CkwsConfig::create(curConfig.device()) ;
   curCurve.cf  = CkwsConfig::create(curConfig.device()) ;
 
@@ -1427,7 +1555,7 @@ unsigned int CreedsSheppDirectPath::findRsCurveNumInVector(double &param) const
 
     param = param - attRsCurveVector[irs].val;
     irs ++ ;
-    
+
   }
 
   return irs ;
@@ -1453,7 +1581,7 @@ void CreedsSheppDirectPath::kwsConfigAtLengthParam(double u, CkwsConfig &outCfg)
   else
     dofRotz = 5 ;
 
- 
+
 
   theta_init = attRsCurveVector[irs].cd->dofValue(dofRotz);
   theta_end = attRsCurveVector[irs].cf->dofValue(dofRotz);

@@ -39,7 +39,7 @@ enum ERsCurveType {
   RS_ALL = 0 ,
   //RS_NO_CUSP = -1,
   //RS_WITH_CUSP = -2,
-  //RS_DUBINS = -3
+  RS_DUBINS = -3
 } ;
 
 ///Type for the direction
@@ -286,6 +286,8 @@ private :
      \name Calculation Function
      @{
   */
+
+  double dubins(CkwsConfig &c1 , CkwsConfig &c2, double radius , int &numero , double &t_r , double &u_r , double &v_r);
 
 
   /**

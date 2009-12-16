@@ -1,5 +1,12 @@
 2009-12-16  Thomas Moulard  <thomas.moulard@gmail.com>
 
+	Resurrect Dubins curve from previous commits.
+	* include/kwsPlus/directPath/reedsSheppDirectPath.h,
+	* src/reedsSheppDirectPath.cpp: Re-insert previously
+	deleted/commented code.
+
+2009-12-16  Thomas Moulard  <thomas.moulard@gmail.com>
+
 	Generate config.h header.
 	* configure.ac: Generate ``config.h'' to make compilation
 	lines less verbose.
