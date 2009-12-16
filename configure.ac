@@ -107,11 +107,23 @@ fi
 
 AM_CONDITIONAL(UNITTESTING, test x${enable_unitTesting} = xyes)
 
-AC_OUTPUT(Makefile
-	src/Makefile
-	include/Makefile
-	doc/Makefile
-	unitTesting/Makefile
-	doc/kwsPlus.dox
-	kwsPlus.pc
-)
+
+## -------------- ##
+## Write output.  ##
+## -------------- ##
+
+# Create config.h
+AC_CONFIG_HEADERS([config.h])
+
+# Create Makefiles.
+AC_CONFIG_FILES([Makefile
+   src/Makefile
+   include/Makefile
+   doc/Makefile
+    doc/kwsPlus.dox
+   unitTesting/Makefile
+   kwsPlus.pc
+])
+
+# Write files.
+AC_OUTPUT
