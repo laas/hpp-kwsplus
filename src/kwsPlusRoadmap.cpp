@@ -46,38 +46,26 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <iostream>
 #include "kwsPlus/roadmap/kwsPlusRoadmap.h"
 
-#if DEBUG==3
-#define ODEBUG3(x) std::cout << "CkwsPlusRoadmap:" << x << std::endl
-#define ODEBUG2(x) std::cout << "CkwsPlusRoadmap:" << x << std::endl
-#define ODEBUG1(x) std::cerr << "CkwsPlusRoadmap:" << x << std::endl
-#elif DEBUG==2
-#define ODEBUG3(x)
-#define ODEBUG2(x) std::cout << "CkwsPlusRoadmap:" << x << std::endl
+// Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
+#if DEBUG==2
+#define ODEBUG2(x) std::cerr << "CkwsPlusRoadmap:" << x << std::endl
 #define ODEBUG1(x) std::cerr << "CkwsPlusRoadmap:" << x << std::endl
 #elif DEBUG==1
-#define ODEBUG3(x)
-#define ODEBUG2(x) 
+#define ODEBUG2(x)
 #define ODEBUG1(x) std::cerr << "CkwsPlusRoadmap:" << x << std::endl
 #else
-#define ODEBUG3(x)
 #define ODEBUG2(x)
 #define ODEBUG1(x)
 #endif
 
-
-KIT_PREDEF_CLASS ( CkppComponent );
-
-
-// ==========================================================================
-
+unsigned int CkwsPlusRoadmap::nbObject = 0;
 
 CkwsPlusRoadmap::CkwsPlusRoadmap() :CkwsRoadmap()
 {
-	RDEBUG ( "Constructor of class CkwsPlusRoadmap." );
-
+	nbObject++;
+	ODEBUG2 ( "Constructor of class CkwsPlusRoadmap. Number of objects: "<< nbObject );
 }
-
-//create method
+// ==========================================================================
 CkwsPlusRoadmapShPtr CkwsPlusRoadmap::create ( CkwsDeviceShPtr inDevice )
 {
 
@@ -93,181 +81,152 @@ CkwsPlusRoadmapShPtr CkwsPlusRoadmap::create ( CkwsDeviceShPtr inDevice )
 
 }
 // ==========================================================================
-// ==========================================================================
-
-
 ktStatus CkwsPlusRoadmap::removeNodeEdge ( std::set<CkwsNodeShPtr> inNodeList , std::set<CkwsEdgeShPtr> inEdgeList )
 {
 
 	CkwsPlusRoadmapShPtr roadmapB = CkwsPlusRoadmap::create ( device() ) ;
-
 	std::map<CkwsNodeShPtr,CkwsNodeShPtr > mapOld2New;
 	std::map<CkwsNodeShPtr,CkwsNodeShPtr > :: iterator it;
 
 	int nbOfNodeInRmA= countNodes () ;
-
-	RDEBUG ( "NUMBER OF NODE in RoadmapA at the begining=  " << nbOfNodeInRmA );
-	RDEBUG ( "NUMBER OF NODE in RoadmapA Which should be removed=  " << inNodeList.size() );
-	RDEBUG ( "NUMBER OF EDGE in RoadmapA Which should be removed=  " << inEdgeList.size() );
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF NODE in RoadmapA at the begining=  " << countNodes() );
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF EDGE in RoadmapA at the begining=  " << countEdges() );
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF ConnectedComponent in RoadmapA at the begining=  " << countConnectedComponents() );
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF START NODE in RoadmapA at the begining =  " << attRoadmapBuilderWkPtr.lock()->countStartNodes() );
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF GOAL NODE in RoadmapA at the begining =  " << attRoadmapBuilderWkPtr.lock()->countGoalNodes() );
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF NODE in RoadmapA Which should be removed=  " << inNodeList.size() );
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF EDGE in RoadmapA Which should be removed=  " << inEdgeList.size() );
 
 //Adding valid nodes to the new roadmap roadmapB
 
 	int i=0;
 	int temp=0;
-	while ( ( nbOfNodeInRmA>0 ) && ( i <nbOfNodeInRmA ) )
+	while ( i<nbOfNodeInRmA )
 	{
 		CkwsNodeShPtr inNode=node ( i ) ;
 
 		if ( inNodeList.find ( inNode ) == inNodeList.end() )
 		{
-
 			CkwsNodeShPtr newNode= CkwsNode::create ( inNode->config() );
 			mapOld2New[inNode]=newNode;
 			roadmapB->addNode ( newNode );
 			temp++;
 		}
-
 		i++;
 	}
-
-	RDEBUG ( "Add Valid Node to roadmapB was done - number of added node = " << temp );
-
 //add valid edge to the new rodmap(rodmapB)
-	temp=0;
 	for ( it = mapOld2New.begin(); it!=mapOld2New.end(); it++ )
 	{
-		int nbOfOutEdges=it->first->countOutEdges();
-		i=0;
-		while ( ( nbOfOutEdges>0 ) && ( i< nbOfOutEdges ) )
+		for ( unsigned int i=1;i<= it->first->countOutEdges() ;i++ )
 		{
-
-			CkwsEdgeShPtr outEdge=it->first->outEdge ( i ) ;
+			CkwsEdgeShPtr outEdge=it->first->outEdge ( i-1 ) ;
 
 			if ( inEdgeList.find ( outEdge ) == inEdgeList.end() )
 			{
-
 				CkwsNodeShPtr endNodeOutEdge= outEdge->endNode();
 				if ( !endNodeOutEdge )
-				  ODEBUG2( "Error : endNodeOutEdge");
-
+				{
+					ODEBUG2 ( "removeNodeEdge:Error : endNodeOutEdge" );
+					return KD_ERROR;
+				}
 				if ( inNodeList.find ( endNodeOutEdge ) == inNodeList.end() )
 				{
-
-
 					CkwsDirectPathConstShPtr directPathOld=outEdge->directPath();
 					if ( !directPathOld )
-					  ODEBUG2( "Error : directPathOld");
-
-					
+					{
+						ODEBUG2 ( "removeNodeEdge:Error : directPathOld" );
+						return KD_ERROR;
+					}
 					CkwsEdgeShPtr newEdge=CkwsEdge::create ( directPathOld );
 					if ( !newEdge )
-					  ODEBUG2( "Error : newEdge");
-
+					{
+						ODEBUG2 ( "removeNodeEdge:Error : newEdge" );
+						return KD_ERROR;
+					}
 					roadmapB->addEdge ( mapOld2New[outEdge->startNode() ],mapOld2New[outEdge->endNode() ],newEdge );
-					temp++;
 				}
 			}
-
-			i++;
 		}
-
 	}
-	RDEBUG ( "Add Valid Edge to roadmapB was done - number of added edge = " << temp );
 
 //Getting the information of the  start nodes and goal nods in the RoadmapBuilder (replacing old nodes with new nods)
-	std::set <CkwsNodeShPtr> startNodeList;
-	std::set <CkwsNodeShPtr> goalNodeList;
+	std::vector <CkwsNodeShPtr> startNodeVector;
+	std::vector <CkwsNodeShPtr> goalNodeVector;
 	CkwsRoadmapBuilder::TNodeList::const_iterator startEndListIt;
-	startEndListIt=attRoadmapBuilderWkPtr.lock()->beginStartNodes();
 
-	startEndListIt = attRoadmapBuilderWkPtr.lock()->endStartNodes();
-
-
-	for ( startEndListIt=attRoadmapBuilderWkPtr.lock()->beginStartNodes();startEndListIt != attRoadmapBuilderWkPtr.lock()->endStartNodes();startEndListIt++ )
+	for ( startEndListIt=attRoadmapBuilderWkPtr.lock()->beginStartNodes();startEndListIt != attRoadmapBuilderWkPtr.lock()->endStartNodes(); startEndListIt++ )
 	{
-
-		if ( inNodeList.find ( *startEndListIt ) == inNodeList.end() )
-		{
-			startNodeList.insert ( *startEndListIt );
-
-		}
+		startNodeVector.push_back ( mapOld2New[*startEndListIt] );
 	}
 
-	for ( startEndListIt=attRoadmapBuilderWkPtr.lock()->beginGoalNodes();startEndListIt != attRoadmapBuilderWkPtr.lock()->endGoalNodes();startEndListIt++ )
+	for ( startEndListIt=attRoadmapBuilderWkPtr.lock()->beginGoalNodes();startEndListIt != attRoadmapBuilderWkPtr.lock()->endGoalNodes(); startEndListIt++ )
 	{
-
-		if ( inNodeList.find ( *startEndListIt ) == inNodeList.end() )
-		{
-			goalNodeList.insert ( *startEndListIt );
-
-		}
+		goalNodeVector.push_back ( mapOld2New[*startEndListIt] );
 	}
 
 	attRoadmapBuilderWkPtr.lock()->resetStartNodes ();
-
 	attRoadmapBuilderWkPtr.lock()->resetGoalNodes ();
-
-	RDEBUG ( "informatin of start and end nodes were get - Start Nods= " << startNodeList.size() << " , goal Nods= "<< goalNodeList.size() );
 
 
 //erasing the old road map (roadmapA)
 	clear();
-	RDEBUG ( "roadmap A cleared " );
-
 // copy roadmapB in the roadmap A which is empty now
-	int nbOfNodeInRmB= roadmapB->countNodes () ;
-
-	RDEBUG ( "NUMBER OF NODE in RoadmapB at the begining =  " << nbOfNodeInRmB );
-	RDEBUG ( "NUMBER OF NODE in RoadmapA after clearing =  " << countNodes () );
-
-	i=0;
 	std::map<CkwsNodeShPtr,CkwsNodeShPtr > mapNew2Old;
-//Copy Nodes
-	while ( ( nbOfNodeInRmB>0 ) && ( i <nbOfNodeInRmB ) )
+	for ( unsigned int i=0; i<roadmapB->countNodes ();i++ )
 	{
 		CkwsNodeShPtr inNode=roadmapB->node ( i ) ;
 		CkwsNodeShPtr newNode= CkwsNode::create ( inNode->config() );
-		mapNew2Old[inNode]=newNode;
-		addNode ( newNode );
-		i++;
+		if ( newNode )
+			mapNew2Old[roadmapB->node ( i ) ]=newNode;
+		if ( addNode ( newNode ) !=KD_OK )
+			ODEBUG1 ( "removeNodeEdge: ERROR: addNode failed" );
 	}
-//Copy Edges
 
+//Copy Edges
 	for ( it = mapNew2Old.begin(); it!=mapNew2Old.end(); it++ )
 	{
-		int nbOfOutEdges=it->first->countOutEdges();
-		i=0;
-		while ( ( nbOfOutEdges>0 ) && ( i< nbOfOutEdges ) )
+		for ( unsigned int i=1;i<= it->first->countOutEdges() ;i++ )
 		{
-			CkwsEdgeShPtr outEdge=it->first->outEdge ( i ) ;
-
+			CkwsEdgeShPtr outEdge=it->first->outEdge ( i-1 ) ;
 			CkwsEdgeShPtr newEdge=CkwsEdge::create ( outEdge->directPath() );
-			addEdge ( mapNew2Old[outEdge->startNode() ],mapNew2Old[outEdge->endNode() ],newEdge );
-
-			i++;
+			if ( addEdge ( mapNew2Old[outEdge->startNode() ],mapNew2Old[outEdge->endNode() ],newEdge ) !=KD_OK )
+				ODEBUG1 ( "removeNodeEdge: ERROR: addEdge failed" );
 		}
-
 	}
 
-
-	RDEBUG ( "NUMBER OF NODE in RoadmapA after copying B inside A =  " << countNodes () );
-
-//setting the start nodes and goal nods in the RoadmapBuilder
-	std::set <CkwsNodeShPtr>:: iterator nodeIt;
-	for ( nodeIt=startNodeList.begin();nodeIt != startNodeList.end();nodeIt++ )
+	//setting the start nodes and goal nods in the RoadmapBuilder
+	for ( unsigned int i=0; i<startNodeVector.size();i++ )
 	{
-		attRoadmapBuilderWkPtr.lock()->addStartNode ( *nodeIt );
+		if ( inNodeList.find ( startNodeVector[i] ) == inNodeList.end() )
+		{
+			if ( attRoadmapBuilderWkPtr.lock()->addStartNode ( mapNew2Old[startNodeVector[i] ] ) !=KD_OK )
+			{
+				ODEBUG1 ( "removeNodeEdge: ERROR: adding init nodes failed" );
+				return KD_ERROR;
+			}
+		}
 	}
 
-	for ( nodeIt=goalNodeList.begin();nodeIt != goalNodeList.end();nodeIt++ )
+	for ( unsigned int i=0; i<goalNodeVector.size();i++ )
 	{
-		attRoadmapBuilderWkPtr.lock()->addGoalNode ( *nodeIt );
+		if ( inNodeList.find ( goalNodeVector[i] ) == inNodeList.end() )
+		{
+			if ( attRoadmapBuilderWkPtr.lock()->addGoalNode ( mapNew2Old[goalNodeVector[i]] ) !=KD_OK )
+			{
+				ODEBUG1 ( "removeNodeEdge: ERROR: adding goal nodes failed" );
+				return KD_ERROR;
+			}
+		}
 	}
 
-
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF NODE in RoadmapA at END=  " << countNodes() );
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF EDGE in RoadmapA at END=  " << countEdges() );
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF ConnectedComponent in RoadmapA at END=  " << countConnectedComponents() );
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF START NODE in RoadmapA at END =  " << attRoadmapBuilderWkPtr.lock()->countStartNodes() );
+	ODEBUG2 ( "removeNodeEdge:NUMBER OF GOAL NODE in RoadmapA at END =  " << attRoadmapBuilderWkPtr.lock()->countGoalNodes() );
 	return KD_OK;
 }
-
+// ==========================================================================
 ktStatus CkwsPlusRoadmap::setRoadmapBuilder ( const CkwsRoadmapBuilderShPtr &i_roadmapBuilder )
 {
 	attRoadmapBuilderWkPtr=i_roadmapBuilder;

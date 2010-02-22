@@ -63,11 +63,6 @@ INCLUDE
 # include <set>
 
 
-#define RDEBUG(x)
-//#define RDEBUG(x) std::cerr << "kwsPlusRoadmap :" << x << std::endl
-
-using std::set;
-
 KIT_PREDEF_CLASS ( CkwsPlusRoadmap );
 
 
@@ -76,16 +71,11 @@ CLASS
 **************************************/
 
 /**
-   \addtogroup kwsPlusEnhancedRoadmapManagement
-   @{
-*/
-
-/**
    \brief Implement a roadmap which enable the user to remove nodes or edges.
 
    kwsPlusRoadmap (managable roadmap) is herited from kwsRoadmap and enable users to remove some nodes and edges.
 
-*/
+ */
 
 class CkwsPlusRoadmap : public CkwsRoadmap
 {
@@ -94,32 +84,34 @@ class CkwsPlusRoadmap : public CkwsRoadmap
 		CkwsPlusRoadmap() ;
 
 		/**
-		\brief Constructor 
-		*/
+		\brief Constructor
+		 */
 		static CkwsPlusRoadmapShPtr create ( CkwsDeviceShPtr inDevice );
 
 		/**
 		\brief Remove a set of nodes and a set of edges from roadmap
-		*/
+		 */
 		ktStatus removeNodeEdge ( std::set<CkwsNodeShPtr> inNodeList , std::set<CkwsEdgeShPtr> inEdgeList );
 
 		/**
-		\brief Set attRoadmapBuilderWkPtr (roadmap builder) 
-		*/
+		\brief Set attRoadmapBuilderWkPtr (roadmap builder)
+		 */
 		ktStatus setRoadmapBuilder ( const CkwsRoadmapBuilderShPtr &i_roadmapBuilder );
-
-
 
 	private:
 		/**
-		   \brief A weak pointer to the roadmap builder
-		*/
+		\brief A weak pointer to the roadmap builder
+		 */
 		CkwsRoadmapBuilderWkPtr attRoadmapBuilderWkPtr;
 
-
+		/**
+		\if 0
+		\brief Count the number of object created and not destroyed
+		 */
+		static unsigned int nbObject;
 };
 
 /**
    @}
-*/
+ */
 #endif

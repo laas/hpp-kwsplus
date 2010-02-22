@@ -1,3 +1,7 @@
+2009-12-16  Alireza Nakhaei  <anakhaei@laas.fr>
+
+	Update the Start and Goal nodes of roadmap builder
+
 2009-12-16  Thomas Moulard  <thomas.moulard@gmail.com>
 
 	Add curve type in reedsSheppSteeringMethod constructor/create method.
