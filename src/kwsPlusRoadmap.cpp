@@ -85,7 +85,7 @@ CkwsPlusRoadmapShPtr CkwsPlusRoadmap::create ( CkwsDeviceShPtr inDevice )
 
 	CkwsPlusRoadmapShPtr shPtr ( ptr );
 
-	if ( KD_ERROR == ptr->init ( inDevice, shPtr ) )
+	if ( KD_ERROR == ptr->init ( inDevice->configSpace(), shPtr ) )
 	{
 		shPtr.reset();
 	}

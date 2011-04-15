@@ -49,10 +49,21 @@ class CflicSteeringMethod : public CkwsSteeringMethod {
 	
 
  public :
+
+	/** The following macro declares:
+     static const CkitClassShPtr CLASS;
+     virtual CkitClassShPtr classObject() const;
+	*/
+	KIT_DECLARE_CLASS();
+
   /**
      \brief   Destructor.
   */
   virtual ~CflicSteeringMethod() ;
+
+  // Interfaces for object coding/decoding:
+  virtual void encodeWithCoder(const CkitCoderShPtr& i_coder) const;
+  virtual ktStatus initWithCoder(const CkitCoderShPtr& i_coder, const CkitCodableShPtr& i_self);
 
   /**
      \brief  create a steering method and return the shared pointer corresponding
@@ -61,13 +72,15 @@ class CflicSteeringMethod : public CkwsSteeringMethod {
   */
   static CflicSteeringMethodShPtr create(bool is_oriented = true) ;
 
+	static CflicSteeringMethodShPtr createCopy(const CflicSteeringMethodConstShPtr& i_flicSM);
+
   /**
      \brief  Factory method that creates a new direct path between two configurations.
      \param i_startCfg : the start config
      \param i_endCfg : the end config
      \return a shared pointer on the direct path just create
   */
-  virtual CkwsDirectPathShPtr makeDirectPath(const CkwsConfig &i_startCfg, const CkwsConfig &i_endCfg) ;
+  virtual CkwsDirectPathShPtr makeDirectPath(const CkwsConfig &i_startCfg, const CkwsConfig &i_endCfg)const;
  	
   /**
      \brief  Returns whether the steering method produces oriented or non-oriented paths.
@@ -75,13 +88,23 @@ class CflicSteeringMethod : public CkwsSteeringMethod {
   */
   virtual bool isOriented() const ;
 
+	virtual CkwsSteeringMethodShPtr clone() const;
+
  protected:
+	/** 
+		\brief constructor
+		\note All codable objects must have a default constructor
+	*/
+  CflicSteeringMethod();	
 
   /** 
       \brief Constructor.
       \param i_oriented : if true, the steering method will produce oriented paths
   */
   CflicSteeringMethod(bool i_oriented);
+
+	//copy constructor
+	CflicSteeringMethod(const CflicSteeringMethod& i_flicSM);
 
   /** 
       \brief Initialization of the CkwsSMLinear object.

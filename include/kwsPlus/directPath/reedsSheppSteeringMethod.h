@@ -41,6 +41,12 @@ class CreedsSheppSteeringMethod : public CkwsSteeringMethod
 
 
 public :
+	
+	/* The following macro declares:
+		 static const CkitClassShPtr CLASS;
+		 virtual CkitClassShPtr classObject() const; */
+  KIT_DECLARE_CLASS();
+	
         /**
                   \brief   Destructor.
          */
@@ -52,7 +58,9 @@ public :
                   \param inRadius : the radius for R&S method
                   \return a shared pointer on the Steering Method
          */
-  static CreedsSheppSteeringMethodShPtr create(double inRadius, bool is_oriented = true) ;
+  static CreedsSheppSteeringMethodShPtr create(double inRadius, bool is_oriented = true);
+	
+	static CreedsSheppSteeringMethodShPtr createCopy(const CreedsSheppSteeringMethodConstShPtr& i_steeringMethod);
 
         /**
                   \brief  Factory method that creates a new direct path between two configurations.
@@ -60,24 +68,27 @@ public :
                   \param i_endCfg : the end config
                   \return a shared pointer on the direct path just create
          */
-        virtual CkwsDirectPathShPtr makeDirectPath(const CkwsConfig &i_startCfg, const CkwsConfig &i_endCfg) ;
+        virtual CkwsDirectPathShPtr makeDirectPath(const CkwsConfig &i_startCfg, const CkwsConfig &i_endCfg)const;
 
         /**
                   \brief  Returns whether the steering method produces oriented or non-oriented paths.
                   \return true if the steering method is oriened or false
          */
         virtual bool isOriented() const ;
+				
+	// Interfaces for object coding/decoding:
+  virtual void encodeWithCoder(const CkitCoderShPtr& i_coder) const;
+	
+  virtual ktStatus initWithCoder(const CkitCoderShPtr& i_coder, const CkitCodableShPtr& i_self);
+	
+	double radius()const;
+	
+	ERsCurveType type()const;
+	
+	virtual CkwsSteeringMethodShPtr clone() const;
+
 
 protected:
-
-        ///weak pointer to itself
-        CkwsSteeringMethodWkPtr   m_weakPtr ;
-        /// oriented or not ?
-        bool m_oriented ;
-        /// the radius for the Reeds&Shepp Method
-        double attRadius ;
-        /// the type of calculation for the Reeds&Shepp Method
-        ERsCurveType attType ;
 
         /**
                   \brief Constructor.
@@ -85,7 +96,17 @@ protected:
                   \param inRadius : the radius for R&S method
          */
         CreedsSheppSteeringMethod(bool i_oriented, double inRadius);
-
+        
+				/**
+                  \brief Constructor.
+         */
+        CreedsSheppSteeringMethod(const CreedsSheppSteeringMethod& i_steeringMethod);
+				
+				 /**
+                  \brief Constructor.
+         */
+        CreedsSheppSteeringMethod();
+				
         /**
                   \brief Initialization of the CkwsSMLinear object.
                   \param         i_smWkPtr : weak pointer to the object itself
@@ -93,7 +114,15 @@ protected:
          */
         ktStatus init(const CkwsSteeringMethodWkPtr& i_smWkPtr);
 
-
+	private:
+		    ///weak pointer to itself
+        CkwsSteeringMethodWkPtr   m_weakPtr ;
+        /// oriented or not ?
+        bool attOriented ;
+        /// the radius for the Reeds&Shepp Method
+        double attRadius ;
+        /// the type of calculation for the Reeds&Shepp Method
+        ERsCurveType attType ;
 
 } ;
 
