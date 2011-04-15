@@ -5,7 +5,7 @@ dnl
 dnl   Author: Florent Lamiraux LAAS-CNRS
 dnl
 
-AC_INIT([kwsPlus],[1.8],[hpp@laas.fr])
+AC_INIT([kwsPlus],[2.0],[hpp@laas.fr])
 AC_PREREQ(2.59)
 
 # Auxiliary files.
@@ -44,7 +44,7 @@ AC_SUBST(KWSIO_PREFIX)
 
 dnl --- kineo  --------------
 
-PKG_CHECK_MODULES(KINEOCONTROLLER, KineoController)
+PKG_CHECK_MODULES([KINEOCONTROLLER], [KineoController >= 2.06])
 AC_SUBST(KINEOCONTROLLER_CFLAGS)
 AC_SUBST(KINEOCONTROLLER_LIBS)
 
@@ -59,9 +59,6 @@ AC_CONFIG_MACRO_DIR([build-aux])
 AC_PROG_LIBTOOL
 
 dnl --- Boost --------------
-
-BOOST_UBLAS
-
 
 dnl lapack path
 AC_ARG_WITH(lapack, AC_HELP_STRING([--with-lapack],
