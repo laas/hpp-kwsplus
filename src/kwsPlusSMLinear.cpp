@@ -84,7 +84,7 @@ CkwsPlusSMLinearShPtr CkwsPlusSMLinear::create(const std::vector<double> &inRati
 
 // =========================================================================================
 
-CkwsDirectPathShPtr CkwsPlusSMLinear::makeDirectPath (const CkwsConfig &inStartConfig, const CkwsConfig &inEndConfig) {
+CkwsDirectPathShPtr CkwsPlusSMLinear::makeDirectPath (const CkwsConfig &inStartConfig, const CkwsConfig &inEndConfig) const {
 	
   // bool oriented = isOriented();
   return CkwsPlusDPLinear::create(inStartConfig, inEndConfig, attRatioVector, attWeakPtr.lock()) ;

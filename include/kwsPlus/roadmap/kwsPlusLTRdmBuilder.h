@@ -174,7 +174,8 @@ bool CkwsPlusLTRdmBuilder<T>::updateRoadmapConnectivity(CkwsNodeShPtr i_node, Ck
     if(!success){ //cout<< "have not performed a connection yet." <<endl; getchar();
       if(i_node){ //cout<< "New Node exists!." <<endl;getchar();
 	if(T::roadmap()->connectedComponent(i) != i_node->connectedComponent()){ //cout<< "Trying to reach another CC." <<endl;getchar();
-	  if(T::canLinkNodeWithComponent ( CkwsRoadmapBuilder::NODE_TO_ROADMAP ,i_node, T::roadmap()->connectedComponent(i), linkNode,o_dp_in) || T::canLinkNodeWithComponent ( CkwsRoadmapBuilder::ROADMAP_TO_NODE ,i_node, T::roadmap()->connectedComponent(i), linkNode,o_dp_out)){
+	  if(T::canLinkNodeWithComponent ( CkwsRoadmapBuilder::NODE_TO_ROADMAP ,i_node, T::roadmap()->connectedComponent(i), CkitParameterMap::create(), linkNode, o_dp_in)
+			|| T::canLinkNodeWithComponent ( CkwsRoadmapBuilder::ROADMAP_TO_NODE ,i_node, T::roadmap()->connectedComponent(i), CkitParameterMap::create(), linkNode, o_dp_out)){
 	    //cout<< "Succeeding to reach another CC." <<endl;getchar();
 	    bool continuer = false;
 	  
@@ -287,8 +288,8 @@ CkwsNodeShPtr CkwsPlusLTRdmBuilder<T>::extend (const CkwsNodeShPtr& i_node, cons
     oldStep=T::roadmap()->countNodes();
     T::injectWaypointNodes();
   }
-
-  CkwsNodeShPtr newNode = T::extend(i_node,i_cfg,i_direction);
+	bool outExtend = false;
+  CkwsNodeShPtr newNode = T::extend(i_node,i_cfg,i_direction, CkitParameterMap::create(),outExtend);
   if(!newNode){;
   }else{ 
     updateRoadmapConnectivity(newNode,i_node,false);

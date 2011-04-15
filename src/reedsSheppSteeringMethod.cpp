@@ -39,10 +39,8 @@
 CreedsSheppSteeringMethod::CreedsSheppSteeringMethod(bool i_oriented,
 						     double inRadius,
 						     ERsCurveType type)
-  : m_oriented(i_oriented)
+  : attOriented(i_oriented), attRadius (inRadius), attType (type)
 {
-        attRadius = inRadius ;
-	attType   = type;
 }
 
 // =========================================================================================
@@ -87,7 +85,7 @@ CreedsSheppSteeringMethodShPtr CreedsSheppSteeringMethod::create(double inRadius
 
 // =========================================================================================
 
-CkwsDirectPathShPtr CreedsSheppSteeringMethod::makeDirectPath (const CkwsConfig &i_startCfg, const CkwsConfig &i_endCfg)
+CkwsDirectPathShPtr CreedsSheppSteeringMethod::makeDirectPath (const CkwsConfig &i_startCfg, const CkwsConfig &i_endCfg) const
 {
 
         //    bool oriented = isOriented();
@@ -99,5 +97,5 @@ CkwsDirectPathShPtr CreedsSheppSteeringMethod::makeDirectPath (const CkwsConfig 
 
 bool CreedsSheppSteeringMethod::isOriented() const
 {
-        return m_oriented ;
+        return attOriented ;
 }

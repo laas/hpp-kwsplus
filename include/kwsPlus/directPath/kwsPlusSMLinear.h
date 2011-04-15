@@ -45,6 +45,12 @@ CLASS
 class CkwsPlusSMLinear : public CkwsSteeringMethod {
 
  public :
+	 
+	// The following macro declares:
+  //   static const CkitClassShPtr CLASS;
+  //   virtual CkitClassShPtr classObject() const;
+  KIT_DECLARE_CLASS();
+	
   /**
      \brief   Destructor.
   */
@@ -57,14 +63,25 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
       (see CkwsPlusDPLinear::maxAbsoluteDerivative()).
       \return        Shared pointer to the newly created steering method
    */
-  static CkwsPlusSMLinearShPtr create(const std::vector<double> &inRatioVector=std::vector<double>(0),
-				      bool inOriented = false);
+  static CkwsPlusSMLinearShPtr create(const std::vector<double> &inRatioVector=std::vector<double>(0), bool inOriented = false);
 
+  /** Create an new instance copy of the CkwsSMLinear class.
+   */
+  static CkwsPlusSMLinearShPtr createCopy(const CkwsPlusSMLinearConstShPtr& i_steeringMethod);
+	
   // inherited -- for doc see parent class
-  virtual CkwsDirectPathShPtr makeDirectPath(const CkwsConfig& inStartConfig, const CkwsConfig& inEndConfig);
+  virtual CkwsDirectPathShPtr makeDirectPath(const CkwsConfig& inStartConfig, const CkwsConfig& inEndConfig)const;
 
   // inherited -- for doc see parent class
   virtual bool isOriented() const;
+	
+  // Interfaces for object coding/decoding:
+  virtual void encodeWithCoder(const CkitCoderShPtr& i_coder) const;
+  virtual ktStatus initWithCoder(const CkitCoderShPtr& i_coder, const CkitCodableShPtr& i_self);
+	
+	void getRatioVector(std::vector<double>& o_ratioVect)const;
+	
+	virtual CkwsSteeringMethodShPtr clone() const;
 
  protected:
 
@@ -76,6 +93,14 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
    */
   CkwsPlusSMLinear(const std::vector<double> &inRatioVector, bool inOriented);
 
+  /** Constructor.
+   */
+  CkwsPlusSMLinear();
+	
+	/** copy Constructor.
+   */
+  CkwsPlusSMLinear(const CkwsPlusSMLinear& i_steeringMethod);
+	
   /** Initialization of the CkwsPlusSMLinear object.
    *   \param         inSmWkPtr : weak pointer to the object itself
    *   \return        KD_OK | KD_ERROR

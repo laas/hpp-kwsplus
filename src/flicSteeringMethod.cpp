@@ -81,7 +81,10 @@ CflicSteeringMethodShPtr CflicSteeringMethod::create(bool i_oriented)
 
 // =========================================================================================
 
-CkwsDirectPathShPtr CflicSteeringMethod::makeDirectPath (const CkwsConfig &i_startCfg, const CkwsConfig &i_endCfg) {
+CkwsDirectPathShPtr
+CflicSteeringMethod::makeDirectPath (const CkwsConfig &i_startCfg,
+				     const CkwsConfig &i_endCfg) const
+{
 	
   bool oriented = isOriented();
   return CflicDirectPath::create(i_startCfg, i_endCfg, m_weakPtr.lock(), oriented) ;

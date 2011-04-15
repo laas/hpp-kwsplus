@@ -100,7 +100,7 @@ ktStatus ChppVisRdmBuilder::buildOneStep()
   std::vector<double> dofs;
   currentConf.getDofValues(dofs);
 
-  CkwsConstraintSetShPtr constraints = this->roadmap()->device()->userConstraints();
+  CkwsValidatorSetShPtr constraints = this->roadmap()->device()->userConstraints();
   constraints->isActivated(false);
 
   if(att_shooter->shoot(currentNode,config))
@@ -153,11 +153,13 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
     for(unsigned int i=0; i<roadmap()->countConnectedComponents(); i++)
     {
       if(canLinkNodeWithComponent(CkwsRoadmapBuilder::NODE_TO_ROADMAP,
-                                       node,roadmap()->connectedComponent(i),
+				  node,roadmap()->connectedComponent(i),
+				  CkitParameterMap::create(),
                                        o_node,o_dp)
          ||
          canLinkNodeWithComponent(CkwsRoadmapBuilder::ROADMAP_TO_NODE,
                                        node,roadmap()->connectedComponent(i),
+				  CkitParameterMap::create(),
                                        o_node,o_dp))
        {
          ncc++;
