@@ -24,6 +24,7 @@ INCLUDE
 #include "KineoWorks2/kwsDiffusionShooter.h"
 #include "KineoWorks2/kwsPickerBasic.h"
 #include "KineoWorks2/kwsShooterRoadmapBox.h"
+#include "KineoWorks2/kwsShooterConfigSpace.h"
 #include "KineoWorks2/kwsConnectedComponent.h"
 #include "KineoWorks2/kwsNode.h"
 #include "KineoWorks2/kwsDof.h"

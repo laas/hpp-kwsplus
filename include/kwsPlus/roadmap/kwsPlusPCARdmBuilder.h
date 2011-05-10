@@ -1,5 +1,5 @@
 /*
-  include file for kwsPCARdmBuilder
+  include file for kwsPlusPCARdmBuilder
 
   Developed by Sebastien Dalibard (LAAS-CNRS)
 
@@ -231,21 +231,19 @@ class CkwsPlusPCARdmBuilder : public T
   std::vector<int> unboundDofs;
   std::vector<int> boundDofs;
   std::map<int,double> dofWidth;
-  
-
-  //DEBUG
-  /*
   unsigned int nbNeighbours;
-  unsigned int nbRecPCA;
 
-  double averageRRT;
-  double averagePCA;
-  int nbIterationsRRT;
-  int nbIterationsPCA;
-  int nbSuccessfullPCA;
-  int nbSuccessfullRRT;
-  int nbUnfinishedPCA;
-  double averageNbPoints;
+  //DEBUG 
+  /*
+    unsigned int nbRecPCA;
+    double averageRRT;
+    double averagePCA;
+    int nbIterationsRRT;
+    int nbIterationsPCA;
+    int nbSuccessfullPCA;
+    int nbSuccessfullRRT;
+    int nbUnfinishedPCA;
+    double averageNbPoints;
   */
   //std::fstream out_fstream;
   //END_DEBUG
@@ -405,8 +403,10 @@ CkwsNodeShPtr CkwsPlusPCARdmBuilder<T>::extend(const CkwsNodeShPtr & i_node,
         {
           if ( doPCA(i_node,i_cfg,&newCfg) == KD_OK)
 	    projected = true;
+	  /*
 	  else
 	    nbUnfinishedPCA++;
+	  */
         }
     }
   
@@ -1008,8 +1008,6 @@ ktStatus CkwsPlusPCARdmBuilder<T>::doPCA(const CkwsNodeShPtr & fatherNode,
   //averageNbPoints += (neighbours - averageNbPoints)/(nbIterationsPCA + 1 ) ;
   //out_fstream.close();
   //nbRecPCA += (neighbours - nbNeighbours)/(nbIterationsPCA + 1);
-  //nbNeighbours = std::max(n_dofs+1,(unsigned int) (averageNbPoints - nbRecPCA / 2)) ;
-  //nbNeighbours = n_dofs+1;
   //END_DEBUG
 
 
