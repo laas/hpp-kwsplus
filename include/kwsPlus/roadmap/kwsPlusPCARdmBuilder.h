@@ -355,7 +355,7 @@ void CkwsPlusPCARdmBuilder<T>::getDeviceInfo()
   n_dofs = device->countDofs();
   
 
-  nbRecPCA = 0;
+  //  nbRecPCA = 0;
 
   unsigned int i;
 
