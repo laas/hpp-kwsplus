@@ -15,6 +15,7 @@ INCLUDE
 #include "KineoWorks2/kwsValidatorDPCollision.h"
 #include "KineoWorks2/kwsDiffusingRdmBuilder.h"
 #include "KineoWorks2/kwsIPPRdmBuilder.h"
+#include "KineoWorks2/kwsShooterConfigSpace.h"
 #include "KineoWorks2/kwsRoadmapBuilder.h"
 #include "KineoWorks2/kwsRoadmap.h"
 #include "KineoWorks2/kwsDistance.h"
