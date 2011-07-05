@@ -212,7 +212,7 @@ bool CkwsPlusLTRdmBuilder<T>::updateRoadmapConnectivity(CkwsNodeShPtr i_node, Ck
 		  if(!found){ //cout<<"not found"<<endl;getchar();//to avoid deletion of 2 diffusion nodes, and then having a connected component without a diffusion node.
 		    if(!diffusion_nodes_list[i]->config().isEquivalent(i_picked->config())){ //cout<<" Not the same Config"<<endl;getchar();
 		      if(diffusion_nodes_list[i]->connectedComponent() != i_picked->connectedComponent() ){ //cout<<" Not the same CC"<<endl;getchar();
-			if(KD_OK != T::addDiffusionNode(diffusion_nodes_list[i],CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)) ;//cout<<"Can't Add THE diffusion Node"<<endl;
+			if(KD_OK != T::addDiffusionNode(diffusion_nodes_list[i],CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)){}//cout<<"Can't Add THE diffusion Node"<<endl;
 			//else //cout<<"Added The diffusion Node"<<endl;
 			//getchar();
 		      }else{//cout<<"found a diffusion node in the same CC!"<<endl;
@@ -221,7 +221,7 @@ bool CkwsPlusLTRdmBuilder<T>::updateRoadmapConnectivity(CkwsNodeShPtr i_node, Ck
 		    }else{//cout<<"found the picked config!"<<endl;
 		      found = true;
 		    }//getchar();
-		  }else if(KD_OK != T::addDiffusionNode(diffusion_nodes_list[i],CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)) ;//cout<<"Can't Add one diffusion Node"<<endl;
+		  }else if(KD_OK != T::addDiffusionNode(diffusion_nodes_list[i],CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)){}//cout<<"Can't Add one diffusion Node"<<endl;
 			//else //cout<<"Add one diffusion Node"<<endl;
 		  //getchar();
 		}
@@ -260,9 +260,9 @@ ktStatus CkwsPlusLTRdmBuilder<T>::addingDiffusionNodes(CkwsNodeShPtr i_newnode, 
 	  linked = updateRoadmapConnectivity(i_shootednode,i_picked,true);
 	  if(!linked){ //cout<<"- Adding Diffusion Node! "<<endl;getchar();
 	    if(KD_OK == T::addDiffusionNode(i_shootednode,CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)){ //cout<<"- OK : "<< T::countDiffusionNodes(CkwsDiffusingRdmBuilder::WAYPOINT_LIKE)<<"! "<<endl;
-	      if(KD_OK != T::roadmap()->device()->setCurrentConfig(i_shootednode->config())) ;//cout<<"unable to set current config"<<endl;getchar();
+	      if(KD_OK != T::roadmap()->device()->setCurrentConfig(i_shootednode->config())){} //cout<<"unable to set current config"<<endl;getchar();
 	     }else{ //cout<<"- Can't Add a Diffusion Node"<<endl;getchar();
-	    	if(KD_OK != T::roadmap()->removeNode(i_shootednode)); //cout<<"haven't removed the shooted node"<<endl;
+	      if(KD_OK != T::roadmap()->removeNode(i_shootednode)){} //cout<<"haven't removed the shooted node"<<endl;
 	    	//else cout<<"have removed the shooted node"<<endl;
 	    	//getchar();
 	    }
