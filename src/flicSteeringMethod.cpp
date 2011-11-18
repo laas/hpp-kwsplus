@@ -41,7 +41,20 @@ PUBLIC METHODS
 
 // =========================================================================================
 
+/* The following macro registers the class with the class registry, assigns the static CLASS attribute and implements the classObject() virtual method */
+
+KIT_DEFINE_CLASS( CflicSteeringMethod );
+
+// =========================================================================================
+
 CflicSteeringMethod::CflicSteeringMethod(bool i_oriented) : m_oriented(i_oriented) {
+	//nothing to do
+}
+
+// =========================================================================================
+
+CflicSteeringMethod::CflicSteeringMethod()
+{
 	//nothing to do
 }
 
@@ -49,6 +62,13 @@ CflicSteeringMethod::CflicSteeringMethod(bool i_oriented) : m_oriented(i_oriente
 
 CflicSteeringMethod::~CflicSteeringMethod() {
 	//nothing to do
+}
+
+// =========================================================================================
+
+CflicSteeringMethod::CflicSteeringMethod(const CflicSteeringMethod& i_flicSM) 
+{
+	m_oriented = i_flicSM.isOriented();
 }
 
 // =========================================================================================
@@ -77,7 +97,42 @@ CflicSteeringMethodShPtr CflicSteeringMethod::create(bool i_oriented)
 	return flatShPtr;
 }
 
+// ==========================================================================================
 
+CflicSteeringMethodShPtr CflicSteeringMethod::createCopy(const CflicSteeringMethodConstShPtr& i_flicSM)
+{
+	CflicSteeringMethod*  flatPtr = new CflicSteeringMethod(*i_flicSM);
+	CflicSteeringMethodShPtr flatShPtr(flatPtr);
+
+	if(flatPtr->init(flatShPtr) != KD_OK)
+	{
+		 flatShPtr.reset();
+	}
+	return flatShPtr;
+}
+
+// =========================================================================================
+
+void CflicSteeringMethod::encodeWithCoder(const CkitCoderShPtr& i_coder)const
+{
+	// Always call parent class coding:
+	CkwsSteeringMethod::encodeWithCoder(i_coder);
+	
+	i_coder->encodeBool(m_oriented,"oriented");
+}
+
+// =========================================================================================
+
+ktStatus CflicSteeringMethod::initWithCoder(const CkitCoderShPtr& i_coder, const CkitCodableShPtr& i_self)
+{
+	ktStatus success = CkwsSteeringMethod::initWithCoder(i_coder, i_self);
+	if(KD_OK == success)
+	{
+		m_weakPtr = KIT_DYNAMIC_PTR_CAST(CflicSteeringMethod,i_self);
+		m_oriented = i_coder->decodeBool("oriented");
+	}
+	return success;
+}
 
 // =========================================================================================
 
@@ -97,6 +152,13 @@ bool CflicSteeringMethod::isOriented() const {
   return m_oriented ;
 }
 
+// ==========================================================================================
+
+CkwsSteeringMethodShPtr CflicSteeringMethod::clone() const
+{
+	KIT_ASSERT( m_weakPtr.lock() );
+	return CflicSteeringMethod::createCopy(KIT_DYNAMIC_PTR_CAST(const CflicSteeringMethod, m_weakPtr.lock()));
+}
 
 /** @}
  */
