@@ -82,7 +82,7 @@ CreedsSheppDirectPathShPtr CreedsSheppDirectPath::create(const CkwsConfig &inSta
 
 
   // test the root joint of the Device //
-  if ( ((inStartCfg.device()->rootJoint()->countDofs() != 3) && (inStartCfg.device()->rootJoint()->countDofs() != 6)) || (inStartCfg.device()->countExtraDofs() != 0 ) ) {
+  if ((inStartCfg.device()->rootJoint()->countDofs() != 3) && (inStartCfg.device()->rootJoint()->countDofs() != 6)) {
     ODEBUG1(" ERROR - CreedsSheppDirectPath::create failed : Reeds&Shepp implemented only for PLAN or FREEFLYER root joint without ExtraDof") ;
     pathShPtr.reset() ;
     return pathShPtr ;

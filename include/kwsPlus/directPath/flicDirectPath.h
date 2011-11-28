@@ -618,7 +618,7 @@ class CflicDirectPath : public CkwsPlusDirectPath {
   /**
      \brief Indices of the different dofs implyied in flicDirectPath
   */
-  typedef enum EDofIndex {
+  enum EDofIndex {
     CURV_COORD = 0,
     X_COORD,
     Y_COORD,
