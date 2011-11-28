@@ -170,6 +170,7 @@ ktStatus CkwsPlusSMLinear::initWithCoder(const CkitCoderShPtr& i_coder, const Ck
     attOriented = i_coder->decodeBool("oriented");
     i_coder->decodeDoubleVector("ratioVector", attRatioVector);
   }
+  return KD_ERROR;
 }
 
 
