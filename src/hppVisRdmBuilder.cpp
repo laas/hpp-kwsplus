@@ -108,7 +108,7 @@ ktStatus ChppVisRdmBuilder::buildOneStep()
     constraints->isActivated(true);
     constraints->apply(config);
     bool val=true;
-    CkwsValidatorCfgCollisionShPtr cfv = CkwsValidatorCfgCollision::create (this->roadmap()->device());
+    CkwsValidatorCfgCollisionShPtr cfv = CkwsValidatorCfgCollision::create ();
     CkwsNodeShPtr node = nodeFactory()->makeNode(config);
     unsigned int i=0;
     while( i<constraints->count() && val)
@@ -139,7 +139,7 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
   {
     if(addNode(node)!=KD_ERROR)
     {
-      link(CkwsRoadmapBuilder::BIDIRECTIONAL,node);
+      link(CkwsRoadmapBuilder::BIDIRECTIONAL,node, CkitParameterMap::create ());
     }
   }
   else
@@ -170,8 +170,8 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
       ODEBUG2(" isolated node");
       if(addNode(node)!=KD_ERROR)
       {
-        link(CkwsRoadmapBuilder::NODE_TO_ROADMAP,node);
-        link(CkwsRoadmapBuilder::ROADMAP_TO_NODE,node);
+        link(CkwsRoadmapBuilder::NODE_TO_ROADMAP,node, CkitParameterMap::create ());
+        link(CkwsRoadmapBuilder::ROADMAP_TO_NODE,node, CkitParameterMap::create ());
       }
       att_n_iterations=0;
     }
@@ -180,7 +180,7 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
       ODEBUG2(" node Link two cc " << ncc);
       if(addNode(node)!=KD_ERROR)
       {
-        link(CkwsRoadmapBuilder::BIDIRECTIONAL,node);
+        link(CkwsRoadmapBuilder::BIDIRECTIONAL,node, CkitParameterMap::create ());
       }
     }
   }
