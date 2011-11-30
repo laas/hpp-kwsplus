@@ -33,7 +33,7 @@ public:
   /**
      \brief Build a diffusion shooter
   */
-  virtual CkwsDiffusionShooterShPtr makeDiffusionShooter(double inStandardDeviation) = 0;
+  virtual CkwsDiffusionShooterShPtr makeDiffusionShooter() = 0;
 };
 
 
@@ -44,10 +44,9 @@ public:
 class CkwsPlusShooterConfigSpaceFactory :
   public CkwsPlusDiffusionShooterFactory
 {
-  CkwsDiffusionShooterShPtr makeDiffusionShooter(double inStandardDeviation)
+  CkwsDiffusionShooterShPtr makeDiffusionShooter()
   {
     CkwsDiffusionShooterShPtr shooter = CkwsShooterConfigSpace::create();
-    shooter->standardDeviation(inStandardDeviation);
     return shooter;
   };
 };
@@ -59,10 +58,9 @@ class CkwsPlusShooterConfigSpaceFactory :
 class CkwsPlusShooterRoadmapBoxFactory :
   public CkwsPlusDiffusionShooterFactory
 {
-  CkwsDiffusionShooterShPtr makeDiffusionShooter(double inStandardDeviation)
+  CkwsDiffusionShooterShPtr makeDiffusionShooter()
   {
     CkwsDiffusionShooterShPtr shooter = CkwsShooterRoadmapBox::create();
-    shooter->standardDeviation(inStandardDeviation);
     return shooter;
   };
 };
@@ -74,10 +72,9 @@ class CkwsPlusShooterRoadmapBoxFactory :
 class CkwsPlusShooterRoadmapNodesFactory :
   public CkwsPlusDiffusionShooterFactory
 {
-  CkwsDiffusionShooterShPtr makeDiffusionShooter(double inStandardDeviation)
+  CkwsDiffusionShooterShPtr makeDiffusionShooter()
   {
     CkwsDiffusionShooterShPtr shooter = CkwsShooterRoadmapNodes::create();
-    shooter->standardDeviation(inStandardDeviation);
     return shooter;
   };
 };
