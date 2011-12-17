@@ -11,6 +11,8 @@
 #include "kwsPlus/directPath/reedsSheppSteeringMethod.h"
 #include "kwsPlus/directPath/flicDistance.h"
 #include "kwsPlus/directPath/kwsPlusDistance.h"
+#include "kwsPlus/directPath/flicDistance.h"
+#include "kwsPlus/directPath/flicSteeringMethod.h"
 
 /**
 
