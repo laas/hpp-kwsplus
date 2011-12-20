@@ -1,3 +1,10 @@
+2011/12/20 Release 2.1
+
+  Main changes since 1.8
+
+  1. Add support for Dubins car steering method,
+  2. Compatibility with Kitelab-2.06.
+
 2009/04/17 Release 1.7
 
   Main changes since 1.6
