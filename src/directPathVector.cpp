@@ -18,20 +18,24 @@
 #define ODEBUG1(x)
 #endif
 
-void CdirectPathVector::computeMaxOfTwoVectors(std::vector<double>& inOutVector1, 
-					       const std::vector<double>& inVector2) const
+void CdirectPathVector::
+computeMaxOfTwoVectors(std::vector<double>& inOutVector1,
+		       const std::vector<double>& inVector2) const
 {
-  for (unsigned int i=0; i<std::max(inOutVector1.size(), inVector2.size()); i++) {
-    inOutVector1[i] = std::max(inOutVector1[i], inVector2[i]);
-  }
+  for (unsigned int i=0; i<std::max(inOutVector1.size(), inVector2.size()); i++)
+    {
+      inOutVector1[i] = std::max(inOutVector1[i], inVector2[i]);
+    }
 }
 
-CdirectPathVectorShPtr CdirectPathVector::create(const CkwsConfig& inStartCfg, 
-						 const CkwsConfig& inEndCfg,
-						 const CkwsSteeringMethodShPtr& inSteeringMethod,
-						 const std::vector<CkwsDirectPathConstShPtr>& inDirectPathVector) 
+CdirectPathVectorShPtr CdirectPathVector::
+create(const CkwsConfig& inStartCfg,
+       const CkwsConfig& inEndCfg,
+       const CkwsSteeringMethodShPtr& inSteeringMethod,
+       const std::vector<CkwsDirectPathConstShPtr>& inDirectPathVector)
 {
-  CdirectPathVector* DPVectorPtr = new CdirectPathVector(inStartCfg, inEndCfg, inSteeringMethod, inDirectPathVector);
+  CdirectPathVector* DPVectorPtr = new CdirectPathVector
+    (inStartCfg, inEndCfg, inSteeringMethod, inDirectPathVector);
   CdirectPathVectorShPtr DPVectorShPtr(DPVectorPtr);
   CdirectPathVectorWkPtr DPVectorWkPtr(DPVectorShPtr);
 
@@ -46,30 +50,12 @@ CkwsAbstractPathShPtr CdirectPathVector::clone() const
 {
   ODEBUG2("CdirectPathVector called.");
 
-  /*
-  CdirectPathVectorShPtr dp; 
-  std::vector<CkwsDirectPathConstShPtr> dpVector;
-
-  for(unsigned int i = attRankStart; i <= attRankEnd; i++){
-    dpVector.push_back(attDirectPathVector[i]);
-  }
-  CkwsConfig cfg_start(device()), cfg_end(device());
-  dpVector[0]->getConfigAtStart(cfg_start);
-  dpVector[dpVector.size()-1]->getConfigAtEnd(cfg_end);
-  dp = CdirectPathVector::create(cfg_start, cfg_end, steeringMethod(), dpVector);
-  dp->extractFrom(attStartLocal);
-  dp->extractTo(length()-attEndLocal);
-  if(isReversed())
-    dp->reverse();
-    
-  return dp;
-  */
-
   return CdirectPathVector::createCopy(attWeakPtr.lock());
 }
 
 
-CdirectPathVectorShPtr CdirectPathVector::createCopy(const CdirectPathVectorConstShPtr &inDirectPathVector)
+CdirectPathVectorShPtr CdirectPathVector::
+createCopy(const CdirectPathVectorConstShPtr &inDirectPathVector)
 {
   if (inDirectPathVector) {
     CdirectPathVector* DPVectorPtr = new CdirectPathVector(*inDirectPathVector);
@@ -85,11 +71,13 @@ CdirectPathVectorShPtr CdirectPathVector::createCopy(const CdirectPathVectorCons
 }
 
 
-CdirectPathVector::CdirectPathVector(const CkwsConfig& inStartConfig, 
+CdirectPathVector::CdirectPathVector(const CkwsConfig& inStartConfig,
 				     const CkwsConfig& inEndConfig,
-				     const CkwsSteeringMethodShPtr& inSteeringMethod,
-				     std::vector<CkwsDirectPathConstShPtr> inDirectPathVector) :
-  CkwsPlusDirectPath(inStartConfig, inEndConfig, inSteeringMethod), 
+				     const CkwsSteeringMethodShPtr&
+				     inSteeringMethod,
+				     std::vector<CkwsDirectPathConstShPtr>
+				     inDirectPathVector) :
+  CkwsPlusDirectPath(inStartConfig, inEndConfig, inSteeringMethod),
   attDirectPathVector(inDirectPathVector)
 
 {
@@ -108,8 +96,9 @@ CdirectPathVector::CdirectPathVector(const CkwsConfig& inStartConfig,
 }
 
 
-CdirectPathVector::CdirectPathVector(const CdirectPathVector& inDirectPathVector) :
-  CkwsPlusDirectPath(inDirectPathVector), 
+CdirectPathVector::CdirectPathVector(const CdirectPathVector&
+				     inDirectPathVector) :
+  CkwsPlusDirectPath(inDirectPathVector),
   attDirectPathVector(inDirectPathVector.attDirectPathVector),
   attLength(inDirectPathVector.attLength),
   attRankStart(inDirectPathVector.attRankStart),
@@ -117,12 +106,6 @@ CdirectPathVector::CdirectPathVector(const CdirectPathVector& inDirectPathVector
   attStartLocal(inDirectPathVector.attStartLocal),
   attEndLocal(inDirectPathVector.attEndLocal)
 {
-  /*
-  attDirectPathVector.clear();
-  for(unsigned int i=0; i<inDirectPathVector.attDirectPathVector.size(); i++){
-    attDirectPathVector.push_back(CkwsDirectPath::createCopy(inDirectPathVector.attDirectPathVector[i]));
-  }
-  */
 }
 
 ktStatus CdirectPathVector::init(const CdirectPathVectorWkPtr& inWeakPtr)
@@ -132,15 +115,19 @@ ktStatus CdirectPathVector::init(const CdirectPathVectorWkPtr& inWeakPtr)
   // Check that vector is not empty
   CdirectPathVectorShPtr directPath = inWeakPtr.lock();
   if (directPath->attDirectPathVector.size() == 0) {
-    std::cerr << "CdirectPathVector::init: vector of direct paths is empty." << std::endl;
+    std::cerr << "CdirectPathVector::init: vector of direct paths is empty."
+	      << std::endl;
     success = KD_ERROR;
   }
 
   if (KD_OK == success) {
     // Check that shared pointers in vector are not NULL
-    for (unsigned int iDP=0; iDP < directPath->attDirectPathVector.size(); iDP++) {
+    for (unsigned int iDP=0; iDP < directPath->attDirectPathVector.size();
+	 iDP++) {
       if (!directPath->attDirectPathVector[iDP]) {
-	std::cerr << "CdirectPathVector::init: a direct path in vector is NULL." << std::endl;
+	std::cerr <<
+	  "CdirectPathVector::init: a direct path in vector is NULL."
+		  << std::endl;
 	success = KD_ERROR;
       }
     }
@@ -154,7 +141,8 @@ ktStatus CdirectPathVector::init(const CdirectPathVectorWkPtr& inWeakPtr)
 
 }
 
-void CdirectPathVector::interpolate(double inLength, CkwsConfig& outConfig) const
+void CdirectPathVector::
+interpolate(double inLength, CkwsConfig& outConfig) const
 {
   // Find direct path in vector corresponding to parameter.
   unsigned int rank;
@@ -169,15 +157,17 @@ void CdirectPathVector::interpolate(double inLength, CkwsConfig& outConfig) cons
   directPath->getConfigAtStart(startCfg);
   directPath->getConfigAtEnd(endCfg);
 #endif
-  ODEBUG2(std::endl<<"at "<<inLength<<", rank "<<rank<<", localLength "<<localLength
+  ODEBUG2(std::endl<<"at "<<inLength<<", rank "<<rank<<", localLength "
+	  <<localLength
 	  <<" of "<<directPath->length() <<" total len "<<length()
 	  <<std::endl<<" -- cfg"<<outConfig);
   ODEBUG2(" startCfg"<<startCfg<<std::endl<<"endCfg"<<endCfg<<std::endl);
 
 }
 
-void CdirectPathVector::maxAbsoluteDerivative(double inFrom, double inTo, 
-					      std::vector<double>& outDerivatives) const
+void CdirectPathVector::
+maxAbsoluteDerivative(double inFrom, double inTo,
+		      std::vector<double>& outDerivatives) const
 {
   if (inFrom > inTo) {
     return;
@@ -194,13 +184,14 @@ void CdirectPathVector::maxAbsoluteDerivative(double inFrom, double inTo,
       inFrom -= attDirectPathVector[iDPFrom]->length();
       inTo -= attDirectPathVector[iDPFrom]->length();
       iDPFrom++;
-    } 
+    }
     else {
       finished = true;
     }
   }
 
-  // If first parameter is bigger than upper bound of definition interval, return.
+  // If first parameter is bigger than upper bound of definition interval,
+  // return.
   if (inFrom > attDirectPathVector[iDPFrom]->length()) {
     return;
   }
@@ -221,28 +212,31 @@ void CdirectPathVector::maxAbsoluteDerivative(double inFrom, double inTo,
   if (inTo > attDirectPathVector[iDPTo]->length()) {
     inTo = attDirectPathVector[iDPTo]->length();
   }
-  
-  // iDPFrom, inFrom represent the index of and parameter on direct path corresponding to first value.
-  // iDPTo, inTo represent the index of and parameter on direct path corresponding to second value.
-  if (iDPFrom == iDPTo) {
-    return attDirectPathVector[iDPTo]->maxAbsoluteDerivative(inFrom, inTo, outDerivatives);
-  }
-  
-  attDirectPathVector[iDPFrom]->maxAbsoluteDerivative(inFrom, attDirectPathVector[iDPFrom]->length(), 
-						     outDerivatives);
 
-  unsigned int iDP=iDPFrom+1; 
+  // iDPFrom, inFrom represent the index of and parameter on direct path
+  // corresponding to first value.
+  // iDPTo, inTo represent the index of and parameter on direct path
+  // corresponding to second value.
+  if (iDPFrom == iDPTo) {
+    return attDirectPathVector[iDPTo]->maxAbsoluteDerivative
+      (inFrom, inTo, outDerivatives);
+  }
+
+  attDirectPathVector[iDPFrom]->maxAbsoluteDerivative
+    (inFrom, attDirectPathVector[iDPFrom]->length(), outDerivatives);
+
+  unsigned int iDP=iDPFrom+1;
   std::vector<double> maxDerivative;
 
   while (iDP<iDPTo) {
-    attDirectPathVector[iDP]->maxAbsoluteDerivative(0, attDirectPathVector[iDPFrom]->length(), 
-						   maxDerivative);
+    attDirectPathVector[iDP]->maxAbsoluteDerivative
+      (0, attDirectPathVector[iDPFrom]->length(), maxDerivative);
     computeMaxOfTwoVectors(outDerivatives, maxDerivative);
     iDP++;
   }
   attDirectPathVector[iDP]->maxAbsoluteDerivative(0, inTo, maxDerivative);
   computeMaxOfTwoVectors(outDerivatives, maxDerivative);
-  
+
 }
 
 ktStatus CdirectPathVector::extractFrom(double inParam)
@@ -254,7 +248,7 @@ ktStatus CdirectPathVector::extractFrom(double inParam)
   }
   ODEBUG2(" new length "<<length());
 
-  // uStart, uEnd, reversed of kwsPlusDirectPath should have been updated. 
+  // uStart, uEnd, reversed of kwsPlusDirectPath should have been updated.
   ktStatus status = KD_OK;
   double len;
   if(isReversed()){
@@ -308,7 +302,8 @@ ktStatus CdirectPathVector::reverse()
   return KD_OK;
 }
 
-ktStatus CdirectPathVector::getRankAtLength(double inLength, unsigned int &oRank, 
+ktStatus CdirectPathVector::getRankAtLength(double inLength,
+					    unsigned int &oRank,
 					    double &localLength) const
 {
   oRank = 0;
@@ -324,10 +319,12 @@ ktStatus CdirectPathVector::getRankAtLength(double inLength, unsigned int &oRank
       finished = true;
     }
   }
-  // 
+  //
   if (localLength > attDirectPathVector[oRank]->length()) {
     if (oRank != attDirectPathVector.size()-1) {
-      std::cerr << "CdirectPathVector::getRankAtLength: this should not happen" << std::endl;
+      std::cerr <<
+	"CdirectPathVector::getRankAtLength: this should not happen"
+		<< std::endl;
       return KD_ERROR;
     }
     localLength = attDirectPathVector[oRank]->length();

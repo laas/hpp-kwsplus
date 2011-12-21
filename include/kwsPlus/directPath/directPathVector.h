@@ -24,7 +24,7 @@ KIT_PREDEF_CLASS(CdirectPathVector);
    Some steering methods build direct paths as a vector of elementary
    direct paths.  For instance, a steering method for a car like
    vehicle going forward and backward can return one or two direct
-   paths if a cusp configuration is inserted. 
+   paths if a cusp configuration is inserted.
 
 */
 
@@ -32,7 +32,7 @@ class CdirectPathVector : public CkwsPlusDirectPath {
 public:
   /*
 
-    P U B L I C   M E T H O D S 
+    P U B L I C   M E T H O D S
 
   */
 
@@ -43,14 +43,15 @@ public:
   /**
      \brief Creates a vector of direct path and returns a shared pointer to it.
   */
-  static CdirectPathVectorShPtr create(const CkwsConfig& inStartCfg, const CkwsConfig& inEndCfg,
-				       const CkwsSteeringMethodShPtr& inSteeringMethod,
-				       const std::vector<CkwsDirectPathConstShPtr>& inDirectPathVector);
+  static CdirectPathVectorShPtr
+    create(const CkwsConfig& inStartCfg, const CkwsConfig& inEndCfg,
+	   const CkwsSteeringMethodShPtr& inSteeringMethod,
+	   const std::vector<CkwsDirectPathConstShPtr>& inDirectPathVector);
 
   /**
      \brief Create a copy of this direct path.
   */
-  CkwsAbstractPathShPtr clone() const; 
+  CkwsAbstractPathShPtr clone() const;
 
   /**
      @}
@@ -63,12 +64,18 @@ public:
   /**
      \brief Return number of direct paths in vector
   */
-  unsigned int countDirectPaths() const {return attDirectPathVector.size();};
+  unsigned int countDirectPaths() const
+  {
+    return attDirectPathVector.size();
+  }
 
   /**
      \brief Access to direct paths of vector
   */
-  CkwsDirectPathConstShPtr directPathAtRank(unsigned int inRank) const {return attDirectPathVector[inRank];};
+  CkwsDirectPathConstShPtr directPathAtRank(unsigned int inRank) const
+  {
+    return attDirectPathVector[inRank];
+  }
 
   /**
      @}
@@ -78,7 +85,7 @@ protected:
 
   /*
 
-    P R O T E C T E D    M E T H O D S 
+    P R O T E C T E D    M E T H O D S
 
   */
 
@@ -86,12 +93,14 @@ protected:
  /**
      \brief  Create by copy a new instance of a direct path vector
   */
-  static CdirectPathVectorShPtr createCopy (const CdirectPathVectorConstShPtr &inDirectPathVector); 
+  static CdirectPathVectorShPtr
+    createCopy (const CdirectPathVectorConstShPtr &inDirectPathVector);
 
   /**
      \brief Constructor with vector of direct paths.
   */
-  CdirectPathVector(const CkwsConfig& inStartConfig, const CkwsConfig& inGoalConfig, 
+  CdirectPathVector(const CkwsConfig& inStartConfig,
+		    const CkwsConfig& inGoalConfig,
 		    const CkwsSteeringMethodShPtr& inSteeringMethod,
 		    std::vector<CkwsDirectPathConstShPtr> inDirectPathVector);
 
@@ -108,7 +117,7 @@ protected:
 
   /**
      \brief Return the length of this direct path.
-     
+
      Length is the sum of the lengths of each direct path in vector.
   */
   double computePrivateLength() const {return attLength;};
@@ -121,7 +130,8 @@ protected:
   /**
      \brief Compute the maximal absolute values of derivative of each degree of freedom on given interval.
   */
-  void maxAbsoluteDerivative(double inFrom, double inTo, std::vector<double>& outDerivatives) const;
+  void maxAbsoluteDerivative(double inFrom, double inTo,
+			     std::vector<double>& outDerivatives) const;
 
   /**
      \brief Reimplementation from CkwsDirectPath in order to keep track of the extracted interval.
@@ -133,24 +143,25 @@ protected:
   */
   virtual ktStatus extractTo(double inParam);
 
- 
+
   /**
      \brief Reimplementation from CkwsDirectPath in order to keep track of the extracted interval.
   */
   virtual ktStatus reverse();
 
-  /** 
+  /**
       \brief get the rank of the direct path in the vector at the length.
       \param inLength: the total length
       \param oRank: the lank of direct path in vector at the length
       \param localLength: the length in the direct path
   */
-  ktStatus getRankAtLength(double inLength, unsigned int &oRank, double &localLength) const;
+  ktStatus getRankAtLength(double inLength, unsigned int &oRank,
+			   double &localLength) const;
 
 private:
   /*
 
-    P R I V A T E    M E T H O D S 
+    P R I V A T E    M E T H O D S
 
   */
 
@@ -163,7 +174,8 @@ private:
      \brief Compute the max between two vector, coordinate by coordinate
      Result is put in first vector.
   */
-  void computeMaxOfTwoVectors(std::vector<double>& inOutVector1, const std::vector<double>& inVector2) const;
+  void computeMaxOfTwoVectors(std::vector<double>& inOutVector1,
+			      const std::vector<double>& inVector2) const;
 
   /*
 
@@ -195,7 +207,7 @@ private:
   unsigned int attRankStart, attRankEnd;
 
   /**
-     \brief 
+     \brief
      start and end point for extraction.
   */
   double attStartLocal, attEndLocal;
