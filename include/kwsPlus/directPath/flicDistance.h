@@ -7,11 +7,10 @@
 #define FLICDISTANCE_H
 
 #include "KineoWorks2/kwsDistance.h"
-#include "KineoWorks2/kwsSteeringMethod.h"
 
 KIT_PREDEF_CLASS(CflicDistance);
+KIT_PREDEF_CLASS(CflicSteeringMethod);
 
-#define FLIC_HUGE_VAL 1e10
 
 /**
    \addtogroup flic
@@ -36,7 +35,7 @@ public:
 
      \param inSteeringMethod To create a direct path, a shared pointer to a steering method is required. This shared pointer is thus given at the construction of CflicDistance. The steering method also indicates whether distance is oriented (see CflicDistance::distance).
   */
-  static CflicDistanceShPtr create(const CkwsSteeringMethodShPtr inSteeringMethod);
+  static CflicDistanceShPtr create(const CflicSteeringMethodShPtr inSteeringMethod);
 
   /**
      \brief Return a shared pointer to a distance object
@@ -55,6 +54,8 @@ public:
   */
   double distance(const CkwsConfig &inConfig1, const CkwsConfig &inConfig2) const;
 
+  /// Same as distance
+  double distanceForSorting(const CkwsConfig& cfg1, const CkwsConfig& cfg2) const;
 
 protected:
   /**
@@ -65,7 +66,7 @@ protected:
   /**
      \brief Protected constructor
   */
-  CflicDistance(const CkwsSteeringMethodShPtr inSteeringMethod);
+  CflicDistance(const CflicSteeringMethodShPtr inSteeringMethod);
 
   /**
      \brief Protected copy constructor
@@ -82,7 +83,7 @@ private:
   /**
      \brief Store steering method to create direct paths
   */
-  CkwsSteeringMethodShPtr attSteeringMethod;
+  CflicSteeringMethodShPtr attSteeringMethod;
 
   /**
      \brief Whether the steering method is oriented.

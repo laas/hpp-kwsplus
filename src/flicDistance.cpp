@@ -4,6 +4,7 @@
 */
 
 #include "kwsPlus/directPath/flicDirectPath.h"
+#include "kwsPlus/directPath/flicSteeringMethod.h"
 #include "kwsPlus/directPath/flicDistance.h"
 #include "flicManager.h"
 
@@ -36,7 +37,7 @@ CflicDistance::~CflicDistance()
 #endif
 }
 
-CflicDistanceShPtr CflicDistance::create(const CkwsSteeringMethodShPtr inSteeringMethod)
+CflicDistanceShPtr CflicDistance::create(const CflicSteeringMethodShPtr inSteeringMethod)
 {
   CflicDistance* distance = new CflicDistance(inSteeringMethod);
   CflicDistanceShPtr distanceShPtr = CflicDistanceShPtr(distance);
@@ -135,6 +136,11 @@ double CflicDistance::distance(const CkwsConfig &inConfig1, const CkwsConfig &in
   return length;
 }
 
+double CflicDistance::distanceForSorting(const CkwsConfig& cfg1, const CkwsConfig& cfg2) const
+{
+  return distance (cfg1, cfg2);
+}
+
 ktStatus CflicDistance::init(const CflicDistanceWkPtr &inWeakPtr)
 {
   ktStatus success = this->CkwsDistance::init(inWeakPtr) ;
@@ -146,7 +152,7 @@ ktStatus CflicDistance::init(const CflicDistanceWkPtr &inWeakPtr)
   return success;
 }
 
-CflicDistance::CflicDistance(const CkwsSteeringMethodShPtr inSteeringMethod) : 
+CflicDistance::CflicDistance(const CflicSteeringMethodShPtr inSteeringMethod) : 
   attSteeringMethod(inSteeringMethod), 
   attIsOriented(inSteeringMethod->isOriented())
 {

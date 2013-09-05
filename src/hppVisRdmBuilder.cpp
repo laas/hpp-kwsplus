@@ -36,10 +36,10 @@
 
 // ==========================================================================
 
-ChppVisRdmBuilderShPtr ChppVisRdmBuilder::create(const CkwsRoadmapShPtr &inRoadmap,
-                                                 double inPenetration,
-                                                 const ChppShooterActiveDofShPtr &inShooter,
-                                                 const CkwsDistanceShPtr &inEvaluator)
+ChppVisRdmBuilderShPtr ChppVisRdmBuilder::create
+(const CkwsRoadmapShPtr &inRoadmap,
+ double inPenetration,
+ const ChppShooterActiveDofShPtr &inShooter)
 {
 
   ChppVisRdmBuilder* rdmBuilderPtr = new ChppVisRdmBuilder(inRoadmap);
@@ -50,9 +50,9 @@ ChppVisRdmBuilderShPtr ChppVisRdmBuilder::create(const CkwsRoadmapShPtr &inRoadm
     rdmBuilderShPtr.reset();
   }
   else {
-    rdmBuilderPtr->distance(inEvaluator);
-    if(KD_ERROR == CkwsValidatorDPCollision::setPenetration(rdmBuilderShPtr->builderDirectPathValidator(), 
-							    inPenetration)) {
+    if(KD_ERROR == CkwsValidatorDPCollision::setPenetration
+       (rdmBuilderShPtr->configSpace ()->directPathValidators(), 
+	inPenetration)) {
       ODEBUG1(" Unvalid penetration: " << inPenetration);
       rdmBuilderShPtr.reset();
     }
@@ -100,7 +100,8 @@ ktStatus ChppVisRdmBuilder::buildOneStep()
   std::vector<double> dofs;
   currentConf.getDofValues(dofs);
 
-  CkwsValidatorSetShPtr constraints = this->roadmap()->device()->userConstraints();
+  CkwsValidatorSetShPtr constraints =
+    this->roadmap()->device()->userConstraints();
   constraints->isActivated(false);
 
   if(att_shooter->shoot(currentNode,config))
@@ -108,7 +109,9 @@ ktStatus ChppVisRdmBuilder::buildOneStep()
     constraints->isActivated(true);
     constraints->apply(config);
     bool val=true;
-    CkwsValidatorCfgCollisionShPtr cfv = CkwsValidatorCfgCollision::create ();
+    CkwsValidatorCfgCollisionShPtr cfv =
+      CkwsValidatorCfgCollision::create
+      (this->roadmap()->device()->configSpace ());
     CkwsNodeShPtr node = nodeFactory()->makeNode(config);
     unsigned int i=0;
     while( i<constraints->count() && val)
@@ -139,7 +142,8 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
   {
     if(addNode(node)!=KD_ERROR)
     {
-      link(CkwsRoadmapBuilder::BIDIRECTIONAL,node, CkitParameterMap::create ());
+      link(CkwsRoadmapBuilder::BIDIRECTIONAL,node,
+	   CkitParameterMap::create ());
     }
   }
   else
@@ -152,15 +156,17 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
 
     for(unsigned int i=0; i<roadmap()->countConnectedComponents(); i++)
     {
+      CkwsConnectedComponentShPtr connectedComponent;
+      roadmap()->getConnectedComponent(i, connectedComponent);
       if(canLinkNodeWithComponent(CkwsRoadmapBuilder::NODE_TO_ROADMAP,
-				  node,roadmap()->connectedComponent(i),
-				  CkitParameterMap::create(),
-                                       o_node,o_dp)
+				  node, connectedComponent,
+				  CkitParameterMap::create (),
+				  o_node,o_dp)
          ||
          canLinkNodeWithComponent(CkwsRoadmapBuilder::ROADMAP_TO_NODE,
-                                       node,roadmap()->connectedComponent(i),
-				  CkitParameterMap::create(),
-                                       o_node,o_dp))
+				  node, connectedComponent,
+				  CkitParameterMap::create (),
+				  o_node,o_dp))
        {
          ncc++;
        }
@@ -170,8 +176,10 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
       ODEBUG2(" isolated node");
       if(addNode(node)!=KD_ERROR)
       {
-        link(CkwsRoadmapBuilder::NODE_TO_ROADMAP,node, CkitParameterMap::create ());
-        link(CkwsRoadmapBuilder::ROADMAP_TO_NODE,node, CkitParameterMap::create ());
+        link(CkwsRoadmapBuilder::NODE_TO_ROADMAP,node,
+	     CkitParameterMap::create ());
+        link(CkwsRoadmapBuilder::ROADMAP_TO_NODE,node,
+	     CkitParameterMap::create ());
       }
       att_n_iterations=0;
     }
@@ -180,7 +188,8 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
       ODEBUG2(" node Link two cc " << ncc);
       if(addNode(node)!=KD_ERROR)
       {
-        link(CkwsRoadmapBuilder::BIDIRECTIONAL,node, CkitParameterMap::create ());
+        link(CkwsRoadmapBuilder::BIDIRECTIONAL,node,
+	     CkitParameterMap::create ());
       }
     }
   }
@@ -188,7 +197,8 @@ void ChppVisRdmBuilder::addVisibilityNode(CkwsNodeShPtr node)
 
 // ==========================================================================
 
-bool ChppVisRdmBuilder::plannerShouldStopPlanning (const CkwsPathPlannerConstShPtr &i_planner) const
+bool ChppVisRdmBuilder::plannerShouldStopPlanning
+(const CkwsPathPlannerConstShPtr&) const
 {
   ODEBUG1(" iteration "<<att_n_iterations);
   if (att_n_iterations>att_max_iterations){

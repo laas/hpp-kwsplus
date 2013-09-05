@@ -260,8 +260,9 @@ ktStatus CdirectPathVector::extractFrom(double inParam)
     len = uStart() > privateLength() ? privateLength() : uStart();
     status = getRankAtLength(len, attRankStart, attStartLocal);
   }
-  if(status)
+  if(status) {
     ODEBUG1(" ERROR : in extractFrom():getRankAtLength did not work ");
+  }
 
   return status;
 }
@@ -286,8 +287,9 @@ ktStatus CdirectPathVector::extractTo(double inParam)
     len = uEnd() > privateLength() ? privateLength() : uEnd();
     status = getRankAtLength(len, attRankEnd, attEndLocal);
   }
-  if(status)
+  if(status) {
     ODEBUG1(" ERROR : in extractEnd(): getRankAtLength did not work ");
+  }
 
   return status;
 }

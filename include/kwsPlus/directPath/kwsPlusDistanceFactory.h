@@ -8,7 +8,6 @@
 #define KWSPLUSDISTANCEFACTORY_H
 
 #include "KineoWorks2/kwsSMLinear.h"
-#include "kwsPlus/directPath/reedsSheppSteeringMethod.h"
 #include "kwsPlus/directPath/flicDistance.h"
 #include "kwsPlus/directPath/kwsPlusDistance.h"
 #include "kwsPlus/directPath/flicDistance.h"
@@ -48,35 +47,6 @@ public:
   CkwsDistanceShPtr makeDistance(bool inOriented) {
     return CkwsPlusDistance::create(CkwsSMLinear::create(inOriented));
   };
-};
-
-
-/**
-   \brief Reeds and Shepp distance function factory
-*/
-class CkwsPlusRSDistanceFactory : public CkwsPlusDistanceFactory {
-public:
-  /**
-     \brief Constructor 
-     \param inRadius Radius of circular segments
-  */
-  CkwsPlusRSDistanceFactory(double inRadius) :
-    attRadius(inRadius) {
-  };
-
-  /**
-     \brief Return a distance function associated with Reeds and Shepp steering method
-  */
-  CkwsDistanceShPtr makeDistance(bool inOriented) {
-    return CkwsPlusDistance::create(CreedsSheppSteeringMethod::create(attRadius, inOriented));
-  };
-
-private:
-  /**
-     \brief Radius of circular segments produced by the steering method
-  */
-  double attRadius;
-
 };
 
 

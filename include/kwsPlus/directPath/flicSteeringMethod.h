@@ -72,23 +72,36 @@ class CflicSteeringMethod : public CkwsSteeringMethod {
   */
   static CflicSteeringMethodShPtr create(bool is_oriented = true) ;
 
-	static CflicSteeringMethodShPtr createCopy(const CflicSteeringMethodConstShPtr& i_flicSM);
+  /**
+     \brief  create a steering method and return the shared pointer corresponding
+     \param  is_oriented : a bool (default = true) ;
+     \return a shared pointer on the Steering Method
+  */
+  static CflicSteeringMethodShPtr createCopy
+    (const CflicSteeringMethodConstShPtr& steeringMethod) ;
 
   /**
-     \brief  Factory method that creates a new direct path between two configurations.
+     Factory method that creates a new direct path between two configurations.
      \param i_startCfg : the start config
      \param i_endCfg : the end config
      \return a shared pointer on the direct path just create
   */
-  virtual CkwsDirectPathShPtr makeDirectPath(const CkwsConfig &i_startCfg, const CkwsConfig &i_endCfg)const;
+  virtual CkwsDirectPathShPtr makeDirectPath (const CkwsConfig& i_startCfg,
+					      const CkwsConfig& i_endCfg) const;
  	
   /**
-     \brief  Returns whether the steering method produces oriented or non-oriented paths.
-     \return true if the steering method is oriened or false
+     Returns whether the steering method produces oriented or non-oriented paths for a given space.
+     \return true if the steering method is oriented or false
+  */
+  virtual bool isOriented(const CkwsConfigSpaceConstShPtr &i_space) const ;
+
+  /**
+     Returns whether the steering method produces oriented or non-oriented paths
+     \return true if the steering method is oriented or false
   */
   virtual bool isOriented() const ;
 
-	virtual CkwsSteeringMethodShPtr clone() const;
+  virtual CkwsSteeringMethodShPtr clone() const;
 
  protected:
 	/** 
@@ -102,21 +115,19 @@ class CflicSteeringMethod : public CkwsSteeringMethod {
       \param i_oriented : if true, the steering method will produce oriented paths
   */
   CflicSteeringMethod(bool i_oriented);
-
-	//copy constructor
-	CflicSteeringMethod(const CflicSteeringMethod& i_flicSM);
+  CflicSteeringMethod(const CflicSteeringMethod& steeringMethod);
 
   /** 
       \brief Initialization of the CkwsSMLinear object.
       \param         i_smWkPtr : weak pointer to the object itself
       \return        KD_OK or KD_ERROR
   */
-  ktStatus init(const CkwsSteeringMethodWkPtr& i_smWkPtr);
+  ktStatus init(const CflicSteeringMethodWkPtr& i_smWkPtr);
 
  	
  private:
 
-  CkwsSteeringMethodWkPtr   m_weakPtr;	 ///< weak pointer to itself
+  CflicSteeringMethodWkPtr   m_weakPtr;	 ///< weak pointer to itself
   bool	 m_oriented;  ///< oriented or not ?
 		
 } ;

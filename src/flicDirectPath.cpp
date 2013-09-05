@@ -945,24 +945,19 @@ double CflicArcLengthManager::findDefaultParameter(double arcLengthParam)
   double middleParam=0, middleValue=0;
   double lowerParam = attDefaultToArcLength.uMin();
   double upperParam = attDefaultToArcLength.uMax();
-  double lowerValue = attDefaultToArcLength.value(lowerParam);
-  double upperValue = attDefaultToArcLength.value(upperParam);
 
   while (upperParam - lowerParam > 1e-8)
   {
-    //middleParam = lowerParam + (arcLengthParam-lowerValue)/(upperValue-lowerValue)*(upperParam-lowerParam);
     middleParam = .5*(lowerParam + upperParam);
     middleValue = attDefaultToArcLength.value(middleParam);
 
     if (middleValue > arcLengthParam)
     {
       upperParam = middleParam;
-      upperValue = middleValue;
     }
     else
     {
       lowerParam = middleParam;
-      lowerValue = middleValue;
     }
   }
   return middleParam;

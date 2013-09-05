@@ -513,7 +513,7 @@ public:
   * \brief Allocate a vector of TflicBoundInterval and store a pointer to the direct path.
   */
   CflicBoundManagerArcLengthParam(unsigned int nbSampleIntervals, double inArcLength,
-                                  CflicDirectPathShPtr inDirectPath):
+                                  CflicDirectPathShPtr):
     attNbSampleIntervals(nbSampleIntervals), attArcLength(inArcLength), 
     boundVectorDeriv1(nbSampleIntervals), boundVectorDeriv2(nbSampleIntervals) {};
 

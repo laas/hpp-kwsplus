@@ -69,17 +69,17 @@ public:
   /**
      \brief Get the private start configuration for directPath reproduction.
   */
-  const CkwsConfig & getPrivateStart () const; 
+  const CkwsConfig& getPrivateStart () const; 
 
   /**
      \brief Get the private start configuration for directPath reproduction.
   */
-  const CkwsConfig & getPrivateEnd () const; 
+  const CkwsConfig& getPrivateEnd () const; 
 
   /**
      \brief Get the private length for directPath reproduction.
   */
-  const double getPrivateLength () const; 
+  double getPrivateLength () const; 
 
   /**
      @}

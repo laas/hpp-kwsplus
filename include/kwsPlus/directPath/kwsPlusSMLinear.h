@@ -63,26 +63,28 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
       (see CkwsPlusDPLinear::maxAbsoluteDerivative()).
       \return        Shared pointer to the newly created steering method
    */
-  static CkwsPlusSMLinearShPtr create(const std::vector<double> &inRatioVector=std::vector<double>(0), bool inOriented = false);
+  static CkwsPlusSMLinearShPtr create
+    (const std::vector<double> &inRatioVector=std::vector<double>(0),
+     bool inOriented = false);
+  
+  /// Clone the steering method
+  virtual CkwsSteeringMethodShPtr clone() const;
 
-  /** Create an new instance copy of the CkwsSMLinear class.
-   */
-  static CkwsPlusSMLinearShPtr createCopy(const CkwsPlusSMLinearConstShPtr& i_steeringMethod);
+  /// Create an new instance copy of the CkwsSMLinear class.
+  static CkwsPlusSMLinearShPtr createCopy (const CkwsPlusSMLinearConstShPtr&
+					   sm);
 	
   // inherited -- for doc see parent class
-  virtual CkwsDirectPathShPtr makeDirectPath(const CkwsConfig& inStartConfig, const CkwsConfig& inEndConfig)const;
-
-  // inherited -- for doc see parent class
-  virtual bool isOriented() const;
-	
   // Interfaces for object coding/decoding:
   virtual void encodeWithCoder(const CkitCoderShPtr& i_coder) const;
   virtual ktStatus initWithCoder(const CkitCoderShPtr& i_coder, const CkitCodableShPtr& i_self);
-	
-	void getRatioVector(std::vector<double>& o_ratioVect)const;
-	
-	virtual CkwsSteeringMethodShPtr clone() const;
+  virtual CkwsDirectPathShPtr makeDirectPath
+    (const CkwsConfig& inStartConfig, const CkwsConfig& inEndConfig) const;
 
+  // inherited -- for doc see parent class
+  virtual bool isOriented(const CkwsConfigSpaceConstShPtr& configSpace) const;
+
+  void getRatioVector (std::vector<double>& o_ratioVect) const;
  protected:
 
   /** Constructor.
@@ -93,26 +95,21 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
    */
   CkwsPlusSMLinear(const std::vector<double> &inRatioVector, bool inOriented);
 
-  /** Constructor.
-   */
-  CkwsPlusSMLinear();
-	
-	/** copy Constructor.
-   */
-  CkwsPlusSMLinear(const CkwsPlusSMLinear& i_steeringMethod);
-	
+  /// Copy constructor
+  CkwsPlusSMLinear(const CkwsPlusSMLinear& sm);
+
   /** Initialization of the CkwsPlusSMLinear object.
    *   \param         inSmWkPtr : weak pointer to the object itself
    *   \return        KD_OK | KD_ERROR
    */
-  ktStatus init(const CkwsSteeringMethodWkPtr& inSmWkPtr);
+  ktStatus init(const CkwsPlusSMLinearWkPtr& inSmWkPtr);
 
  private:
 
   /**
      \brief Weak pointer to itself
   */
-  CkwsSteeringMethodWkPtr attWeakPtr;	 
+  CkwsPlusSMLinearWkPtr attWeakPtr;	 
 
   /**
      \brief whether steering method produces oriented paths

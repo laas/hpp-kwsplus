@@ -7,9 +7,8 @@
 #ifndef KWSPLUSSTEERINGMETHODFACTORY_H
 #define KWSPLUSSTEERINGMETHODFACTORY_H
 
-# include <KineoUtility/kitDefine.h>
-
-KIT_PREDEF_CLASS (CkppSteeringMethodComponent);
+#include "kwsPlus/directPath/kwsPlusSMLinear.h"
+#include "kwsPlus/directPath/flicSteeringMethod.h"
 
 /**
 
@@ -29,8 +28,37 @@ public:
   /**
      \brief Return a steering method
   */
-  virtual CkppSteeringMethodComponentShPtr
-    makeSteeringMethod(bool inOriented) = 0;
+  virtual CkwsSteeringMethodShPtr makeSteeringMethod(bool inOriented) = 0;
+};
+
+
+/**
+   \brief Linear steering method factory
+*/
+class CkwsPlusLinearSteeringMethodFactory : public CkwsPlusSteeringMethodFactory {
+public:
+
+  /**
+     \brief Return a linear steering method
+  */
+  CkwsSteeringMethodShPtr makeSteeringMethod(bool inOriented) {
+    std::vector<double> ratioVector;
+    return CkwsPlusSMLinear::create(ratioVector, inOriented);
+  };
+};
+
+
+/**
+   \brief CflicSteeringMethod steering method factory
+*/
+class CkwsPlusFlicSteeringMethodFactory : public CkwsPlusSteeringMethodFactory {
+public:
+  /**
+     \brief Return a flic steering method
+  */
+  CkwsSteeringMethodShPtr makeSteeringMethod(bool inOriented) {
+    return CflicSteeringMethod::create(inOriented);
+  };
 };
 
 

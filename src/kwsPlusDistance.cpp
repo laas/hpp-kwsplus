@@ -91,3 +91,8 @@ double CkwsPlusDistance::distance ( const CkwsConfig &i_cfg1, const CkwsConfig &
 	}
 	return flicDirectPath->length();
 }
+
+double CkwsPlusDistance::distanceForSorting (const CkwsConfig& cfg1, const CkwsConfig& cfg2) const
+{
+  return distance (cfg1, cfg2);
+}

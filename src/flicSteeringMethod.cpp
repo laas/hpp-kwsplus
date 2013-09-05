@@ -51,6 +51,14 @@ CflicSteeringMethod::CflicSteeringMethod(bool i_oriented) : m_oriented(i_oriente
 	//nothing to do
 }
 
+// ============================================================================
+CflicSteeringMethod::CflicSteeringMethod
+(const CflicSteeringMethod& steeringMethod) :
+  CkwsSteeringMethod (steeringMethod),
+  m_oriented (steeringMethod.m_oriented)
+{
+}
+
 // =========================================================================================
 
 CflicSteeringMethod::CflicSteeringMethod()
@@ -66,14 +74,7 @@ CflicSteeringMethod::~CflicSteeringMethod() {
 
 // =========================================================================================
 
-CflicSteeringMethod::CflicSteeringMethod(const CflicSteeringMethod& i_flicSM) 
-{
-	m_oriented = i_flicSM.isOriented();
-}
-
-// =========================================================================================
-
-ktStatus CflicSteeringMethod::init(const CkwsSteeringMethodWkPtr& i_smWkPtr) {
+ktStatus CflicSteeringMethod::init(const CflicSteeringMethodWkPtr& i_smWkPtr) {
  
     ktStatus  success = CkwsSteeringMethod::init(i_smWkPtr);
 
@@ -82,7 +83,7 @@ ktStatus CflicSteeringMethod::init(const CkwsSteeringMethodWkPtr& i_smWkPtr) {
     return success;
 }
 
-// ==========================================================================================
+// ===========================================================================
 
 CflicSteeringMethodShPtr CflicSteeringMethod::create(bool i_oriented)
 {
@@ -97,67 +98,48 @@ CflicSteeringMethodShPtr CflicSteeringMethod::create(bool i_oriented)
 	return flatShPtr;
 }
 
-// ==========================================================================================
+// ===========================================================================
 
-CflicSteeringMethodShPtr CflicSteeringMethod::createCopy(const CflicSteeringMethodConstShPtr& i_flicSM)
+CflicSteeringMethodShPtr CflicSteeringMethod::createCopy
+(const CflicSteeringMethodConstShPtr& steeringMethod)
 {
-	CflicSteeringMethod*  flatPtr = new CflicSteeringMethod(*i_flicSM);
-	CflicSteeringMethodShPtr flatShPtr(flatPtr);
+  CflicSteeringMethod*  flatPtr = new CflicSteeringMethod(*steeringMethod);
+  CflicSteeringMethodShPtr flatShPtr(flatPtr);
+  CflicSteeringMethodWkPtr flatWkPtr(flatShPtr);
 
-	if(flatPtr->init(flatShPtr) != KD_OK)
-	{
-		 flatShPtr.reset();
-	}
-	return flatShPtr;
+  ODEBUG2("steering method create.");
+  
+  if(flatPtr->init(flatWkPtr) != KD_OK) flatShPtr.reset();
+  
+  return flatShPtr;
 }
 
-// =========================================================================================
-
-void CflicSteeringMethod::encodeWithCoder(const CkitCoderShPtr& i_coder)const
+CkwsSteeringMethodShPtr CflicSteeringMethod::clone () const
 {
-	// Always call parent class coding:
-	CkwsSteeringMethod::encodeWithCoder(i_coder);
-	
-	i_coder->encodeBool(m_oriented,"oriented");
+  return CflicSteeringMethod::createCopy (this->m_weakPtr.lock ());
 }
 
-// =========================================================================================
+// ============================================================================
 
-ktStatus CflicSteeringMethod::initWithCoder(const CkitCoderShPtr& i_coder, const CkitCodableShPtr& i_self)
+CkwsDirectPathShPtr CflicSteeringMethod::makeDirectPath
+(const CkwsConfig &i_startCfg, const CkwsConfig &i_endCfg) const
 {
-	ktStatus success = CkwsSteeringMethod::initWithCoder(i_coder, i_self);
-	if(KD_OK == success)
-	{
-		m_weakPtr = KIT_DYNAMIC_PTR_CAST(CflicSteeringMethod,i_self);
-		m_oriented = i_coder->decodeBool("oriented");
-	}
-	return success;
-}
-
-// =========================================================================================
-
-CkwsDirectPathShPtr
-CflicSteeringMethod::makeDirectPath (const CkwsConfig &i_startCfg,
-				     const CkwsConfig &i_endCfg) const
-{
-	
-  bool oriented = isOriented();
-  return CflicDirectPath::create(i_startCfg, i_endCfg, m_weakPtr.lock(), oriented) ;
+  bool oriented = isOriented (i_startCfg.configSpace ());
+  return CflicDirectPath::create(i_startCfg, i_endCfg, m_weakPtr.lock(),
+				 oriented) ;
  
 }
 
 // ==========================================================================================
 
-bool CflicSteeringMethod::isOriented() const {
+bool CflicSteeringMethod::isOriented (const CkwsConfigSpaceConstShPtr &) const
+{
   return m_oriented ;
 }
 
-// ==========================================================================================
-
-CkwsSteeringMethodShPtr CflicSteeringMethod::clone() const
+bool CflicSteeringMethod::isOriented () const
 {
-	KIT_ASSERT( m_weakPtr.lock() );
-	return CflicSteeringMethod::createCopy(KIT_DYNAMIC_PTR_CAST(const CflicSteeringMethod, m_weakPtr.lock()));
+  return m_oriented ;
 }
 
 /** @}

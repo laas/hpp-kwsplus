@@ -64,7 +64,9 @@ class CkwsPlusDistance : public CkwsDistance
 		ktStatus init ( const CkwsPlusDistanceWkPtr& i_smWkPtr );
 
 		virtual double distance ( const CkwsConfig &i_cfg1, const CkwsConfig &i_cfg2 ) const;
-
+		
+		/// Same as distance
+		virtual double distanceForSorting(const CkwsConfig& cfg1, const CkwsConfig& cfg2) const;
 	protected:
 
 

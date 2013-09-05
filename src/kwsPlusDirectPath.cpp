@@ -123,7 +123,7 @@ const CkwsConfig & CkwsPlusDirectPath::getPrivateEnd () const
   return privateEnd();
 } 
 
-const double CkwsPlusDirectPath::getPrivateLength () const
+double CkwsPlusDirectPath::getPrivateLength () const
 {
   return privateLength();
 } 
@@ -150,8 +150,8 @@ ktStatus CkwsPlusDirectPath::getVelocityAtDistance(double inParameter, std::vect
   return KD_OK;
 }
 
-ktStatus CkwsPlusDirectPath::getVelocityAtDistanceAtConstruction(double inDistance, 
-								 std::vector<double>& outVelocity) const
+ktStatus CkwsPlusDirectPath::getVelocityAtDistanceAtConstruction(double, 
+								 std::vector<double>&) const
 {
   ODEBUG1(":getVelocityAtDistanceAtConstruction not implemented yet.");
   return KD_ERROR;

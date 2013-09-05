@@ -37,11 +37,8 @@ INCLUDES
 /*****************************************
 PUBLIC METHODS
 *******************************************/
-// The following macro registers the class with the class registry,
-// assigns the static CLASS attribute
-// and implements the classObject() virtual method.
-KIT_DEFINE_CLASS( CkwsPlusSMLinear );
-// =========================================================================================
+
+// ============================================================================
 
 CkwsPlusSMLinear::CkwsPlusSMLinear(const std::vector<double> &inRatioVector, 
 				   bool inOriented) 
@@ -50,23 +47,15 @@ CkwsPlusSMLinear::CkwsPlusSMLinear(const std::vector<double> &inRatioVector,
 	//nothing to do
 }
 
-// =========================================================================================
+// ============================================================================
 
-CkwsPlusSMLinear::CkwsPlusSMLinear(const CkwsPlusSMLinear& i_steeringMethod) 
-  : attOriented(i_steeringMethod.isOriented())
+CkwsPlusSMLinear::CkwsPlusSMLinear(const CkwsPlusSMLinear& sm) :
+  CkwsSteeringMethod (sm), attOriented (sm.attOriented),
+  attRatioVector (sm.attRatioVector)
 {
-	i_steeringMethod.getRatioVector(attRatioVector);
 }
 
-// =========================================================================================
-
-CkwsPlusSMLinear::CkwsPlusSMLinear() 
-  : attOriented(false)
-{
-	//nothing to do
-}
-
-// =========================================================================================
+// ============================================================================
 
 CkwsPlusSMLinear::~CkwsPlusSMLinear() {
 	//nothing to do
@@ -74,7 +63,8 @@ CkwsPlusSMLinear::~CkwsPlusSMLinear() {
 
 // =========================================================================================
 
-ktStatus CkwsPlusSMLinear::init(const CkwsSteeringMethodWkPtr& inSmWeakPtr) {
+ktStatus CkwsPlusSMLinear::init(const CkwsPlusSMLinearWkPtr& inSmWeakPtr)
+{
  
     ktStatus  success = CkwsSteeringMethod::init(inSmWeakPtr);
 
@@ -83,7 +73,7 @@ ktStatus CkwsPlusSMLinear::init(const CkwsSteeringMethodWkPtr& inSmWeakPtr) {
     return success;
 }
 
-// ==========================================================================================
+// ============================================================================
 
 CkwsPlusSMLinearShPtr CkwsPlusSMLinear::create(const std::vector<double> &inRatioVector,
 					       bool inOriented)
@@ -99,53 +89,50 @@ CkwsPlusSMLinearShPtr CkwsPlusSMLinear::create(const std::vector<double> &inRati
   return flatShPtr;
 }
 
+// ============================================================================
 
-
-// =========================================================================================
-
-CkwsPlusSMLinearShPtr CkwsPlusSMLinear::createCopy(const CkwsPlusSMLinearConstShPtr& i_steeringmethod)
+CkwsPlusSMLinearShPtr CkwsPlusSMLinear::createCopy
+(const CkwsPlusSMLinearConstShPtr& sm)
 {
-  CkwsPlusSMLinear*  flatPtr = new CkwsPlusSMLinear(*i_steeringmethod);
+  CkwsPlusSMLinear*  flatPtr = new CkwsPlusSMLinear(*sm);
   CkwsPlusSMLinearShPtr flatShPtr(flatPtr);
+  CkwsPlusSMLinearWkPtr flatWkPtr(flatShPtr);
 
-  ODEBUG2( "steering method create" );
-
-  if(flatPtr->init(flatShPtr) != KD_OK)
-		flatShPtr.reset();
-
+  if(flatPtr->init(flatWkPtr) != KD_OK) flatShPtr.reset();
   return flatShPtr;
 }
 
-// =========================================================================================
+ CkwsSteeringMethodShPtr CkwsPlusSMLinear::clone() const
+ {
+   return CkwsPlusSMLinear::createCopy (this->attWeakPtr.lock ());
+ }
 
-CkwsDirectPathShPtr CkwsPlusSMLinear::makeDirectPath (const CkwsConfig &inStartConfig, const CkwsConfig &inEndConfig) const {
-	
+// ============================================================================
+
+CkwsDirectPathShPtr CkwsPlusSMLinear::makeDirectPath
+(const CkwsConfig &inStartConfig, const CkwsConfig &inEndConfig) const
+{
   // bool oriented = isOriented();
-  return CkwsPlusDPLinear::create(inStartConfig, inEndConfig, attRatioVector, attWeakPtr.lock()) ;
+  return CkwsPlusDPLinear::create(inStartConfig, inEndConfig, 
+				  attRatioVector, attWeakPtr.lock()) ;
  
 }
 
-// ==========================================================================================
+// ============================================================================
 
-bool CkwsPlusSMLinear::isOriented() const {
+bool CkwsPlusSMLinear::isOriented(const CkwsConfigSpaceConstShPtr&) const
+{
   return attOriented ;
 }
 
-// ==========================================================================================
+// ============================================================================
 
-void CkwsPlusSMLinear::getRatioVector(std::vector<double>& o_ratioVect)const
+void CkwsPlusSMLinear::getRatioVector(std::vector<double>& o_ratioVect) const
 {
 	o_ratioVect = attRatioVector;
 }
 
-// ==========================================================================================
-
-CkwsSteeringMethodShPtr CkwsPlusSMLinear::clone()const
-{
-	return CkwsPlusSMLinear::createCopy(KIT_DYNAMIC_PTR_CAST(const CkwsPlusSMLinear, attWeakPtr.lock()));
-}
-
-// ==========================================================================================
+// ============================================================================
 
 void CkwsPlusSMLinear::encodeWithCoder(const CkitCoderShPtr& i_coder) const
 {

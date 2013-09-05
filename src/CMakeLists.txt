@@ -21,7 +21,6 @@ SET(${PROJECT_NAME}_SOURCES
   flicSteeringMethod.cpp
   kwsPlusDirectPath.cpp
   directPathVector.cpp
-  kitMat3.cpp
   hppConfigurationShooter.cpp
   hppShooterActiveDof.cpp
   hppVisRdmBuilder.cpp

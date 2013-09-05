@@ -176,7 +176,7 @@ void CkwsPlusDPLinear::maxAbsoluteDerivative(double inFrom, double inTo, std::ve
 }
 
 ktStatus 
-CkwsPlusDPLinear::getVelocityAtDistanceAtConstruction(double inDistance, 
+CkwsPlusDPLinear::getVelocityAtDistanceAtConstruction(double, 
 						      std::vector<double>& outVelocity) const
 {
   CkwsConfig startConfig = privateStart();

@@ -37,12 +37,11 @@ public:
      \param inRoadmap: The roadmap to construct.
      \param inPenetration: The penetration allowed.
      \param inShooter: The shooter used to generate the configurations.
-     \param inEvaluator: The class used to evaluate the distance between two configurations.
  */
-  static ChppVisRdmBuilderShPtr create (const CkwsRoadmapShPtr &inRoadmap,
-                                        double inPenetration,
-                                        const ChppShooterActiveDofShPtr& inShooter=ChppShooterActiveDof::create(),
-                                        const CkwsDistanceShPtr &inEvaluator=CkwsDistance::create());
+  static ChppVisRdmBuilderShPtr create
+    (const CkwsRoadmapShPtr &inRoadmap,
+     double inPenetration,
+     const ChppShooterActiveDofShPtr& inShooter=ChppShooterActiveDof::create());
 
  /**
      \brief Destructor.
