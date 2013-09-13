@@ -114,6 +114,32 @@ CflicSteeringMethodShPtr CflicSteeringMethod::createCopy
   return flatShPtr;
 }
 
+// ===========================================================================
+
+void CflicSteeringMethod::encodeWithCoder(const CkitCoderShPtr& i_coder) const
+{
+  // Always call parent class coding:
+  CkwsSteeringMethod::encodeWithCoder(i_coder);
+	
+  i_coder->encodeBool(m_oriented,"oriented");
+}
+
+// ===========================================================================
+
+ktStatus CflicSteeringMethod::initWithCoder(const CkitCoderShPtr& i_coder,
+					    const CkitCodableShPtr& i_self)
+{
+  ktStatus success = CkwsSteeringMethod::initWithCoder(i_coder, i_self);
+  if(KD_OK == success)
+    {
+      m_weakPtr = KIT_DYNAMIC_PTR_CAST(CflicSteeringMethod,i_self);
+      m_oriented = i_coder->decodeBool("oriented");
+    }
+  return success;
+}
+
+// ===========================================================================
+
 CkwsSteeringMethodShPtr CflicSteeringMethod::clone () const
 {
   return CflicSteeringMethod::createCopy (this->m_weakPtr.lock ());
