@@ -1,5 +1,4 @@
 INPUT                  = \
 			@CMAKE_SOURCE_DIR@/include/kwsPlus/directPath \
 			@CMAKE_SOURCE_DIR@/include/kwsPlus/roadmap \
-			@CMAKE_SOURCE_DIR@/include/kwsPlus/util \
                         @CMAKE_SOURCE_DIR@/doc/additionalDoc
