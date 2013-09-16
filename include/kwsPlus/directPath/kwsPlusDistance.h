@@ -18,7 +18,7 @@ INCLUDE
 
 #include "KineoWorks2/kwsSteeringMethod.h"
 #include "KineoWorks2/kwsConfig.h"
-#include "KineoWorks2/kwsDistance.h"
+#include "KineoWorks2/kwsMetric.h"
 
 
 
@@ -39,10 +39,10 @@ CLASS
 /**
    \brief Implement a distance which enable the user to measure distance based on a specific steering method.
 
-   CkwsPlusDistance is herited from kwsDistance and enable users to use it as a steering method base distance calculator .
+   CkwsPlusDistance is herited from kwsMetric and enable users to use it as a steering method base distance calculator .
 
 */
-class CkwsPlusDistance : public CkwsDistance
+class CkwsPlusDistance : public CkwsMetric
 {
 
 
@@ -60,6 +60,10 @@ class CkwsPlusDistance : public CkwsDistance
 		   \return a shared pointer on the distance function
 		*/
 		static CkwsPlusDistanceShPtr create(CkwsSteeringMethodShPtr inSteeringMethod) ;
+		/// Create copy and return shared pointer to newly allocated distance. 
+		static CkwsPlusDistanceShPtr createCopy (const CkwsPlusDistanceShPtr& inDisance) ;
+
+		CkwsMetricShPtr clone () const;
 
 		ktStatus init ( const CkwsPlusDistanceWkPtr& i_smWkPtr );
 
@@ -67,6 +71,7 @@ class CkwsPlusDistance : public CkwsDistance
 		
 		/// Same as distance
 		virtual double distanceForSorting(const CkwsConfig& cfg1, const CkwsConfig& cfg2) const;
+
 	protected:
 
 

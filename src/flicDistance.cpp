@@ -62,6 +62,11 @@ CflicDistanceShPtr CflicDistance::createCopy(const CflicDistanceConstShPtr& inDi
   return distanceShPtr;
 }
 
+CkwsMetricShPtr CflicDistance::clone () const
+{
+  return CflicDistance::createCopy (attWeakPtr.lock ());
+}
+
 /*
   This function computes an approximation of the length of flicDirectPath between 
   Two configurations. 
@@ -143,7 +148,7 @@ double CflicDistance::distanceForSorting(const CkwsConfig& cfg1, const CkwsConfi
 
 ktStatus CflicDistance::init(const CflicDistanceWkPtr &inWeakPtr)
 {
-  ktStatus success = this->CkwsDistance::init(inWeakPtr) ;
+  ktStatus success = this->CkwsMetric::init(inWeakPtr) ;
 
   if (KD_OK == success) {
     attWeakPtr = inWeakPtr;

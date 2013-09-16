@@ -58,7 +58,7 @@ CkwsPlusDistance::~CkwsPlusDistance()
 ktStatus CkwsPlusDistance::init ( const CkwsPlusDistanceWkPtr& i_smWkPtr )
 {
 
-	ktStatus  success = CkwsDistance::init ( i_smWkPtr );
+	ktStatus  success = CkwsMetric::init ( i_smWkPtr );
 
 	if ( KD_OK == success ) m_weakPtr = i_smWkPtr;
 
@@ -78,6 +78,40 @@ CkwsPlusDistanceShPtr CkwsPlusDistance:: create ( CkwsSteeringMethodShPtr inStre
 	if ( flatPtr->init ( flatWkPtr ) != KD_OK ) flatShPtr.reset();
 
 	return flatShPtr;
+}
+
+// ==========================================================================================
+
+CkwsPlusDistanceShPtr CkwsPlusDistance::createCopy ( const CkwsPlusDistanceShPtr& inDistance )
+{
+	CkwsPlusDistance*  flatPtr = new CkwsPlusDistance(*inDistance);
+	CkwsPlusDistanceShPtr flatShPtr ( flatPtr );
+	CkwsPlusDistanceWkPtr flatWkPtr ( flatShPtr );
+
+	ODEBUG2( "CkwsPlusDistance create copy" );
+
+	if ( flatPtr->init ( flatWkPtr ) != KD_OK )
+	  {
+	    flatShPtr.reset();
+	    return flatShPtr;
+	  }
+
+	if (inDistance->attSteeringMethod)
+	  flatShPtr->attSteeringMethod = inDistance->attSteeringMethod;
+	else
+	  {
+	    ODEBUG1(":createCopy: attSteeringMethod does not exist in the copied distance.");
+	    return CkwsPlusDistanceShPtr ();
+	  }
+
+	return flatShPtr;
+}
+
+// ==========================================================================================
+
+CkwsMetricShPtr CkwsPlusDistance::clone () const
+{
+  return createCopy (m_weakPtr.lock ());
 }
 
 // ==========================================================================================

@@ -6,7 +6,7 @@
 #ifndef FLICDISTANCE_H
 #define FLICDISTANCE_H
 
-#include "KineoWorks2/kwsDistance.h"
+#include "KineoWorks2/kwsMetric.h"
 
 KIT_PREDEF_CLASS(CflicDistance);
 KIT_PREDEF_CLASS(CflicSteeringMethod);
@@ -24,7 +24,7 @@ KIT_PREDEF_CLASS(CflicSteeringMethod);
    Derives from from CkwsDistance.
 */
 
-class CflicDistance : public CkwsDistance
+class CflicDistance : public CkwsMetric
 {
 public:
   
@@ -42,6 +42,9 @@ public:
   */
   static CflicDistanceShPtr createCopy(const CflicDistanceConstShPtr& inDistance);
 
+  /// Clone metric.
+  CkwsMetricShPtr clone () const;
+		
   /**
      \brief Compute an approximation of the distance between two configurations
      \param inConfig1 first configuration.
