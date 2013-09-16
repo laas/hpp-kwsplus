@@ -87,6 +87,9 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
   void getRatioVector (std::vector<double>& o_ratioVect) const;
  protected:
 
+  /// Constructor.
+  CkwsPlusSMLinear();
+
   /** Constructor.
       \param         inOriented : if true, the steering method will produce oriented paths
       \param         inRatioVector The vector of ratios used to overestimate 

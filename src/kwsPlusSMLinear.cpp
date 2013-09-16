@@ -40,6 +40,13 @@ PUBLIC METHODS
 
 // ============================================================================
 
+CkwsPlusSMLinear::CkwsPlusSMLinear()
+  : attOriented(false), attRatioVector()
+{
+}
+
+// ============================================================================
+
 CkwsPlusSMLinear::CkwsPlusSMLinear(const std::vector<double> &inRatioVector, 
 				   bool inOriented) 
   : attOriented(inOriented), attRatioVector(inRatioVector)
@@ -159,7 +166,6 @@ ktStatus CkwsPlusSMLinear::initWithCoder(const CkitCoderShPtr& i_coder, const Ck
   }
   return KD_ERROR;
 }
-
 
 /** @}
  */
