@@ -38,6 +38,8 @@ INCLUDES
 PUBLIC METHODS
 *******************************************/
 
+KIT_DEFINE_CLASS(CkwsPlusSMLinear)
+
 // ============================================================================
 
 CkwsPlusSMLinear::CkwsPlusSMLinear()
