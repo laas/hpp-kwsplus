@@ -22,7 +22,7 @@
 /**
    \brief Distance function factory
 
-   This abstract class is intended to be derived to build different types of distance functions (CkwsDistance).
+   This abstract class is intended to be derived to build different types of metric functions (CkwsMetric).
 */
 
 class CkwsPlusDistanceFactory {
@@ -31,7 +31,7 @@ public:
   /**
      \brief Return a distance function.
   */
-  virtual CkwsDistanceShPtr makeDistance(bool inOriented) = 0;
+  virtual CkwsMetricShPtr makeDistance(bool inOriented) = 0;
 };
 
 
@@ -44,7 +44,7 @@ public:
   /**
      \brief Return a distance function associated with the linear steering method
   */
-  CkwsDistanceShPtr makeDistance(bool inOriented) {
+  CkwsMetricShPtr makeDistance(bool inOriented) {
     return CkwsPlusDistance::create(CkwsSMLinear::create(inOriented));
   };
 };
@@ -61,7 +61,7 @@ public:
      \note CflicDistance computes an approximation of the length of the CflicDirectPath 
      between two configurations.
   */
-  CkwsDistanceShPtr makeDistance(bool inOriented) {
+  CkwsMetricShPtr makeDistance(bool inOriented) {
     return CflicDistance::create(CflicSteeringMethod::create(inOriented));
   };
 };
