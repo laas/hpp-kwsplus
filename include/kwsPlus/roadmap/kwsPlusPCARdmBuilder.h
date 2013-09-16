@@ -26,7 +26,6 @@ INCLUDE
 #include "KineoWorks2/kwsIPPRdmBuilder.h"
 #include "KineoWorks2/kwsRoadmapBuilder.h"
 #include "KineoWorks2/kwsRoadmap.h"
-#include "KineoWorks2/kwsDistance.h"
 #include "KineoWorks2/kwsDevice.h"
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDiffusionNodePicker.h"

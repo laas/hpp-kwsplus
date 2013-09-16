@@ -18,7 +18,6 @@ INCLUDE
 #include "KineoWorks2/kwsShooterConfigSpace.h"
 #include "KineoWorks2/kwsRoadmapBuilder.h"
 #include "KineoWorks2/kwsRoadmap.h"
-#include "KineoWorks2/kwsDistance.h"
 #include "KineoWorks2/kwsDevice.h"
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDiffusionNodePicker.h"
@@ -101,7 +100,7 @@ class CkwsPlusLTRdmBuilder : public T
     KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) 
     create(const CkwsRoadmapShPtr& i_roadmap, 
 	   double i_penetration,
-	   const CkwsDistanceShPtr &i_evaluator = CkwsDistance::create(),
+	   const CkwsMetricShPtr &i_evaluator = CkwsMetricEuclidean::create(),
 	   const CkwsDiffusionNodePickerShPtr &i_picker = CkwsPickerBasic::create(), 
 	   const CkwsDiffusionShooterShPtr &i_shooter = CkwsShooterConfigSpace::create());
   
@@ -348,7 +347,7 @@ ktStatus CkwsPlusLTRdmBuilder<T>::init(const KIT_WEAK_PTR(CkwsPlusLTRdmBuilder<T
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 template <class T>
-KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) CkwsPlusLTRdmBuilder<T>::create(const CkwsRoadmapShPtr &i_roadmap, double i_penetration,const CkwsDistanceShPtr &i_evaluator, const CkwsDiffusionNodePickerShPtr &i_picker, const CkwsDiffusionShooterShPtr &i_shooter)
+KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) CkwsPlusLTRdmBuilder<T>::create(const CkwsRoadmapShPtr &i_roadmap, double i_penetration,const CkwsMetricShPtr &i_evaluator, const CkwsDiffusionNodePickerShPtr &i_picker, const CkwsDiffusionShooterShPtr &i_shooter)
 {
 
   //cout<<endl;
@@ -361,7 +360,7 @@ KIT_SHARED_PTR(CkwsPlusLTRdmBuilder<T>) CkwsPlusLTRdmBuilder<T>::create(const Ck
     rdmBuilderShPtr.reset();
   }
   else {
-    rdmBuilderShPtr->distance(i_evaluator);
+    rdmBuilderShPtr->roadmap ()->configSpace ()->metric (i_evaluator);
     rdmBuilderShPtr->diffusionNodePicker(i_picker);
     rdmBuilderShPtr->diffusionShooter(i_shooter);
     if(KD_ERROR == CkwsValidatorDPCollision::setPenetration(rdmBuilderShPtr->builderDirectPathValidator(), i_penetration)) {

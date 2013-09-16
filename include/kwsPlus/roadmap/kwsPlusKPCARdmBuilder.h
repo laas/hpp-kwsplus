@@ -17,7 +17,6 @@ INCLUDE
 #include "KineoWorks2/kwsIPPRdmBuilder.h"
 #include "KineoWorks2/kwsRoadmapBuilder.h"
 #include "KineoWorks2/kwsRoadmap.h"
-#include "KineoWorks2/kwsDistance.h"
 #include "KineoWorks2/kwsDevice.h"
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDiffusionNodePicker.h"
@@ -216,7 +215,7 @@ KIT_SHARED_PTR(CkwsPlusKPCARdmBuilder<T>)
   CkwsPlusKPCARdmBuilder<T>::create(
 				   const CkwsRoadmapShPtr &i_roadmap,
 				   double i_penetration,
-				   const CkwsDistanceShPtr &i_evaluator,
+				   const CkwsMetricShPtr &i_evaluator,
 				   const CkwsDiffusionNodePickerShPtr &i_picker, 
 				   const CkwsDiffusionShooterShPtr &i_shooter
 				   )
@@ -230,7 +229,7 @@ KIT_SHARED_PTR(CkwsPlusKPCARdmBuilder<T>)
     pcaRdmBuilderShPtr.reset();
   }
   else {
-    pcaRdmBuilderPtr->distance(i_evaluator);
+    pcaRdmBuilderPtr->roadmap ()->configSpace ()->metric (i_evaluator);
 //    pcaRdmBuilderPtr->diffusionNodePicker(i_picker);
 //    pcaRdmBuilderPtr->diffusionShooter(i_shooter);
     if(KD_ERROR == CkwsValidatorDPCollision::setPenetration(pcaRdmBuilderShPtr->builderDirectPathValidator(), i_penetration)) {
