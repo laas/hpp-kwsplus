@@ -18,6 +18,7 @@ INCLUDE
 #include "KineoWorks2/kwsShooterConfigSpace.h"
 #include "KineoWorks2/kwsRoadmapBuilder.h"
 #include "KineoWorks2/kwsRoadmap.h"
+#include <KineoWorks2/kwsMetricEuclidean.h>
 #include "KineoWorks2/kwsDevice.h"
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDiffusionNodePicker.h"
