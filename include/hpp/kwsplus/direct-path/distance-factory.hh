@@ -9,7 +9,7 @@
 
 #include "KineoWorks2/kwsSMLinear.h"
 #include <hpp/kwsplus/direct-path/flic-distance.hh>
-#include <hpp/kwsplus/direct-path/istance.hh>
+#include <hpp/kwsplus/direct-path/distance.hh>
 #include <hpp/kwsplus/direct-path/flic-distance.hh>
 #include <hpp/kwsplus/direct-path/flic-steering-method.hh>
 
