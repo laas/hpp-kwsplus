@@ -15,7 +15,7 @@ INCLUDES
 #include <math.h>
 #include <fstream>
 #include "KineoWorks2/kwsDevice.h" // without this causes error when calling functions of kwsDevice
-#include "kwsioInterface.h"
+#include <hpp/kwsio/interface.hh>
 #include "flicManager.h"
 
 #if DEBUG==3

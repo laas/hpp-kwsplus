@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "kwsPlus/directPath/directPathVector.h"
-#include "kwsioInterface.h"
+#include <hpp/kwsio/interface.hh>
 
 // #define DEBUG 2
 #if DEBUG==2
