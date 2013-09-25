@@ -31,6 +31,7 @@ SET(${PROJECT_NAME}_SOURCES
   kwsPlusNodeFactory.cpp
   kwsPlusEdge.cpp
   kwsPlusEdgeFactory.cpp
+  kwsPlusRoadmap.cpp
   flicDistance.cpp
   flicManager.h
   flicManager.cpp

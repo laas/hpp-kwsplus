@@ -38,6 +38,7 @@ SET(${PROJECT_NAME}_HEADERS
   ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusNode.h
   ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusNodeFactory.h
   ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusPCARdmBuilder.h
+  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusRoadmap.h
   ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusStopRdmBuilderDelegate.h
   ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusTalkingBuilder.h
   ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusTalkingShooter.h
