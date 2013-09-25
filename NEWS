@@ -1,3 +1,13 @@
+2013/09/25 Release 2.3
+
+  Main changes since 2.2
+
+  1. Update to KiteLab 2.07.
+  2. All distance classes inherit from CkwsMetric.
+  3. Rename package to hpp-kwsplus
+  4. Move header files to include/hpp/kwsplus sub-directory.
+  5. Rename header and source files to comply with lower case and dash naming convention.
+
 2011/12/20 Release 2.1
 
   Main changes since 1.8
