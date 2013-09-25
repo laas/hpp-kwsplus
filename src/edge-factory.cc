@@ -5,7 +5,7 @@
 
 */
 
-#include "kwsPlus/roadmap/kwsPlusEdgeFactory.h"
+#include <hpp/kwsplus/roadmap/edge-factory.hh>
 
 CkwsPlusEdgeFactory::CkwsPlusEdgeFactory(){
 }

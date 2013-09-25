@@ -3,7 +3,7 @@
   Authors: Florent Lamiraux
 */
 
-#include "flicManager.h"
+#include "flic-manager.hh"
 
 /// \brief Maximal order of derivation in combination function
 #define MAX_DERIV_ORDER_IN_COMBINATION   5

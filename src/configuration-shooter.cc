@@ -6,7 +6,7 @@
 */
 
 
-#include "kwsPlus/roadmap/hppConfigurationShooter.h"
+#include <hpp/kwsplus/roadmap/configuration-shooter.hh>
 #include "KineoWorks2/kwsNode.h"
 #include <iostream>
 

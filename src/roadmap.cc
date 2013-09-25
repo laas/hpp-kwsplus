@@ -44,7 +44,7 @@ POSSIBILITY OF SUCH DAMAGE.
 *******************************************/
 
 #include <iostream>
-#include "kwsPlus/roadmap/kwsPlusRoadmap.h"
+#include <hpp/kwsplus/roadmap/roadmap.hh>
 
 // Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
 #if DEBUG==2

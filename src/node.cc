@@ -5,8 +5,8 @@
 
 */
 
-#include "kwsPlus/roadmap/kwsPlusNode.h"
-#include "kwsPlus/roadmap/kwsPlusEdge.h"
+#include <hpp/kwsplus/roadmap/node.hh>
+#include <hpp/kwsplus/roadmap/edge.hh>
 
 #include "KineoWorks2/kwsRoadmap.h"
 #include "KineoWorks2/kwsDevice.h"

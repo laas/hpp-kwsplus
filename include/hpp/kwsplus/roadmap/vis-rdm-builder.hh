@@ -11,7 +11,7 @@
 INCLUDE
 **************************************/
 #include "KineoWorks2/kwsRoadmapBuilder.h"
-#include "kwsPlus/roadmap/hppShooterActiveDof.h"
+#include <hpp/kwsplus/roadmap/shooter-active-dof.hh>
 
 
 KIT_PREDEF_CLASS(ChppVisRdmBuilder);

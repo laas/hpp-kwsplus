@@ -16,7 +16,7 @@ INCLUDES
 #include <fstream>
 #include "KineoWorks2/kwsDevice.h" // without this causes error when calling functions of kwsDevice
 #include <hpp/kwsio/interface.hh>
-#include "flicManager.h"
+#include "flic-manager.hh"
 
 #if DEBUG==3
 #define ODEBUG3(x) std::cout << "CflicDirectPath:" << x << std::endl

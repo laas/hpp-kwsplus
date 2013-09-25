@@ -8,10 +8,10 @@
 #define KWSPLUSDISTANCEFACTORY_H
 
 #include "KineoWorks2/kwsSMLinear.h"
-#include "kwsPlus/directPath/flicDistance.h"
-#include "kwsPlus/directPath/kwsPlusDistance.h"
-#include "kwsPlus/directPath/flicDistance.h"
-#include "kwsPlus/directPath/flicSteeringMethod.h"
+#include <hpp/kwsplus/direct-path/flic-distance.hh>
+#include <hpp/kwsplus/direct-path/istance.hh>
+#include <hpp/kwsplus/direct-path/flic-distance.hh>
+#include <hpp/kwsplus/direct-path/flic-steering-method.hh>
 
 /**
 

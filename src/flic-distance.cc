@@ -3,10 +3,10 @@
   Authors: Florent Lamiraux
 */
 
-#include "kwsPlus/directPath/flicDirectPath.h"
-#include "kwsPlus/directPath/flicSteeringMethod.h"
-#include "kwsPlus/directPath/flicDistance.h"
-#include "flicManager.h"
+#include <hpp/kwsplus/direct-path/flic-direct-path.hh>
+#include <hpp/kwsplus/direct-path/flic-steering-method.hh>
+#include <hpp/kwsplus/direct-path/flic-distance.hh>
+#include "flic-manager.hh"
 
 // Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
 #if DEBUG==3

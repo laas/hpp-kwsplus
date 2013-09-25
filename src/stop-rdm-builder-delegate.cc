@@ -4,7 +4,7 @@
 
 */
 
-#include "kwsPlus/roadmap/kwsPlusStopRdmBuilderDelegate.h"
+#include <hpp/kwsplus/roadmap/stop-rdm-builder-delegate.hh>
 
 #if DEBUG==2
 unsigned int CkwsPlusStopRdmBuilderDelegate::attNbInstances = 0;

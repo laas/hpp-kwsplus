@@ -17,25 +17,25 @@ INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
 INCLUDE_DIRECTORIES("${CMAKE_CURRENT_BINARY_DIR}")
 
 SET(${PROJECT_NAME}_SOURCES
-  flicDirectPath.cpp
-  flicSteeringMethod.cpp
-  kwsPlusDirectPath.cpp
-  directPathVector.cpp
-  hppConfigurationShooter.cpp
-  hppShooterActiveDof.cpp
-  hppVisRdmBuilder.cpp
-  kwsPlusDPLinear.cpp
-  kwsPlusSMLinear.cpp
-  kwsPlusDistance.cpp
-  kwsPlusNode.cpp
-  kwsPlusNodeFactory.cpp
-  kwsPlusEdge.cpp
-  kwsPlusEdgeFactory.cpp
-  kwsPlusRoadmap.cpp
-  flicDistance.cpp
-  flicManager.h
-  flicManager.cpp
-  kwsPlusStopRdmBuilderDelegate.cpp
+  flic-direct-path.cc
+  flic-steering-method.cc
+  direct-path.cc
+  direct-path-vector.cc
+  configuration-shooter.cc
+  shooter-active-dof.cc
+  vis-rdm-builder.cc
+  dp-linear.cc
+  sm-linear.cc
+  distance.cc
+  node.cc
+  node-factory.cc
+  edge.cc
+  edge-factory.cc
+  roadmap.cc
+  flic-distance.cc
+  flic-manager.hh
+  flic-manager.cc
+  stop-rdm-builder-delegate.cc
   )
 
 ADD_LIBRARY(${PROJECT_NAME}

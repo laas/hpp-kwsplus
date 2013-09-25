@@ -5,7 +5,7 @@
 
 */
 
-#include "kwsPlus/roadmap/kwsPlusEdge.h"
+#include <hpp/kwsplus/roadmap/edge.hh>
 
 CkwsPlusEdge::~CkwsPlusEdge(){
 }

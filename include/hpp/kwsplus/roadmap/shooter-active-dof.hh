@@ -13,8 +13,8 @@ INCLUDE
 
 #include <list>
 
-#include "kwsPlus/roadmap/hppConfigurationShooter.h"
-#include "kwsPlus/roadmap/hppActiveDofSetter.h"
+#include <hpp/kwsplus/roadmap/configuration-shooter.hh>
+#include <hpp/kwsplus/roadmap/active-dof-setter.hh>
 
 KIT_PREDEF_CLASS(ChppShooterActiveDof);
 

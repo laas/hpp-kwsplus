@@ -8,7 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "kwsPlus/directPath/kwsPlusDirectPath.h"
+#include <hpp/kwsplus/direct-path/direct-path.hh>
 
 KIT_PREDEF_CLASS(CdirectPathVector);
 

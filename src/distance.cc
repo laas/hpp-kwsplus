@@ -10,9 +10,9 @@
 INCLUDES
 *******************************************/
 
-#include "kwsPlus/directPath/flicSteeringMethod.h"
-#include "kwsPlus/directPath/flicDirectPath.h"
-#include "kwsPlus/directPath/kwsPlusDistance.h"
+#include <hpp/kwsplus/direct-path/flic-steering-method.hh>
+#include <hpp/kwsplus/direct-path/flic-direct-path.hh>
+#include <hpp/kwsplus/direct-path/distance.hh>
 
 #if DEBUG==3
 #define ODEBUG3(x) std::cout << "CkwsPlusDistance:" << x << std::endl

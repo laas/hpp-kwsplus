@@ -3,7 +3,7 @@
 */
 
 #include <iostream>
-#include "kwsPlus/directPath/directPathVector.h"
+#include <hpp/kwsplus/direct-path/direct-path-vector.hh>
 #include <hpp/kwsio/interface.hh>
 
 // #define DEBUG 2

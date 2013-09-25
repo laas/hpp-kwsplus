@@ -6,7 +6,7 @@
 #ifndef FLIC_MANAGER_H
 #define FLIC_MANAGER_H
 
-#include "kwsPlus/directPath/flicDirectPath.h"
+#include <hpp/kwsplus/direct-path/flic-direct-path.hh>
 
 /**
    \brief class that contain some fonction to deal with flicDirectPath.

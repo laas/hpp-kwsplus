@@ -6,7 +6,7 @@
 */
 
 
-#include "kwsPlus/roadmap/hppShooterActiveDof.h"
+#include <hpp/kwsplus/roadmap/shooter-active-dof.hh>
 #include "KineoWorks2/kwsNode.h"
 #include <iostream>
 

@@ -20,38 +20,38 @@ INCLUDE(cmake/base.cmake)
 INCLUDE(cmake/boost.cmake)
 INCLUDE(cmake/cpack.cmake)
 
-SET(PROJECT_NAME kwsPlus)
+SET(PROJECT_NAME hpp-kwsplus)
 SET(PROJECT_DESCRIPTION "Extension to Kineoworks")
 SET(PROJECT_URL "")
 
 SET(${PROJECT_NAME}_HEADERS
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/hppActiveDofSetter.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/hppConfigurationShooter.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/hppShooterActiveDof.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/hppVisRdmBuilder.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusDiffusionNodePickerFactory.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusDiffusionShooterFactory.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusEdge.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusEdgeFactory.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusKPCARdmBuilder.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusLTRdmBuilder.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusNode.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusNodeFactory.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusPCARdmBuilder.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusRoadmap.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusStopRdmBuilderDelegate.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusTalkingBuilder.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/roadmap/kwsPlusTalkingShooter.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/directPath/directPathVector.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/directPath/flicDirectPath.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/directPath/flicDistance.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/directPath/flicSteeringMethod.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/directPath/kwsPlusDPLinear.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/directPath/kwsPlusDirectPath.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/directPath/kwsPlusDistance.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/directPath/kwsPlusDistanceFactory.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/directPath/kwsPlusSMLinear.h
-  ${CMAKE_SOURCE_DIR}/include/kwsPlus/directPath/kwsPlusSteeringMethodFactory.h
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/active-dof-setter.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/configuration-shooter.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/shooter-active-dof.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/vis-rdm-builder.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/diffusion-node-picker-factory.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/diffusion-shooter-factory.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/edge.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/edge-factory.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/kpca-rdm-builder.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/lt-rdm-builder.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/node.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/node-factory.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/pca-rdm-builder.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/roadmap.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/stop-rdm-builder-delegate.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/talking-builder.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/roadmap/talking-shooter.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/direct-path/direct-path-vector.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/direct-path/flic-direct-path.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/direct-path/flic-distance.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/direct-path/flic-steering-method.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/direct-path/dp-linear.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/direct-path/direct-path.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/direct-path/distance.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/direct-path/distance-factory.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/direct-path/sm-linear.hh
+  ${CMAKE_SOURCE_DIR}/include/hpp/kwsplus/direct-path/steering-method-factory.hh
 )
 
 SET(CXX_DISABLE_WERROR 1)
