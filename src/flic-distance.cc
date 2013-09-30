@@ -168,7 +168,9 @@ CflicDistance::CflicDistance(const CflicSteeringMethodShPtr inSteeringMethod) :
 }
 
 CflicDistance::CflicDistance(const CflicDistance& inDistance) : 
-  attSteeringMethod(inDistance.attSteeringMethod) 
+  CkwsMetric (),
+  attSteeringMethod(inDistance.attSteeringMethod),
+  attIsOriented(inDistance.attIsOriented)
 {
 #if DEBUG==2
   nbObject++;
