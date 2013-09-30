@@ -1536,13 +1536,11 @@ void CflicDirectPath::maxAbsoluteDerivative(double inFrom, double inTo, std::vec
 
 double CflicDirectPath::normGammaDeriv1(double u)
 {
-  double v2;
   int deriv_order = 2 ;
   double Tab_gamma[6] ;
   double normDeriv;
 
   // compute the Tflatconfiguration corresponding to the i
-  v2 = attFlatV2;
   CflicManager::flatCombination(&attFlatStartCfg, &attFlatEndCfg, u, attFlatV2, deriv_order, Tab_gamma) ;
 
   normDeriv = sqrt((Tab_gamma[2]*Tab_gamma[2]) + (Tab_gamma[3]*Tab_gamma[3]));

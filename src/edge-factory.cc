@@ -25,7 +25,7 @@ CkwsPlusEdgeFactoryShPtr CkwsPlusEdgeFactory::create(){
   return shPtr;
 
 }
-ktStatus CkwsPlusEdgeFactory::init(const CkwsPlusEdgeFactoryWkPtr &inWeakPtr){
+ktStatus CkwsPlusEdgeFactory::init(const CkwsPlusEdgeFactoryWkPtr&){
 
   return KD_OK;
 
