@@ -179,9 +179,7 @@ ktStatus CkwsPlusRoadmap::removeNodeEdge ( std::set<CkwsNodeShPtr> inNodeList , 
 		if ( newNode )
 			mapNew2Old[roadmapB->node ( i ) ]=newNode;
 		if ( addNode ( newNode ) !=KD_OK )
-		  {
 			ODEBUG1 ( "removeNodeEdge: ERROR: addNode failed" );
-		  }
 	}
 
 //Copy Edges
@@ -192,9 +190,7 @@ ktStatus CkwsPlusRoadmap::removeNodeEdge ( std::set<CkwsNodeShPtr> inNodeList , 
 			CkwsEdgeShPtr outEdge=it->first->outEdge ( i-1 ) ;
 			CkwsEdgeShPtr newEdge=CkwsEdge::create ( outEdge->directPath() );
 			if ( addEdge ( mapNew2Old[outEdge->startNode() ],mapNew2Old[outEdge->endNode() ],newEdge ) !=KD_OK )
-			  {
 				ODEBUG1 ( "removeNodeEdge: ERROR: addEdge failed" );
-			  }
 		}
 	}
 
