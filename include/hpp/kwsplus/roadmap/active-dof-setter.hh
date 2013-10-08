@@ -13,7 +13,9 @@ INCLUDE
 # include "KineoUtility/kitDefine.h"
 # include "KineoWorks2/kwsConfig.h"
 
-KIT_PREDEF_CLASS(ChppActiveDofSetter);
+# include <hpp/util/kitelab.hh>
+
+HPP_KIT_PREDEF_CLASS(ChppActiveDofSetter);
 
 /**
    \addtogroup visi

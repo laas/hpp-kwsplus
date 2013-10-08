@@ -43,7 +43,7 @@ PUBLIC METHODS
 
 /* The following macro registers the class with the class registry, assigns the static CLASS attribute and implements the classObject() virtual method */
 
-KIT_DEFINE_CLASS( CflicSteeringMethod );
+HPP_KIT_DEFINE_CLASS( CflicSteeringMethod );
 
 // =========================================================================================
 

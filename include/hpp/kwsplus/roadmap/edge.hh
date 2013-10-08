@@ -12,7 +12,9 @@
 #include "KineoWorks2/kwsEdge.h"
 #include "KineoModel/kppColor.h"
 
-KIT_PREDEF_CLASS(CkwsPlusEdge);
+#include <hpp/util/kitelab.hh>
+
+HPP_KIT_PREDEF_CLASS(CkwsPlusEdge);
 
 /**
    \addtogroup kwsPlusEnhancedRoadmapManagement

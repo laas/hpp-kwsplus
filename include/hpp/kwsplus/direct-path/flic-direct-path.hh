@@ -21,10 +21,10 @@ INCLUDE
 
 #include <hpp/kwsplus/direct-path/direct-path.hh>
 
-KIT_PREDEF_CLASS( CflicDirectPath );
-KIT_PREDEF_CLASS( CflicBoundManagerDefParam );
-KIT_PREDEF_CLASS( CflicArcLengthManager );
-KIT_PREDEF_CLASS( CflicBoundManagerArcLengthParam );
+HPP_KIT_PREDEF_CLASS( CflicDirectPath );
+HPP_KIT_PREDEF_CLASS( CflicBoundManagerDefParam );
+HPP_KIT_PREDEF_CLASS( CflicArcLengthManager );
+HPP_KIT_PREDEF_CLASS( CflicBoundManagerArcLengthParam );
 
 /** 
 

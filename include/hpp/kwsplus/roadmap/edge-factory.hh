@@ -11,7 +11,7 @@
 #include "KineoWorks2/kwsEdgeFactory.h"
 #include <hpp/kwsplus/roadmap/edge.hh>
 
-KIT_PREDEF_CLASS(CkwsPlusEdgeFactory);
+HPP_KIT_PREDEF_CLASS(CkwsPlusEdgeFactory);
 
 /**
    \addtogroup kwsPlusEnhancedRoadmapManagement

@@ -16,7 +16,7 @@ INCLUDE
 #include <hpp/kwsplus/roadmap/configuration-shooter.hh>
 #include <hpp/kwsplus/roadmap/active-dof-setter.hh>
 
-KIT_PREDEF_CLASS(ChppShooterActiveDof);
+HPP_KIT_PREDEF_CLASS(ChppShooterActiveDof);
 
 /**
    \addtogroup visi

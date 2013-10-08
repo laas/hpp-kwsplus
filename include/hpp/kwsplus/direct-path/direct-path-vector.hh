@@ -10,7 +10,7 @@
 #include <vector>
 #include <hpp/kwsplus/direct-path/direct-path.hh>
 
-KIT_PREDEF_CLASS(CdirectPathVector);
+HPP_KIT_PREDEF_CLASS(CdirectPathVector);
 
 /**
    \addtogroup kwsPlus_DP

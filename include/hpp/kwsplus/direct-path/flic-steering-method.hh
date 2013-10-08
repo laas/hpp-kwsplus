@@ -24,7 +24,7 @@ INCLUDE
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDefine.h"
 
-
+#include <hpp/util/kitelab.hh>
 
 /**
 
@@ -37,7 +37,7 @@ INCLUDE
 STRUCTURES
 **************************************/
 
-KIT_PREDEF_CLASS( CflicSteeringMethod );
+HPP_KIT_PREDEF_CLASS( CflicSteeringMethod );
 
 /*************************************
 CLASS
@@ -54,7 +54,7 @@ class CflicSteeringMethod : public CkwsSteeringMethod {
      static const CkitClassShPtr CLASS;
      virtual CkitClassShPtr classObject() const;
 	*/
-	KIT_DECLARE_CLASS();
+	HPP_KIT_DECLARE_CLASS();
 
   /**
      \brief   Destructor.

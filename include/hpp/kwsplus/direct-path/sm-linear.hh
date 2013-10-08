@@ -19,6 +19,7 @@ INCLUDE
 #include "KineoUtility/kitInterface.h"
 #include "KineoWorks2/kwsDefine.h"
 
+#include <hpp/util/kitelab.hh>
 
 /**
 
@@ -30,8 +31,8 @@ INCLUDE
 STRUCTURES
 **************************************/
 
-KIT_PREDEF_CLASS( CkwsConfig );
-KIT_PREDEF_CLASS( CkwsPlusSMLinear );
+HPP_KIT_PREDEF_CLASS( CkwsConfig );
+HPP_KIT_PREDEF_CLASS( CkwsPlusSMLinear );
 
 /*************************************
 CLASS
@@ -49,7 +50,7 @@ class CkwsPlusSMLinear : public CkwsSteeringMethod {
 	// The following macro declares:
   //   static const CkitClassShPtr CLASS;
   //   virtual CkitClassShPtr classObject() const;
-  KIT_DECLARE_CLASS();
+  HPP_KIT_DECLARE_CLASS();
 	
   /**
      \brief   Destructor.

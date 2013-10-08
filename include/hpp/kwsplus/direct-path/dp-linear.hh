@@ -18,10 +18,10 @@ INCLUDE
 #include "KineoWorks2/kwsDefine.h"
 #include <hpp/kwsplus/direct-path/direct-path.hh>
 
-KIT_PREDEF_CLASS( CkwsConfig );
-KIT_PREDEF_CLASS( CkwsSteeringMethod );
+HPP_KIT_PREDEF_CLASS( CkwsConfig );
+HPP_KIT_PREDEF_CLASS( CkwsSteeringMethod );
 
-KIT_PREDEF_CLASS( CkwsPlusDPLinear );
+HPP_KIT_PREDEF_CLASS( CkwsPlusDPLinear );
 
 /**
 

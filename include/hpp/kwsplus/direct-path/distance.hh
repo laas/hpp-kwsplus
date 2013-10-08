@@ -31,7 +31,7 @@ INCLUDE
 STRUCTURES
 **************************************/
 
-KIT_PREDEF_CLASS ( CkwsPlusDistance );
+HPP_KIT_PREDEF_CLASS ( CkwsPlusDistance );
 
 /*************************************
 CLASS

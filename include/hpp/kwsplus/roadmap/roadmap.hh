@@ -60,8 +60,9 @@ INCLUDE
 #include <sys/time.h>
 # include <set>
 
+#include <hpp/util/kitelab.hh>
 
-KIT_PREDEF_CLASS ( CkwsPlusRoadmap );
+HPP_KIT_PREDEF_CLASS ( CkwsPlusRoadmap );
 
 
 /*************************************

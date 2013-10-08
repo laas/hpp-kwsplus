@@ -4,7 +4,9 @@
 #include "KineoWorks2/kwsDirectPath.h"
 #include <iostream>
 
-KIT_PREDEF_CLASS(CkwsPlusDirectPath);
+#include <hpp/util/kitelab.hh>
+
+HPP_KIT_PREDEF_CLASS(CkwsPlusDirectPath);
 
 /**
    \addtogroup kwsPlus_DP

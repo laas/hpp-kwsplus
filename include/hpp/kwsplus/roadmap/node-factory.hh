@@ -11,7 +11,7 @@
 #include "KineoWorks2/kwsNodeFactory.h"
 #include <hpp/kwsplus/roadmap/node.hh>
 
-KIT_PREDEF_CLASS(CkwsPlusNodeFactory);
+HPP_KIT_PREDEF_CLASS(CkwsPlusNodeFactory);
 
 
 /**

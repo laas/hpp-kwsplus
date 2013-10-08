@@ -14,7 +14,7 @@ INCLUDE
 #include <hpp/kwsplus/roadmap/shooter-active-dof.hh>
 
 
-KIT_PREDEF_CLASS(ChppVisRdmBuilder);
+HPP_KIT_PREDEF_CLASS(ChppVisRdmBuilder);
 
 /**
    \addtogroup visi

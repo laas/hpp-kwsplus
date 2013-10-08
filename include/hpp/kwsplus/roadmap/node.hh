@@ -11,8 +11,9 @@
 #include "KineoWorks2/kwsNode.h"
 #include "KineoModel/kppColor.h"
 
+#include <hpp/util/kitelab.hh>
 
-KIT_PREDEF_CLASS(CkwsPlusNode);
+HPP_KIT_PREDEF_CLASS(CkwsPlusNode);
 
 /**
    \addtogroup kwsPlusEnhancedRoadmapManagement
