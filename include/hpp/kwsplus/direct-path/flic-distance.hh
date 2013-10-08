@@ -8,6 +8,8 @@
 
 #include "KineoWorks2/kwsMetric.h"
 
+#include <hpp/util/kitelab.hh>
+
 HPP_KIT_PREDEF_CLASS(CflicDistance);
 HPP_KIT_PREDEF_CLASS(CflicSteeringMethod);
 

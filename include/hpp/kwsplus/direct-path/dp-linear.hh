@@ -16,6 +16,9 @@ INCLUDE
 #include "KineoWorks2/kwsDPLinear.h"
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsDefine.h"
+
+#include <hpp/util/kitelab.hh>
+
 #include <hpp/kwsplus/direct-path/direct-path.hh>
 
 HPP_KIT_PREDEF_CLASS( CkwsConfig );

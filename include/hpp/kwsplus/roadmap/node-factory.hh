@@ -9,6 +9,9 @@
 #define KWS_PLUS_NODE_FACTORY_H
 
 #include "KineoWorks2/kwsNodeFactory.h"
+
+#include <hpp/util/kitelab.hh>
+
 #include <hpp/kwsplus/roadmap/node.hh>
 
 HPP_KIT_PREDEF_CLASS(CkwsPlusNodeFactory);

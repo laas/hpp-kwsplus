@@ -13,6 +13,8 @@ INCLUDE
 
 #include <list>
 
+#include <hpp/util/kitelab.hh>
+
 #include <hpp/kwsplus/roadmap/configuration-shooter.hh>
 #include <hpp/kwsplus/roadmap/active-dof-setter.hh>
 

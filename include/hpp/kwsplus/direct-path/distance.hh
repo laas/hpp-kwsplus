@@ -20,7 +20,7 @@ INCLUDE
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoWorks2/kwsMetric.h"
 
-
+#include <hpp/util/kitelab.hh>
 
 /**
    \addtogroup kwsPlus_DP

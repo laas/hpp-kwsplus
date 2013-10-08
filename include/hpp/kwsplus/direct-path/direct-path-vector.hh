@@ -8,6 +8,9 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+
+#include <hpp/util/kitelab.hh>
+
 #include <hpp/kwsplus/direct-path/direct-path.hh>
 
 HPP_KIT_PREDEF_CLASS(CdirectPathVector);

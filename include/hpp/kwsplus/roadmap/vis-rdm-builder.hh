@@ -11,8 +11,10 @@
 INCLUDE
 **************************************/
 #include "KineoWorks2/kwsRoadmapBuilder.h"
-#include <hpp/kwsplus/roadmap/shooter-active-dof.hh>
 
+#include <hpp/util/kitelab.hh>
+
+#include <hpp/kwsplus/roadmap/shooter-active-dof.hh>
 
 HPP_KIT_PREDEF_CLASS(ChppVisRdmBuilder);
 

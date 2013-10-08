@@ -9,6 +9,9 @@
 #define KWS_PLUS_EDGE_FACTORY_H
 
 #include "KineoWorks2/kwsEdgeFactory.h"
+
+#include <hpp/util/kitelab.hh>
+
 #include <hpp/kwsplus/roadmap/edge.hh>
 
 HPP_KIT_PREDEF_CLASS(CkwsPlusEdgeFactory);
